@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thank You - SF Event Photo</title>
+    <meta name="robots" content="noindex, nofollow">
+    
+    <!-- Google Ads Conversion Tracking - Add your conversion code here -->
+    <!-- Example:
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-XXXXXXXXX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'AW-XXXXXXXXX');
+        gtag('event', 'conversion', {'send_to': 'AW-XXXXXXXXX/XXXXXX'});
+    </script>
+    -->
+    
+    <style>
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400; font-style: normal; font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500; font-style: normal; font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e8e8e8;
+            --gray-dark: #888888;
+            --green: #22c55e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            background: var(--white);
+            color: var(--black);
+            line-height: 1.5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-mid);
+        }
+
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .logo {
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            color: var(--black);
+            text-decoration: none;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        .nav a:hover { opacity: 0.5; }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 1.5rem;
+            text-align: center;
+        }
+
+        .thank-you-content {
+            max-width: 500px;
+        }
+
+        .check-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+        }
+
+        .check-icon svg {
+            width: 40px;
+            height: 40px;
+            stroke: white;
+            stroke-width: 3;
+        }
+
+        .thank-you-title {
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+        }
+
+        .thank-you-message {
+            font-size: 1.1rem;
+            color: var(--gray-dark);
+            line-height: 1.7;
+            margin-bottom: 2.5rem;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--black);
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        .back-link:hover {
+            opacity: 0.85;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 4rem 2rem;
+            background: var(--black);
+            border-top: 1px solid var(--gray-mid);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-col h4 {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            opacity: 0.8;
+            transition: opacity 0.2s;
+        }
+
+        .footer-col a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header-inner {
+                padding: 1rem;
+            }
+
+            .nav {
+                gap: 1.5rem;
+            }
+
+            .nav a {
+                font-size: 0.75rem;
+            }
+
+            .thank-you-title {
+                font-size: 2rem;
+            }
+
+            .check-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .check-icon svg {
+                width: 30px;
+                height: 30px;
+            }
+
+            .footer-inner {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <nav class="nav">
+                <a href="/services.html">Services</a>
+                <a href="/contact.html">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <div class="thank-you-content">
+            <div class="check-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
+                </svg>
+            </div>
+            <h1 class="thank-you-title">Thank you!</h1>
+            <p class="thank-you-message">
+                We've received your message and will get back to you within 24 hours with availability and a custom quote for your event.
+            </p>
+            <a href="/" class="back-link">Back to Home</a>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>Email us</h4>
+                <a href="mailto:bookings@sfeventphoto.com">bookings@sfeventphoto.com</a>
+            </div>
+            <div class="footer-col">
+                <h4>Call us</h4>
+                <a href="tel:+14155551234">415 555 1234</a>
+            </div>
+            <div class="footer-col">
+                <h4>Follow us</h4>
+                <a href="https://instagram.com/sfeventphoto" target="_blank">Instagram</a>
+                <a href="https://linkedin.com/company/sfeventphoto" target="_blank">LinkedIn</a>
+            </div>
+            <div class="footer-col">
+                <h4>Location</h4>
+                <a href="#">San Francisco, CA</a>
+                <a href="#">Los Angeles, CA</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © 2026 SF Event Photo. All Rights Reserved.
+        </div>
+    </footer>
+</body>
+</html>

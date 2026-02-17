@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart - SF Event Photo</title>
+    <style>
+        /* PP Neue York Font Family */
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalThin.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalThin.woff') format('woff');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e8e8e8;
+            --gray-dark: #888888;
+            --accent: #1a1a1a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Header */
+        .header {
+            border-bottom: 1px solid var(--gray-mid);
+            padding: 1.25rem 2rem;
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+        
+        .nav a:hover {
+            opacity: 0.5;
+        }
+        
+        .cart-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        
+        .cart-link svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background: #e53935;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 500;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Main */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 2rem;
+        }
+        
+        /* Empty state */
+        .empty-cart {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray-dark);
+        }
+        
+        .empty-cart h2 {
+            font-size: 1.25rem;
+            color: var(--black);
+            margin-bottom: 0.5rem;
+        }
+        
+        .empty-cart a {
+            display: inline-block;
+            margin-top: 1rem;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        /* Cart Item */
+        .cart-item {
+            display: flex;
+            gap: 2rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        
+        .cart-item:first-child {
+            padding-top: 0;
+        }
+        
+        /* Photo column */
+        .item-photo {
+            flex-shrink: 0;
+            width: 200px;
+        }
+        
+        .item-photo img {
+            width: 100%;
+            aspect-ratio: 3/2;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .item-photo-meta {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+        }
+        
+        .item-photo-id {
+            font-variant-numeric: tabular-nums;
+        }
+        
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--black);
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            padding: 0;
+        }
+        
+        .remove-btn:hover {
+            opacity: 0.7;
+        }
+        
+        /* Details column */
+        .item-details {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .detail-row {
+            margin-bottom: 0.75rem;
+        }
+        
+        .detail-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-dark);
+        }
+        
+        .detail-value {
+            font-size: 0.9rem;
+        }
+        
+        /* License column */
+        .item-license {
+            flex-shrink: 0;
+            width: 280px;
+        }
+        
+        .license-header {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-dark);
+            margin-bottom: 0.25rem;
+        }
+        
+        .license-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+        
+        .license-description {
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .license-contact {
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+            line-height: 1.6;
+        }
+        
+        .license-contact a {
+            color: var(--black);
+        }
+        
+        /* Options column */
+        .item-options {
+            flex-shrink: 0;
+            width: 200px;
+            text-align: right;
+        }
+        
+        .show-options-btn {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .show-options-btn:hover {
+            background: #333;
+        }
+        
+        .options-panel {
+            display: none;
+            text-align: left;
+            margin-top: 1rem;
+        }
+        
+        .options-panel.open {
+            display: block;
+        }
+        
+        .options-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--gray-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .options-select {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 1px solid var(--gray-mid);
+            font-size: 0.85rem;
+            font-family: inherit;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+        }
+        
+        .update-btn {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            background: var(--white);
+            color: var(--black);
+            border: 2px solid var(--black);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .update-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+        
+        .item-total-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--gray-dark);
+            margin-top: 1rem;
+        }
+        
+        .item-total-price {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+        
+        /* Totals */
+        .cart-totals {
+            max-width: 300px;
+            margin-left: auto;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--black);
+        }
+        
+        .totals-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .totals-row.total {
+            font-weight: 800;
+            font-size: 1.1rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-mid);
+        }
+        
+        .checkout-btn {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-top: 1.5rem;
+            transition: background 0.2s;
+        }
+        
+        .checkout-btn:hover {
+            background: #333;
+        }
+        
+        .checkout-btn:disabled {
+            background: var(--gray-mid);
+            color: var(--gray-dark);
+            cursor: not-allowed;
+        }
+        
+        .continue-shopping {
+            display: block;
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--gray-dark);
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+        
+        .continue-shopping:hover {
+            color: var(--black);
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .cart-item {
+                flex-wrap: wrap;
+            }
+            
+            .item-photo {
+                width: 160px;
+            }
+            
+            .item-details {
+                flex: 1;
+                min-width: 200px;
+            }
+            
+            .item-license {
+                width: 100%;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid var(--gray-light);
+            }
+            
+            .item-options {
+                width: 100%;
+                text-align: left;
+                margin-top: 1rem;
+                display: flex;
+                align-items: flex-start;
+                gap: 1rem;
+                flex-wrap: wrap;
+            }
+            
+            .options-panel {
+                flex: 1;
+                min-width: 180px;
+            }
+            
+            .item-total-label,
+            .item-total-price {
+                text-align: left;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .main {
+                padding: 1.5rem 1rem;
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .item-photo {
+                width: 100%;
+                text-align: center;
+            }
+            
+            .item-photo img {
+                max-width: 80%;
+                max-height: 400px;
+                width: auto;
+                aspect-ratio: auto;
+                margin: 0 auto;
+                display: block;
+            }
+            
+            .item-photo-meta {
+                justify-content: center;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
+            }
+            
+            .item-details {
+                text-align: right;
+            }
+            
+            .detail-label {
+                font-weight: 700;
+            }
+            
+            .item-license {
+                width: 100%;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid var(--gray-light);
+            }
+            
+            .item-options {
+                width: 100%;
+                text-align: left;
+                flex-direction: column;
+                margin-top: 1rem;
+            }
+            
+            .cart-totals {
+                max-width: 100%;
+            }
+            
+            .nav {
+                gap: 1rem;
+            }
+            
+            .nav a:not(.cart-link) {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <nav class="nav">
+                <a href="/">Projects</a>
+                <a href="/about.html">About</a>
+                <a href="/contact.html">Contact</a>
+                <a href="/cart.html" class="cart-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <h1 class="page-title">Shopping Cart</h1>
+        <div id="cartContainer">
+            <div class="empty-cart">
+                <h2>Your cart is empty</h2>
+                <p>Browse our galleries and add photos to your cart.</p>
+                <a href="/">← Browse Galleries</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://sf-event-photo-backend.vercel.app';
+        
+        const LICENSE_INFO = {
+            'web_editorial': {
+                name: 'Web Editorial',
+                price: 8500,
+                description: 'This is a single use EDITORIAL license. You may use this image to support the EDITORIAL content of a single magazine, website article or social media channel.'
+            },
+            'pr_usage': {
+                name: 'PR / Commercial',
+                price: 25000,
+                description: 'This license permits use in PR materials, advertising, commercial publications, and marketing collateral. Includes digital and print usage.'
+            },
+            'client_download': {
+                name: 'Client Download',
+                price: 0,
+                description: 'Complimentary full-resolution download provided to the commissioning client. All rights as per your service agreement.'
+            }
+        };
+        
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let appliedCartCode = null;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if any cart items already have a download code
+            const existingCode = cart.find(item => item.download_code)?.download_code;
+            if (existingCode) appliedCartCode = existingCode;
+            renderCart();
+        });
+        
+        async function applyCartCode() {
+            const input = document.getElementById('cartDownloadCode');
+            const status = document.getElementById('cartCodeStatus');
+            const code = input.value.trim().toUpperCase();
+            
+            if (!code) { status.textContent = ''; return; }
+            
+            try {
+                const r = await fetch(`${API_URL}/api/projects`);
+                const d = await r.json();
+                const allProjects = d.projects || [];
+                
+                // Find any project with this download code
+                const matchedProject = allProjects.find(p => 
+                    p.download_code && p.download_code.toUpperCase() === code
+                );
+                
+                if (matchedProject) {
+                    appliedCartCode = code;
+                    status.textContent = '✓ Code applied!';
+                    status.style.color = '#10b981';
+                    
+                    // Update all cart items from this project to free
+                    // We need to check which cart items belong to this project
+                    let updated = 0;
+                    cart.forEach(item => {
+                        if (item.project_slug === matchedProject.slug || item.title === matchedProject.title) {
+                            item.license_type = 'client_download';
+                            item.license = 'Client Download';
+                            item.price = 0;
+                            item.download_code = code;
+                            updated++;
+                        }
+                    });
+                    
+                    // If no items matched by slug/title, apply to ALL items (user may not have slug stored)
+                    if (updated === 0) {
+                        cart.forEach(item => {
+                            item.license_type = 'client_download';
+                            item.license = 'Client Download';
+                            item.price = 0;
+                            item.download_code = code;
+                            updated++;
+                        });
+                    }
+                    
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    renderCart();
+                } else {
+                    appliedCartCode = null;
+                    status.textContent = '✕ Invalid code';
+                    status.style.color = '#ef4444';
+                }
+            } catch (e) {
+                status.textContent = '✕ Error checking code';
+                status.style.color = '#ef4444';
+            }
+        }
+        
+        function renderCart() {
+            const container = document.getElementById('cartContainer');
+            document.getElementById('cartBadge').textContent = cart.length;
+            
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-cart">
+                        <h2>Your cart is empty</h2>
+                        <p>Browse our galleries and add photos to your cart.</p>
+                        <a href="/">← Browse Galleries</a>
+                    </div>
+                `;
+                return;
+            }
+            
+            let subtotal = 0;
+            
+            const itemsHTML = cart.map((item, index) => {
+                subtotal += item.price;
+                const license = LICENSE_INFO[item.license_type] || LICENSE_INFO['web_editorial'];
+                const photoId = item.photo_id ? item.photo_id.substring(0, 8) : '—';
+                
+                return `
+                    <div class="cart-item" id="cartItem${index}">
+                        <div class="item-photo">
+                            <img src="${item.thumbnail}" alt="${item.title}">
+                            <div class="item-photo-meta">
+                                <span class="item-photo-id">${photoId}</span>
+                                <span>|</span>
+                                <button class="remove-btn" onclick="removeItem(${index})">Remove</button>
+                            </div>
+                        </div>
+                        
+                        <div class="item-details">
+                            ${item.people ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">People:</div>
+                                    <div class="detail-value">${item.people}</div>
+                                </div>
+                            ` : ''}
+                            ${item.venue ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">Location:</div>
+                                    <div class="detail-value">${item.venue}</div>
+                                </div>
+                            ` : ''}
+                            <div class="detail-row">
+                                <div class="detail-label">Event Title:</div>
+                                <div class="detail-value">${item.title || '—'}</div>
+                            </div>
+                            ${item.event_date ? `
+                                <div class="detail-row">
+                                    <div class="detail-label">Date:</div>
+                                    <div class="detail-value">${item.event_date}</div>
+                                </div>
+                            ` : ''}
+                            <div class="detail-row">
+                                <div class="detail-label">Copyright:</div>
+                                <div class="detail-value">SF Event Photo</div>
+                            </div>
+                        </div>
+                        
+                        <div class="item-license">
+                            <div class="license-header">License and Resolution</div>
+                            <div class="license-name">${license.name}</div>
+                            <div class="license-description">${license.description}</div>
+                            <div class="license-contact">
+                                For any usage beyond the above authorized, please contact 
+                                <a href="mailto:licensing@sfeventphoto.com">licensing@sfeventphoto.com</a> 
+                                for assistance.
+                            </div>
+                        </div>
+                        
+                        <div class="item-options">
+                            <button class="show-options-btn" onclick="toggleOptions(${index})" id="optionsBtn${index}">
+                                SHOW OPTIONS
+                            </button>
+                            <div class="options-panel" id="optionsPanel${index}">
+                                <div class="options-label">License and Resolution</div>
+                                <select class="options-select" id="licenseSelect${index}">
+                                    <option value="web_editorial" ${item.license_type === 'web_editorial' ? 'selected' : ''}>Web Editorial (single use) — $85.00</option>
+                                    <option value="pr_usage" ${item.license_type === 'pr_usage' ? 'selected' : ''}>PR / Commercial — $250.00</option>
+                                </select>
+                                <button class="update-btn" onclick="updateLicense(${index})">UPDATE ITEM</button>
+                            </div>
+                            <div class="item-total-label">Item Total:</div>
+                            <div class="item-total-price">${item.price === 0 ? '<span style="color:#10b981;font-weight:800;">FREE</span>' : '$' + (item.price / 100).toFixed(2)}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            const tax = 0;
+            const shipping = 0;
+            const total = subtotal;
+            
+            container.innerHTML = `
+                ${itemsHTML}
+                
+                <div class="cart-code-section" style="padding:1.25rem;border:2px solid var(--gray-mid);border-radius:6px;margin-bottom:1.5rem;display:flex;align-items:center;gap:0.75rem;flex-wrap:wrap;">
+                    <label style="font-weight:700;font-size:0.85rem;white-space:nowrap;">Download Code:</label>
+                    <input type="text" id="cartDownloadCode" placeholder="Enter code" 
+                        style="padding:0.5rem 0.75rem;border:2px solid var(--gray-mid);border-radius:4px;font-size:0.85rem;font-weight:600;text-transform:uppercase;width:160px;font-family:inherit;"
+                        value="${appliedCartCode || ''}">
+                    <button onclick="applyCartCode()" 
+                        style="padding:0.5rem 1rem;background:var(--accent);color:white;border:none;font-size:0.8rem;font-weight:700;cursor:pointer;border-radius:4px;">APPLY</button>
+                    <span id="cartCodeStatus" style="font-size:0.8rem;font-weight:600;"></span>
+                </div>
+                
+                <div class="cart-totals">
+                    <div class="totals-row">
+                        <span>Subtotal:</span>
+                        <span>$${(subtotal / 100).toFixed(2)}</span>
+                    </div>
+                    <div class="totals-row">
+                        <span>Tax:</span>
+                        <span>$${(tax / 100).toFixed(2)}</span>
+                    </div>
+                    <div class="totals-row">
+                        <span>Shipping &amp; Handling:</span>
+                        <span>$${(shipping / 100).toFixed(2)}</span>
+                    </div>
+                    <div class="totals-row total">
+                        <span>Total:</span>
+                        <span>${total === 0 ? 'FREE' : '$' + (total / 100).toFixed(2)}</span>
+                    </div>
+                    <button class="checkout-btn" onclick="checkout()">${total === 0 ? 'DOWNLOAD' : 'CHECKOUT'}</button>
+                    <a href="/" class="continue-shopping">← Continue Shopping</a>
+                </div>
+            `;
+        }
+        
+        function toggleOptions(index) {
+            const panel = document.getElementById(`optionsPanel${index}`);
+            const btn = document.getElementById(`optionsBtn${index}`);
+            const isOpen = panel.classList.contains('open');
+            
+            panel.classList.toggle('open');
+            btn.textContent = isOpen ? 'SHOW OPTIONS' : 'HIDE OPTIONS';
+        }
+        
+        function updateLicense(index) {
+            const select = document.getElementById(`licenseSelect${index}`);
+            const newType = select.value;
+            const license = LICENSE_INFO[newType];
+            
+            cart[index].license_type = newType;
+            cart[index].license = license.name;
+            cart[index].price = license.price;
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+        
+        function removeItem(index) {
+            cart.splice(index, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            renderCart();
+        }
+        
+        async function checkout() {
+            if (cart.length === 0) return;
+            
+            const btn = document.querySelector('.checkout-btn');
+            btn.disabled = true;
+            btn.textContent = 'PROCESSING...';
+            
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            
+            // FREE download - skip Stripe entirely
+            if (total === 0) {
+                const email = prompt('Enter your email address to receive download links:');
+                if (!email) {
+                    btn.disabled = false;
+                    btn.textContent = 'DOWNLOAD';
+                    return;
+                }
+                
+                // Store download info and go to download page
+                const downloadInfo = {
+                    email: email,
+                    items: cart.map(item => ({
+                        photo_id: item.photo_id,
+                        thumbnail: item.thumbnail,
+                        title: item.title,
+                        license: 'Client Download',
+                        download_code: item.download_code || appliedCartCode
+                    })),
+                    date: new Date().toISOString()
+                };
+                localStorage.setItem('lastDownload', JSON.stringify(downloadInfo));
+                localStorage.removeItem('cart');
+                window.location.href = '/download-page.html?free=true';
+                return;
+            }
+            
+            // Paid checkout - use Stripe
+            try {
+                const email = prompt('Enter your email address:');
+                if (!email) {
+                    btn.disabled = false;
+                    btn.textContent = 'CHECKOUT';
+                    return;
+                }
+                
+                const response = await fetch(`${API_URL}/api/checkout/create-session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        items: cart.map(item => ({
+                            photo_id: item.photo_id,
+                            license_type: item.license_type
+                        })),
+                        customer_email: email
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) throw new Error(data.error);
+                
+                localStorage.removeItem('cart');
+                window.location.href = data.url;
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Checkout failed: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = 'CHECKOUT';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Your Photos - SF Event Photo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        /* PP Neue York Font Family */
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalThin.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalThin.woff') format('woff');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e8e8e8;
+            --gray-dark: #888888;
+            --accent: #1a1a1a;
+            --success: #10b981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            color: var(--black);
+            background: var(--gray-light);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .header {
+            background: var(--white);
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        
+        .content {
+            background: var(--white);
+            margin: 3rem auto;
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 3rem;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            font-weight: 400;
+            text-align: center;
+            margin-bottom: 1rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--gray-dark);
+            font-size: 1rem;
+            font-weight: 300;
+            margin-bottom: 3rem;
+        }
+        
+        .order-info {
+            background: var(--gray-light);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-bottom: 2rem;
+        }
+        
+        .order-info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        
+        .order-info-row:last-child {
+            border-bottom: none;
+        }
+        
+        .order-info-label {
+            font-weight: 600;
+            color: var(--gray-dark);
+        }
+        
+        .order-info-value {
+            font-weight: 600;
+        }
+        
+        .photos-section {
+            margin-top: 3rem;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+        
+        .photo-card {
+            border: 1px solid var(--gray-mid);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .photo-thumbnail {
+            width: 120px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        
+        .photo-info {
+            flex: 1;
+        }
+        
+        .photo-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .photo-license {
+            color: var(--gray-dark);
+            font-size: 0.9rem;
+        }
+        
+        .download-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-weight: 400;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            display: inline-block;
+            transition: opacity 0.2s;
+        }
+        
+        .download-btn:hover {
+            opacity: 0.8;
+        }
+        
+        .download-all {
+            width: 100%;
+            padding: 1rem;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-weight: 400;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-top: 2rem;
+            transition: opacity 0.2s;
+        }
+        
+        .download-all:hover {
+            opacity: 0.8;
+        }
+        
+        .alert {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-left: 4px solid #ffc107;
+            padding: 1rem;
+            border-radius: 4px;
+            margin: 2rem 0;
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .alert-icon {
+            font-size: 1.5rem;
+        }
+        
+        .alert-content {
+            flex: 1;
+        }
+        
+        .alert-title {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .license-info {
+            background: var(--gray-light);
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin-top: 3rem;
+        }
+        
+        .license-info h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+        
+        .license-info ul {
+            margin-left: 1.5rem;
+            color: var(--gray-dark);
+        }
+        
+        .license-info li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .footer {
+            text-align: center;
+            color: var(--gray-dark);
+            margin-top: 3rem;
+            padding-bottom: 2rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .spinner {
+            border: 3px solid var(--gray-mid);
+            border-top: 3px solid var(--black);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+        
+        .error h2 {
+            color: #dc3545;
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="logo">SF EVENT PHOTO</div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="content">
+            <div id="loading" class="loading">
+                <div class="spinner"></div>
+                <p>Loading your order...</p>
+            </div>
+
+            <div id="success" style="display: none;">
+                <div class="success-icon">✓</div>
+                <h1>Payment Successful!</h1>
+                <p class="subtitle">Your photos are ready to download</p>
+
+                <div class="order-info">
+                    <div class="order-info-row">
+                        <span class="order-info-label">Order Number</span>
+                        <span class="order-info-value" id="orderNumber">-</span>
+                    </div>
+                    <div class="order-info-row">
+                        <span class="order-info-label">Email</span>
+                        <span class="order-info-value" id="customerEmail">-</span>
+                    </div>
+                    <div class="order-info-row">
+                        <span class="order-info-label">Total</span>
+                        <span class="order-info-value" id="orderTotal">-</span>
+                    </div>
+                    <div class="order-info-row">
+                        <span class="order-info-label">Photos</span>
+                        <span class="order-info-value" id="photoCount">-</span>
+                    </div>
+                </div>
+
+                <div class="alert">
+                    <div class="alert-icon">⏰</div>
+                    <div class="alert-content">
+                        <div class="alert-title">Download within 48 hours</div>
+                        <div>Your download links will expire on <strong id="expiryDate">-</strong>. Make sure to save your photos!</div>
+                    </div>
+                </div>
+
+                <div class="photos-section">
+                    <h2 class="section-title">Your Photos</h2>
+                    <div id="photosList">
+                        <!-- Photos will be inserted here -->
+                    </div>
+                    
+                    <button class="download-all" onclick="downloadAll()">
+                        📦 Download All Photos
+                    </button>
+                </div>
+
+                <div class="license-info">
+                    <h3>License Information</h3>
+                    <p style="margin-bottom: 1rem; color: var(--gray-dark);">
+                        Please review your license terms:
+                    </p>
+                    <ul>
+                        <li><strong>Personal:</strong> Personal use and social media only</li>
+                        <li><strong>Commercial:</strong> Marketing, advertising, and print rights (1-year license)</li>
+                        <li><strong>Extended:</strong> Full commercial rights with no time limit, includes raw files</li>
+                    </ul>
+                </div>
+
+                <div class="footer">
+                    <p>A confirmation email has also been sent to your inbox.</p>
+                    <p style="margin-top: 1rem;">Questions? Contact us at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="345b46505146477447525142515a40445c5b405b1a575b59">[email&#160;protected]</a></p>
+                </div>
+            </div>
+
+            <div id="error" class="error" style="display: none;">
+                <h2>Order Not Found</h2>
+                <p>We couldn't find your order. This could mean:</p>
+                <ul style="text-align: left; display: inline-block; margin-top: 1rem;">
+                    <li>The payment is still processing</li>
+                    <li>The link has expired</li>
+                    <li>There was an error with the order</li>
+                </ul>
+                <p style="margin-top: 2rem;">
+                    Please check your email for order confirmation, or contact support.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://sf-event-photo-backend.vercel.app';
+        
+        let orderData = null;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderToken = urlParams.get('token');
+        const sessionId = urlParams.get('session_id');
+        const isFreeDownload = urlParams.get('free') === 'true';
+
+        async function loadOrder() {
+            try {
+                // FREE client download — read from localStorage
+                if (isFreeDownload) {
+                    const downloadInfo = JSON.parse(localStorage.getItem('lastDownload'));
+                    if (!downloadInfo || !downloadInfo.items || downloadInfo.items.length === 0) {
+                        throw new Error('No download info found');
+                    }
+                    displayFreeDownload(downloadInfo);
+                    return;
+                }
+                
+                let url;
+                if (orderToken) {
+                    url = `${API_URL}/api/downloads/${orderToken}`;
+                } else if (sessionId) {
+                    const sessionResponse = await fetch(`${API_URL}/api/checkout/session/${sessionId}`);
+                    const sessionData = await sessionResponse.json();
+                    url = `${API_URL}/api/orders/${sessionData.order_id}`;
+                } else {
+                    throw new Error('No order identifier provided');
+                }
+
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Order not found');
+
+                orderData = await response.json();
+                displayOrder(orderData);
+            } catch (error) {
+                console.error('Error loading order:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        function displayFreeDownload(downloadInfo) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+            
+            document.querySelector('#success h1').textContent = 'Your Photos Are Ready!';
+            document.querySelector('#success .subtitle').textContent = 'Client download — complimentary access';
+            
+            document.getElementById('orderNumber').textContent = 'CLIENT-' + Date.now().toString(36).toUpperCase();
+            document.getElementById('customerEmail').textContent = downloadInfo.email;
+            document.getElementById('orderTotal').textContent = 'FREE';
+            document.getElementById('photoCount').textContent = downloadInfo.items.length;
+            
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 7);
+            document.getElementById('expiryDate').textContent = expiryDate.toLocaleDateString('en-US', {
+                month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+            
+            loadFreeDownloadPhotos(downloadInfo);
+        }
+        
+        async function loadFreeDownloadPhotos(downloadInfo) {
+            const photosList = document.getElementById('photosList');
+            photosList.innerHTML = '<div style="text-align:center;padding:1rem;color:#666;">Loading download links...</div>';
+            
+            try {
+                const r = await fetch(`${API_URL}/api/projects`);
+                const d = await r.json();
+                const allProjects = d.projects || [];
+                
+                // Build map of photo_id → photo data
+                const photoMap = {};
+                for (const project of allProjects) {
+                    try {
+                        const pr = await fetch(`${API_URL}/api/projects/${project.slug}`);
+                        const pd = await pr.json();
+                        if (pd.photos) {
+                            pd.photos.forEach(photo => {
+                                photoMap[photo.id] = { ...photo, project_title: project.title };
+                            });
+                        }
+                    } catch (e) { /* skip */ }
+                }
+                
+                const resolvedPhotos = [];
+                
+                photosList.innerHTML = downloadInfo.items.map((item) => {
+                    const photoData = photoMap[item.photo_id];
+                    const downloadUrl = photoData ? (photoData.original_url || photoData.large_url || photoData.thumbnail_url) : '';
+                    const thumbUrl = item.thumbnail || (photoData ? photoData.thumbnail_url : '');
+                    const title = item.title || (photoData ? photoData.project_title : 'Photo');
+                    
+                    if (downloadUrl) resolvedPhotos.push({ id: item.photo_id, download_url: downloadUrl });
+                    
+                    return `
+                        <div class="photo-card">
+                            <img src="${thumbUrl}" alt="Photo" class="photo-thumbnail">
+                            <div class="photo-info">
+                                <div class="photo-title">${title}</div>
+                                <div class="photo-license">Client Download</div>
+                            </div>
+                            ${downloadUrl ? `
+                                <a href="${downloadUrl}" class="download-btn" download target="_blank">Download</a>
+                            ` : `
+                                <span class="download-btn" style="opacity:0.5;cursor:default;">Unavailable</span>
+                            `}
+                        </div>
+                    `;
+                }).join('');
+                
+                orderData = { photos: resolvedPhotos };
+                
+            } catch (e) {
+                photosList.innerHTML = downloadInfo.items.map((item) => `
+                    <div class="photo-card">
+                        <img src="${item.thumbnail}" alt="Photo" class="photo-thumbnail">
+                        <div class="photo-info">
+                            <div class="photo-title">${item.title || 'Photo'}</div>
+                            <div class="photo-license">Client Download</div>
+                        </div>
+                        <a href="${item.thumbnail}" class="download-btn" download target="_blank">Download</a>
+                    </div>
+                `).join('');
+            }
+        }
+
+        function displayOrder(order) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('success').style.display = 'block';
+
+            document.getElementById('orderNumber').textContent = order.order_number;
+            document.getElementById('customerEmail').textContent = order.customer_email;
+            document.getElementById('orderTotal').textContent = `$${(order.total_amount / 100).toFixed(2)}`;
+            document.getElementById('photoCount').textContent = order.photos.length;
+
+            const expiryDate = new Date(order.expires_at);
+            document.getElementById('expiryDate').textContent = expiryDate.toLocaleDateString('en-US', {
+                month: 'long', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+
+            const photosList = document.getElementById('photosList');
+            photosList.innerHTML = order.photos.map((photo) => `
+                <div class="photo-card">
+                    <img src="${photo.thumbnail_url}" alt="Photo" class="photo-thumbnail">
+                    <div class="photo-info">
+                        <div class="photo-title">${photo.project_title}</div>
+                        <div class="photo-license">${capitalizeFirst(photo.license_type)} License</div>
+                    </div>
+                    <a href="${photo.download_url}" class="download-btn" download target="_blank">Download</a>
+                </div>
+            `).join('');
+        }
+
+        function capitalizeFirst(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        async function downloadAll() {
+            if (!orderData || !orderData.photos) return;
+
+            for (const photo of orderData.photos) {
+                const link = document.createElement('a');
+                link.href = photo.download_url;
+                link.download = '';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+
+            alert(`Downloading ${orderData.photos.length} photos. Check your downloads folder!`);
+        }
+
+        function track

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results - SF Event Photo</title>
+    <style>
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalThin.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalThin.woff') format('woff');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e8e8e8;
+            --gray-dark: #888888;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 1000;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .logo {
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+        
+        .nav a:hover { opacity: 0.5; }
+        
+        .cart-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .cart-link svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background: #e53935;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 500;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-badge.show {
+            display: flex;
+        }
+        
+        .search-section {
+            padding: 2rem;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        
+        .search-container {
+            display: flex;
+            max-width: 600px;
+            margin: 0 auto;
+            border: 1px solid var(--gray-mid);
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.9rem 1.25rem;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+        
+        .search-input:focus { outline: none; }
+        .search-input::placeholder { color: var(--gray-dark); }
+        
+        .search-btn {
+            padding: 0.9rem 1.75rem;
+            background: var(--black);
+            color: white;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        
+        .search-btn:hover { opacity: 0.8; }
+        
+        .main {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .search-info { margin-bottom: 2rem; }
+        .search-info h1 {
+            font-size: 1.5rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+        .search-info p { color: var(--gray-dark); font-weight: 300; }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-tab {
+            padding: 0.6rem 1.25rem;
+            background: var(--gray-light);
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            cursor: pointer;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        
+        .filter-tab:hover { background: var(--gray-mid); }
+        .filter-tab.active { background: var(--black); color: white; }
+        
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 3rem;
+        }
+        
+        @media (max-width: 1200px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 900px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 600px) { .gallery-grid { grid-template-columns: 1fr; } }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: #222;
+            border-radius: 4px;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s;
+        }
+        
+        .gallery-item:hover img { transform: scale(1.03); }
+        
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+            padding: 4rem 1rem 1rem;
+            color: white;
+        }
+        
+        .overlay-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.35;
+        }
+        
+        .overlay-meta {
+            font-size: 0.8rem;
+            font-weight: 300;
+            opacity: 0.85;
+            margin-top: 0.3rem;
+        }
+        
+        .loading, .empty-state {
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+        
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--gray-mid);
+            border-top-color: var(--black);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loading p { font-size: 0.9rem; font-weight: 300; color: var(--gray-dark); }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <nav class="nav">
+                <a href="/signin.html" id="signInLink">Sign In</a>
+                <a href="/cart.html" class="cart-link">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span class="cart-badge" id="cartCount">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="search-section">
+        <div class="search-container">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search people, brands, or events">
+            <button class="search-btn" onclick="doSearch()">Search</button>
+        </div>
+    </section>
+
+    <main class="main">
+        <div class="search-info">
+            <h1>Search Results for "<span id="queryDisplay"></span>"</h1>
+            <p id="resultsCount">Searching...</p>
+        </div>
+        
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-type="all">All</button>
+            <button class="filter-tab" data-type="people">People</button>
+            <button class="filter-tab" data-type="brands">Brands</button>
+            <button class="filter-tab" data-type="projects">Galleries</button>
+        </div>
+        
+        <div id="resultsContainer">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Searching...</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://sf-event-photo-backend.vercel.app';
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentQuery = urlParams.get('q') || '';
+        let currentType = 'all';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('searchInput').value = currentQuery;
+            document.getElementById('queryDisplay').textContent = currentQuery;
+            if (currentQuery) performSearch();
+            
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentType = tab.dataset.type;
+                    performSearch();
+                });
+            });
+            
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') doSearch();
+            });
+        });
+        
+        function doSearch() {
+            const q = document.getElementById('searchInput').value.trim();
+            if (q) window.location.href = `/search.html?q=${encodeURIComponent(q)}`;
+        }
+        
+        async function performSearch() {
+            const container = document.getElementById('resultsContainer');
+            container.innerHTML = '<div class="loading"><div class="spinner"></div><p>Searching...</p></div>';
+            
+            try {
+                const [searchRes, projectsRes] = await Promise.all([
+                    fetch(`${API_URL}/api/search?q=${encodeURIComponent(currentQuery)}&type=${currentType}`),
+                    fetch(`${API_URL}/api/projects`)
+                ]);
+                const data = await searchRes.json();
+                const projectsData = await projectsRes.json();
+                
+                if (data.error) throw new Error(data.error);
+                
+                const allProjects = projectsData.projects || [];
+                const queryLower = currentQuery.toLowerCase();
+                
+                const brandMatched = allProjects.filter(p => (p.brands || []).some(b => b.toLowerCase().includes(queryLower)));
+                const titleMatched = allProjects.filter(p => (p.title || '').toLowerCase().includes(queryLower) || (p.venue || '').toLowerCase().includes(queryLower));
+                
+                const apiProjects = data.projects || [];
+                const mergedMap = new Map();
+                [...apiProjects, ...brandMatched, ...titleMatched].forEach(p => { if (!mergedMap.has(p.id)) mergedMap.set(p.id, p); });
+                const mergedProjects = Array.from(mergedMap.values());
+                
+                document.getElementById('resultsCount').textContent = `Found ${mergedProjects.length} galleries`;
+                
+                let html = '';
+                if (mergedProjects.length > 0) {
+                    html += `<h2 class="section-title">Galleries (${mergedProjects.length})</h2>
+                        <div class="gallery-grid">
+                            ${mergedProjects.map(p => `
+                                <div class="gallery-item" onclick="window.location.href='/project.html?slug=${p.slug}'">
+                                    <img src="${p.cover_image_url || 'https://via.placeholder.com/600x450'}" alt="${p.title}">
+                                    <div class="overlay">
+                                        <div class="overlay-title">${p.title}</div>
+                                        <div class="overlay-meta">${p.photo_count || 0} photos${p.venue ? ' · ' + p.venue : ''}</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>`;
+                }
+                
+                if (!html) {
+                    html = '<div class="empty-state"><h3>No results found</h3><p>Try a different search term.</p></div>';
+                }
+                
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `<div class="empty-state"><h3>Error searching</h3><p>${error.message}</p></div>`;
+            }
+        }
+    </script>
+</body>
+</html>

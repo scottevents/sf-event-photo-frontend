@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SF Event Photo - Professional Event Photography in San Francisco</title>
+    <meta name="description" content="Professional event photography services in San Francisco. Corporate events, conferences, activations, parties, portraits, and video coverage. View our portfolio of recent events.">
+    <meta name="keywords" content="event photography, San Francisco photographer, corporate photography, conference photography, party photographer, activation photography, portrait photography, event videography">
+    <meta name="author" content="SF Event Photo">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="SF Event Photo - Professional Event Photography">
+    <meta property="og:description" content="Professional event photography services in San Francisco. Corporate events, conferences, activations, parties, and more.">
+    <meta property="og:url" content="https://sparkly-starlight-a5d2d5.netlify.app">
+    <meta property="og:site_name" content="SF Event Photo">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="SF Event Photo - Professional Event Photography">
+    <meta name="twitter:description" content="Professional event photography services in San Francisco.">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://sparkly-starlight-a5d2d5.netlify.app">
+    
+    <!-- Schema.org structured data for Local Business -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "SF Event Photo",
+        "description": "Professional event photography services in San Francisco",
+        "url": "https://sparkly-starlight-a5d2d5.netlify.app",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "San Francisco",
+            "addressRegion": "CA",
+            "addressCountry": "US"
+        },
+        "serviceType": ["Event Photography", "Corporate Photography", "Conference Photography", "Party Photography", "Portrait Photography", "Activation Photography", "Event Videography"]
+    }
+    </script>
+    
+    <style>
+        /* PP Neue York Font Family */
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalThin.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalThin.woff') format('woff');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e8e8e8;
+            --gray-dark: #888888;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Header */
+        .header {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            z-index: 1000;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+        }
+        
+        .logo {
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.08em;
+            text-decoration: none;
+            color: var(--black);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+        
+        .nav a:hover {
+            opacity: 0.5;
+        }
+        
+        .cart-link {
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        
+        .cart-link svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+        }
+        
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background: #e53935;
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 500;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .cart-badge.show {
+            display: flex;
+        }
+        
+        /* Search */
+        .search-section {
+            padding: 2rem 2rem 1.5rem;
+            background: var(--white);
+        }
+
+        /* Combined search and info layout */
+        .search-info-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+        }
+
+        .search-side {
+            flex: 0 0 auto;
+        }
+        
+        .info-side {
+            flex: 0 0 auto;
+            padding-left: 3rem;
+            border-left: 1px solid var(--gray-mid);
+        }
+        
+        .search-container {
+            display: flex;
+            border: 1px solid var(--gray-mid);
+        }
+        
+        .search-filter {
+            position: relative;
+            border-right: 1px solid var(--gray-mid);
+        }
+        
+        .search-filter-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 1rem;
+            background: none;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: var(--black);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.2s;
+        }
+        
+        .search-filter-btn:hover {
+            color: var(--gray-dark);
+        }
+        
+        .search-filter-btn svg {
+            width: 12px;
+            height: 12px;
+            stroke-width: 2;
+            transition: transform 0.2s;
+        }
+        
+        .search-filter-btn.open svg {
+            transform: rotate(180deg);
+        }
+        
+        .search-filter-dropdown {
+            position: absolute;
+            top: 100%;
+            left: -1px;
+            min-width: 160px;
+            background: var(--white);
+            border: 1px solid var(--gray-mid);
+            border-top: none;
+            z-index: 100;
+            display: none;
+        }
+        
+        .search-filter-dropdown.show {
+            display: block;
+        }
+        
+        .search-filter-option {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background: none;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--black);
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .search-filter-option:hover {
+            background: var(--gray-light);
+        }
+        
+        .search-filter-option.active {
+            font-weight: 500;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.9rem 1.25rem;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 300;
+            min-width: 340px;
+        }
+        
+        .search-input:focus { outline: none; }
+        .search-input::placeholder { color: var(--gray-dark); }
+
+        .info-side .info-block {
+            padding-left: 0;
+        }
+
+        .info-side .info-line {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-side .info-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-side .info-label {
+            font-weight: 400;
+            font-size: 0.8rem;
+            letter-spacing: 0.02em;
+            color: var(--gray-dark);
+            min-width: 70px;
+            flex-shrink: 0;
+        }
+
+        .info-side .info-value {
+            font-weight: 400;
+            color: var(--black);
+            white-space: nowrap;
+        }
+        
+        @media (max-width: 1250px) {
+            .search-info-wrapper {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+
+            .search-side {
+                width: 100%;
+            }
+
+            .search-container {
+                max-width: 550px;
+            }
+
+            .search-input {
+                min-width: 0;
+            }
+
+            .info-side {
+                padding-left: 1.25rem;
+                border-left: 1px solid var(--gray-mid);
+            }
+
+            .info-side .info-value {
+                white-space: normal;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .search-info-wrapper {
+                padding: 1.5rem;
+            }
+            
+            .search-filter {
+                display: none;
+            }
+            
+            .search-input {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+            
+            .search-btn {
+                padding: 0.75rem 1.25rem;
+                font-size: 0.75rem;
+            }
+
+            .info-side {
+                display: none;
+            }
+        }
+        
+        .search-btn {
+            padding: 0.9rem 1.75rem;
+            background: var(--black);
+            color: white;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        
+        .search-btn:hover { opacity: 0.8; }
+        
+        /* Gallery */
+        .gallery {
+            padding: 2rem 1.5rem 3rem;
+        }
+
+        .gallery-top {
+            padding: 2rem 1.5rem 0;
+            border-top: 1px solid var(--gray-mid);
+        }
+
+        .gallery-bottom {
+            padding: 2rem 1.5rem 3rem;
+            border-top: 1px solid var(--gray-mid);
+        }
+
+        .gallery-header {
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 6px;
+        }
+        
+        @media (max-width: 1400px) { .gallery-grid { grid-template-columns: repeat(4, 1fr); } }
+        @media (max-width: 1100px) { .gallery-grid { grid-template-columns: repeat(3, 1fr); } }
+        @media (max-width: 750px) { .gallery-grid { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 500px) { 
+            .gallery-grid { grid-template-columns: repeat(2, 1fr); gap: 4px; }
+            .gallery { padding: 1.5rem 0.75rem 2rem; }
+            .gallery-top { padding-bottom: 0; }
+            .gallery-bottom { padding-top: 1.5rem; }
+            .header-inner { padding: 1rem; }
+            .nav { gap: 1.5rem; }
+            .nav a { font-size: 0.75rem; }
+            .gallery-title { font-size: 0.7rem; }
+            .gallery-venue { font-size: 0.65rem; }
+            .gallery-date { font-size: 0.6rem; }
+            .gallery-count { font-size: 0.6rem; }
+            .gallery-overlay { padding: 2rem 0.75rem 0.75rem; }
+        }
+
+        /* Index Info Section - now part of search-info-wrapper */
+        }
+
+        @media (max-width: 600px) {
+            .info-index {
+                justify-content: flex-start;
+                padding: 1.25rem 1.5rem 1.5rem;
+            }
+            
+            .info-block {
+                padding-left: 1rem;
+            }
+            
+            .info-line {
+                flex-direction: column;
+                gap: 0.25rem;
+                margin-bottom: 1rem;
+            }
+            
+            .info-line:last-child {
+                margin-bottom: 0;
+            }
+            
+            .info-label {
+                min-width: auto;
+            }
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            background: #222;
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.03);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 60%, transparent 100%);
+            padding: 4rem 1rem 1rem;
+            color: white;
+        }
+        
+        .gallery-date {
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.35rem;
+            opacity: 0.9;
+        }
+        
+        .gallery-title {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            line-height: 1.35;
+            margin-bottom: 0.3rem;
+        }
+        
+        .gallery-venue {
+            font-size: 0.8rem;
+            font-weight: 300;
+            opacity: 0.85;
+            margin-bottom: 0.5rem;
+        }
+        
+        .gallery-count {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            font-weight: 300;
+            opacity: 0.8;
+        }
+        
+        .gallery-count svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Gallery Header */
+        .gallery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .gallery-header-title {
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--black);
+        }
+
+        .gallery-header-link {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--gray-dark);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .gallery-header-link:hover {
+            color: var(--black);
+        }
+
+        /* Reviews Section - Slideshow */
+        .reviews-section {
+            padding: 5rem 1.5rem;
+            margin-top: 3rem;
+            background: var(--white);
+            border-top: 1px solid var(--gray-mid);
+            border-bottom: 1px solid var(--gray-mid);
+        }
+
+        .reviews-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .reviews-slideshow {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .reviews-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .reviews-slide {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            min-width: 100%;
+            padding: 0 1rem;
+        }
+
+        @media (max-width: 800px) {
+            .reviews-slide {
+                grid-template-columns: 1fr;
+                gap: 3rem;
+            }
+            .reviews-section {
+                padding: 3.5rem 1.5rem;
+            }
+        }
+
+        .review-item {
+            max-width: 550px;
+        }
+
+        .review-quote {
+            font-size: 1.75rem;
+            font-weight: 400;
+            line-height: 1.35;
+            margin-bottom: 1.5rem;
+            color: var(--black);
+        }
+
+        @media (max-width: 600px) {
+            .review-quote {
+                font-size: 1.35rem;
+            }
+        }
+
+        .review-attribution {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: var(--gray-dark);
+            font-family: monospace;
+            letter-spacing: 0.02em;
+        }
+
+        .reviews-nav {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 3rem;
+        }
+
+        .reviews-arrow {
+            width: 48px;
+            height: 48px;
+            border: 1px solid var(--gray-mid);
+            background: var(--white);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .reviews-arrow:hover {
+            background: var(--black);
+            border-color: var(--black);
+        }
+
+        .reviews-arrow:hover svg {
+            stroke: var(--white);
+        }
+
+        .reviews-arrow svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--black);
+            stroke-width: 1.5;
+            fill: none;
+        }
+
+        .reviews-dots {
+            display: flex;
+            gap: 0.5rem;
+            margin-left: 1rem;
+        }
+
+        .reviews-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray-mid);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .reviews-dot.active {
+            background: var(--black);
+        }
+        
+        /* Loading & Empty */
+        .loading, .empty-state {
+            text-align: center;
+            padding: 6rem 2rem;
+        }
+        
+        .spinner {
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--gray-mid);
+            border-top-color: var(--black);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 1.5rem;
+        }
+        
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .loading p { font-size: 0.9rem; font-weight: 300; color: var(--gray-dark); }
+        .empty-state h3 { font-size: 1.25rem; font-weight: 400; margin-bottom: 0.5rem; }
+        .empty-state p { color: var(--gray-dark); font-weight: 300; }
+        
+        /* Cart Sidebar */
+        .cart-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+        
+        .cart-overlay.open { opacity: 1; visibility: visible; }
+        
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 400px;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            transition: right 0.3s;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -4px 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .cart-sidebar.open { right: 0; }
+        
+        .cart-header {
+            padding: 1.5rem 1.75rem;
+            border-bottom: 1px solid var(--gray-mid);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .cart-header h2 {
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        
+        .cart-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--black);
+        }
+        
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem 1.75rem;
+        }
+        
+        .cart-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .cart-item:first-child { padding-top: 0; }
+        
+        .cart-item-image {
+            width: 70px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 2px;
+        }
+        
+        .cart-item-info { flex: 1; }
+        .cart-item-title { font-size: 0.85rem; font-weight: 400; margin-bottom: 0.2rem; }
+        .cart-item-license { font-size: 0.75rem; color: var(--gray-dark); font-weight: 300; }
+        .cart-item-price { font-size: 0.85rem; font-weight: 500; margin-top: 0.25rem; }
+        .cart-item-remove { background: none; border: none; color: var(--gray-dark); cursor: pointer; font-size: 1.25rem; }
+        
+        .cart-footer {
+            padding: 1.5rem 1.75rem;
+            border-top: 1px solid var(--gray-mid);
+            background: var(--gray-light);
+        }
+        
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .checkout-btn {
+            width: 100%;
+            padding: 1rem;
+            background: var(--black);
+            color: white;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+        
+        .checkout-btn:hover:not(:disabled) { opacity: 0.8; }
+        .checkout-btn:disabled { background: var(--gray-mid); color: var(--gray-dark); cursor: not-allowed; }
+        
+        /* User Menu */
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--black);
+            padding: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .user-menu-btn:hover { opacity: 0.5; }
+        
+        .user-menu-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke-width: 1.5;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-mid);
+            min-width: 200px;
+            display: none;
+            z-index: 100;
+        }
+        
+        .user-dropdown.show { display: block; }
+        
+        .user-dropdown a,
+        .user-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--gray-mid);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .user-dropdown a:hover,
+        .user-dropdown button:hover { background: var(--gray-light); }
+        
+        .user-dropdown .signout-btn {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+        }
+        
+        .user-dropdown .signout-btn:hover { opacity: 0.9; background: var(--black); }
+        
+        .user-dropdown .user-email {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.7);
+            text-transform: none;
+            letter-spacing: 0;
+            margin-top: 0.25rem;
+        }
+        
+        .auth-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+        
+        .auth-link:hover { opacity: 0.5; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <nav class="nav">
+                <!-- Auth: Sign In link (shown when logged out) -->
+                <a href="/signin.html" class="auth-link" id="signInLink">Sign In</a>
+                
+                <!-- User Menu (shown when logged in) -->
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <button class="user-menu-btn" onclick="toggleUserMenu()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span id="userName">Account</span>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="/my-photos.html">My Photos</a>
+                        <button class="signout-btn" onclick="signOut()">
+                            Sign Out
+                            <div class="user-email" id="userEmail"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <a href="#" class="cart-link" onclick="toggleCart(); return false;">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span class="cart-badge" id="cartCount">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="search-info-wrapper">
+        <div class="search-side">
+            <div class="search-container">
+                <div class="search-filter">
+                    <button class="search-filter-btn" id="filterBtn" onclick="toggleFilterDropdown()">
+                        <span id="filterLabel">Event Type</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </button>
+                    <div class="search-filter-dropdown" id="filterDropdown">
+                        <button class="search-filter-option active" data-filter="all" onclick="selectFilter('all', 'Event Type')">All</button>
+                        <button class="search-filter-option" data-filter="activations" onclick="selectFilter('activations', 'Activations')">Activations</button>
+                        <button class="search-filter-option" data-filter="conferences" onclick="selectFilter('conferences', 'Conferences')">Conferences</button>
+                        <button class="search-filter-option" data-filter="corporate" onclick="selectFilter('corporate', 'Corporate')">Corporate</button>
+                        <button class="search-filter-option" data-filter="portraits" onclick="selectFilter('portraits', 'Portraits')">Portraits</button>
+                        <button class="search-filter-option" data-filter="parties" onclick="selectFilter('parties', 'Parties')">Parties</button>
+                        <button class="search-filter-option" data-filter="video" onclick="selectFilter('video', 'Video')">Video</button>
+                    </div>
+                </div>
+                <input type="text" class="search-input" id="searchInput" placeholder="Search people, brands, or events">
+                <button class="search-btn" onclick="doSearch()">Search</button>
+            </div>
+        </div>
+        <div class="info-side">
+            <div class="info-block">
+                <div class="info-line">
+                    <span class="info-label">About</span>
+                    <span class="info-value">Premiere event photography agency trusted by top brands & agencies.</span>
+                </div>
+                <div class="info-line">
+                    <span class="info-label">Services</span>
+                    <span class="info-value">Event Photography, Videography, & Distribution</span>
+                </div>
+                <div class="info-line">
+                    <span class="info-label">Locations</span>
+                    <span class="info-value">San Francisco & Los Angeles with projects worldwide.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="gallery gallery-top">
+        <div class="gallery-header">
+            <span class="gallery-header-title">Featured Projects</span>
+        </div>
+        <div id="galleryContainerTop">
+            <div class="loading">
+                <div class="spinner"></div>
+                <p>Loading galleries...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews Section -->
+    <section class="reviews-section">
+        <div class="reviews-container">
+            <div class="reviews-slideshow">
+                <div class="reviews-track" id="reviewsTrack">
+                    <!-- Slide 1 -->
+                    <div class="reviews-slide">
+                        <div class="review-item">
+                            <p class="review-quote">"I manage corporate events across 7 states and this is by far my favorite photography team. They are quick to respond, adaptable, and deliver on timelines."</p>
+                            <div class="review-attribution">Michelle H, Lockton</div>
+                        </div>
+                        <div class="review-item">
+                            <p class="review-quote">"We hired SF Event Photo for our corporate event and couldn't be happier. The photos are absolutely stunning."</p>
+                            <div class="review-attribution">Yajaira C, StarSpace Global</div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="reviews-slide">
+                        <div class="review-item">
+                            <p class="review-quote">"The experience was amazing from the first time we spoke. Every moment and detail was perfectly captured with great quality."</p>
+                            <div class="review-attribution">Lucia M, MarketLogic</div>
+                        </div>
+                        <div class="review-item">
+                            <p class="review-quote">"The attention to detail and creativity truly set them apart. We highly recommend SF Event Photo."</p>
+                            <div class="review-attribution">Lauren R, Transforming Age</div>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="reviews-slide">
+                        <div class="review-item">
+                            <p class="review-quote">"A top professional from start to finish. Full of positive energy during the event and the final photos were stunning."</p>
+                            <div class="review-attribution">Maude P, BlockChain Game Alliance</div>
+                        </div>
+                        <div class="review-item">
+                            <p class="review-quote">"I hired SF Event Photo for my company's biggest events and they did a fantastic job! Completely professional."</p>
+                            <div class="review-attribution">Garnette R, BXP</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="reviews-nav">
+                <button class="reviews-arrow" id="reviewsPrev" onclick="changeReviewSlide(-1)">
+                    <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <button class="reviews-arrow" id="reviewsNext" onclick="changeReviewSlide(1)">
+                    <svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+                <div class="reviews-dots">
+                    <div class="reviews-dot active" onclick="goToReviewSlide(0)"></div>
+                    <div class="reviews-dot" onclick="goToReviewSlide(1)"></div>
+                    <div class="reviews-dot" onclick="goToReviewSlide(2)"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Event Feed Section -->
+    <section class="gallery gallery-bottom" id="galleryBottomSection" style="display: none;">
+        <div class="gallery-header">
+            <span class="gallery-header-title">Event Feed</span>
+        </div>
+        <div id="galleryContainerBottom"></div>
+    </section>
+
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h2>Your Cart</h2>
+            <button class="cart-close" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <div class="empty-state"><p>Your cart is empty</p></div>
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://sf-event-photo-backend.vercel.app';
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let projects = [];
+        let currentFilter = 'all';
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProjects();
+            updateCartUI();
+            checkAuth();
+            document.getElementById('searchInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') doSearch();
+            });
+            
+            // Close filter dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.search-filter')) {
+                    document.getElementById('filterDropdown').classList.remove('show');
+                    document.getElementById('filterBtn').classList.remove('open');
+                }
+            });
+        });
+        
+        // Filter dropdown functions
+        function toggleFilterDropdown() {
+            const dropdown = document.getElementById('filterDropdown');
+            const btn = document.getElementById('filterBtn');
+            dropdown.classList.toggle('show');
+            btn.classList.toggle('open');
+        }
+        
+        function selectFilter(filter, label) {
+            currentFilter = filter;
+            document.getElementById('filterLabel').textContent = label;
+            
+            // Update active state
+            document.querySelectorAll('.search-filter-option').forEach(opt => {
+                opt.classList.remove('active');
+                if (opt.dataset.filter === filter) opt.classList.add('active');
+            });
+            
+            // Close dropdown
+            document.getElementById('filterDropdown').classList.remove('show');
+            document.getElementById('filterBtn').classList.remove('open');
+            
+            // Re-render gallery with filter
+            renderGallery();
+        }
+        
+        // Auth functions
+        function checkAuth() {
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                document.getElementById('signInLink').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('userName').textContent = user.name.split(' ')[0];
+                document.getElementById('userEmail').textContent = user.email;
+            }
+        }
+        
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.user-menu')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        });
+        
+        function signOut() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.reload();
+        }
+        
+        async function loadProjects() {
+            const containerTop = document.getElementById('galleryContainerTop');
+            try {
+                const response = await fetch(`${API_URL}/api/projects`);
+                const data = await response.json();
+                if (data.error) throw new Error(data.error);
+                projects = data.projects || [];
+                // Sort by sort_order (ascending)
+                projects.sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+                if (projects.length === 0) {
+                    containerTop.innerHTML = '<div class="empty-state"><h3>No galleries yet</h3><p>Check back soon!</p></div>';
+                    return;
+                }
+                renderGallery();
+            } catch (error) {
+                containerTop.innerHTML = `<div class="empty-state"><h3>Error loading galleries</h3><p>${error.message}</p></div>`;
+            }
+        }
+        
+        function renderGalleryGrid(projectsList) {
+            return `
+                <div class="gallery-grid">
+                    ${projectsList.map(p => `
+                        <div class="gallery-item" onclick="viewProject('${p.slug}')">
+                            <img src="${p.cover_image_url || 'https://via.placeholder.com/600x450'}" alt="${p.title}" loading="lazy">
+                            <div class="gallery-overlay">
+                                <div class="gallery-date">${formatDateRange(p.event_date, p.event_end_date)}</div>
+                                <div class="gallery-title">${p.title}</div>
+                                ${p.venue ? `<div class="gallery-venue">${p.venue}</div>` : ''}
+                                <div class="gallery-count">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+                                    </svg>
+                                    ${p.photo_count || 0}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+        
+        function renderGallery() {
+            // Get all featured projects sorted by featured_order
+            let allFeaturedProjects = projects.filter(p => p.featured === true);
+            allFeaturedProjects.sort((a, b) => (a.featured_order || 0) - (b.featured_order || 0));
+            
+            // Filter featured projects by event type if filter is active
+            let filteredFeatured = allFeaturedProjects;
+            if (currentFilter !== 'all') {
+                filteredFeatured = allFeaturedProjects.filter(p => {
+                    const eventType = (p.event_type || '').toLowerCase();
+                    return eventType === currentFilter;
+                });
+            }
+            
+            // Only show first 10 featured projects
+            const featuredToShow = filteredFeatured.slice(0, 10);
+            
+            // Filter all projects for event feed
+            let eventFeedProjects = projects;
+            if (currentFilter !== 'all') {
+                eventFeedProjects = projects.filter(p => {
+                    const eventType = (p.event_type || '').toLowerCase();
+                    return eventType === currentFilter;
+                });
+            }
+            
+            // Render featured gallery (top section) - always show if there are featured projects
+            if (featuredToShow.length > 0) {
+                document.getElementById('galleryContainerTop').innerHTML = renderGalleryGrid(featuredToShow);
+            } else if (eventFeedProjects.length > 0) {
+                // Fallback: if no featured projects match filter, show first 10 from event feed
+                const fallbackProjects = eventFeedProjects.slice(0, 10);
+                document.getElementById('galleryContainerTop').innerHTML = renderGalleryGrid(fallbackProjects);
+            } else {
+                document.getElementById('galleryContainerTop').innerHTML = '<div class="empty-state"><p>No projects found for this filter.</p></div>';
+            }
+            
+            // Show Event Feed with all filtered projects
+            if (eventFeedProjects.length > 0) {
+                document.getElementById('galleryBottomSection').style.display = 'block';
+                document.getElementById('galleryContainerBottom').innerHTML = renderGalleryGrid(eventFeedProjects);
+            } else {
+                document.getElementById('galleryBottomSection').style.display = 'none';
+            }
+        }
+        
+        function doSearch() {
+            const q = document.getElementById('searchInput').value.trim();
+            if (q) window.location.href = `/search.html?q=${encodeURIComponent(q)}`;
+        }
+        
+        function viewProject(slug) { window.location.href = `/project.html?slug=${slug}`; }
+        
+        function formatDateRange(startDate, endDate) {
+            if (!startDate) return '';
+            const start = new Date(startDate);
+            const startMonth = start.toLocaleDateString('en-US', { month: 'short' });
+            const startDay = start.getDate();
+            const startYear = start.getFullYear();
+            
+            if (!endDate) {
+                return `${startMonth} ${startDay}, ${startYear}`;
+            }
+            
+            const end = new Date(endDate);
+            const endMonth = end.toLocaleDateString('en-US', { month: 'short' });
+            const endDay = end.getDate();
+            const endYear = end.getFullYear();
+            
+            // Same month and year
+            if (startMonth === endMonth && startYear === endYear) {
+                return `${startMonth} ${startDay}-${endDay}, ${startYear}`;
+            }
+            // Same year, different month
+            if (startYear === endYear) {
+                return `${startMonth} ${startDay} - ${endMonth} ${endDay}, ${startYear}`;
+            }
+            // Different years
+            return `${startMonth} ${startDay}, ${startYear} - ${endMonth} ${endDay}, ${endYear}`;
+        }
+        
+        function toggleCart() {
+            document.getElementById('cartSidebar').classList.toggle('open');
+            document.getElementById('cartOverlay').classList.toggle('open');
+        }
+        
+        function updateCartUI() {
+            const cartItems = document.getElementById('cartItems');
+            const cartCount = document.getElementById('cartCount');
+            const cartTotal = document.getElementById('cartTotal');
+            const checkoutBtn = document.getElementById('checkoutBtn');
+            cartCount.textContent = cart.length;
+            cartCount.classList.toggle('show', cart.length > 0);
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-state"><p>Your cart is empty</p></div>';
+                cartTotal.textContent = '$0.00';
+                checkoutBtn.disabled = true;
+                return;
+            }
+            let total = 0;
+            cartItems.innerHTML = cart.map((item, i) => {
+                total += item.price;
+                return `<div class="cart-item">
+                    <img src="${item.thumbnail}" class="cart-item-image">
+                    <div class="cart-item-info">
+                        <div class="cart-item-title">${item.title}</div>
+                        <div class="cart-item-license">${item.license} License</div>
+                        <div class="cart-item-price">$${(item.price / 100).toFixed(2)}</div>
+                    </div>
+                    <button class="cart-item-remove" onclick="removeFromCart(${i})">&times;</button>
+                </div>`;
+            }).join('');
+            cartTotal.textContent = `$${(total / 100).toFixed(2)}`;
+            checkoutBtn.disabled = false;
+        }
+        
+        function removeFromCart(i) {
+            cart.splice(i, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartUI();
+        }
+        
+        async function checkout() {
+            if (cart.length === 0) return;
+            const btn = document.getElementById('checkoutBtn');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+            try {
+                const email = prompt('Enter your email address:');
+                if (!email) { btn.disabled = false; btn.textContent = 'Proceed to Checkout'; return; }
+                const res = await fetch(`${API_URL}/api/checkout/create-session`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ items: cart.map(item => ({ photo_id: item.photo_id, license_type: item.license_type })), customer_email: email })
+                });
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                localStorage.removeItem('cart');
+                window.location.href = data.url;
+            } catch (e) {
+                alert('Checkout failed: ' + e.message);
+                btn.disabled = false;
+                btn.textContent = 'Proceed to Checkout';
+            }
+        }
+
+        // Reviews Slideshow
+        let currentReviewSlide = 0;
+        const totalReviewSlides = 3;
+        let reviewAutoPlay;
+
+        function changeReviewSlide(direction) {
+            currentReviewSlide += direction;
+            if (currentReviewSlide >= totalReviewSlides) currentReviewSlide = 0;
+            if (currentReviewSlide < 0) currentReviewSlide = totalReviewSlides - 1;
+            updateReviewSlide();
+            resetReviewAutoPlay();
+        }
+
+        function goToReviewSlide(index) {
+            currentReviewSlide = index;
+            updateReviewSlide();
+            resetReviewAutoPlay();
+        }
+
+        function updateReviewSlide() {
+            const track = document.getElementById('reviewsTrack');
+            track.style.transform = `translateX(-${currentReviewSlide * 100}%)`;
+            
+            document.querySelectorAll('.reviews-dot').forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentReviewSlide);
+            });
+        }
+
+        function resetReviewAutoPlay() {
+            clearInterval(reviewAutoPlay);
+            reviewAutoPlay = setInterval(() => changeReviewSlide(1), 6000);
+        }
+
+        // Start autoplay
+        document.addEventListener('DOMContentLoaded', () => {
+            reviewAutoPlay = setInterval(() => changeReviewSlide(1), 6000);
+        });
+    </script>
+</body>
+</html>

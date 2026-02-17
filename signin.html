@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - SF Event Photo</title>
+    
+    <link rel="preload" href="./fonts/PPNeueYork-NormalRegular.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <style>
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e0e0e0;
+            --gray-dark: #888888;
+            --error: #e53935;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-mid);
+            z-index: 1000;
+            padding: 1.25rem 2rem;
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+        
+        .nav a:hover {
+            opacity: 0.5;
+        }
+        
+        .cart-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--black);
+            background: none;
+            border: none;
+        }
+        
+        .cart-btn:hover {
+            opacity: 0.5;
+        }
+        
+        .cart-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background: #e53935;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 500;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Main Content */
+        .main {
+            margin-top: 75px;
+            min-height: calc(100vh - 75px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem 2rem;
+        }
+        
+        .auth-container {
+            width: 100%;
+            max-width: 420px;
+        }
+        
+        .auth-title {
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.75rem;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 0;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 1rem;
+            font-weight: 300;
+            border: none;
+            border-bottom: 1px solid var(--gray-mid);
+            background: transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-bottom-color: var(--black);
+        }
+        
+        .form-input::placeholder {
+            color: var(--gray-dark);
+        }
+        
+        .form-error {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        
+        .form-error.show {
+            display: block;
+        }
+        
+        .forgot-password {
+            display: block;
+            text-align: right;
+            margin-bottom: 2rem;
+            font-size: 0.8rem;
+            color: var(--black);
+        }
+        
+        .forgot-password a {
+            color: var(--black);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        
+        .forgot-password a:hover {
+            opacity: 0.6;
+        }
+        
+        .auth-actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .submit-btn {
+            padding: 1rem 2.5rem;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border: 1px solid var(--black);
+            background: var(--white);
+            color: var(--black);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .submit-btn:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .auth-switch {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: var(--gray-dark);
+        }
+        
+        .auth-switch a {
+            color: var(--black);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+        }
+        
+        .auth-switch a:hover {
+            opacity: 0.6;
+        }
+        
+        .general-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: var(--error);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+        
+        .general-error.show {
+            display: block;
+        }
+        
+        /* Loading state */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        @media (max-width: 600px) {
+            .header { padding: 1rem; }
+            .logo { font-size: 1.2rem; }
+            .nav { gap: 1rem; }
+            .nav a { font-size: 0.75rem; }
+            
+            .main { padding: 2rem 1.5rem; }
+            .auth-title { font-size: 2rem; margin-bottom: 2rem; }
+            .auth-actions { flex-direction: column; align-items: stretch; }
+            .submit-btn { width: 100%; }
+            .auth-switch { text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <nav class="nav">
+                <a href="/">Projects</a>
+                <a href="/cart.html" class="cart-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="auth-container">
+            <h1 class="auth-title">Sign In</h1>
+            
+            <div class="general-error" id="generalError"></div>
+            
+            <form id="signinForm" onsubmit="handleSignIn(event)">
+                <div class="form-group">
+                    <label class="form-label" for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        class="form-input" 
+                        placeholder="you@example.com"
+                        required
+                        autocomplete="email"
+                    >
+                    <div class="form-error" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        name="password" 
+                        class="form-input" 
+                        placeholder="••••••••"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <div class="form-error" id="passwordError"></div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="/forgot-password.html">Forgot your password?</a>
+                </div>
+                
+                <div class="auth-actions">
+                    <button type="submit" class="submit-btn" id="submitBtn">Sign In</button>
+                    <span class="auth-switch">Not a user? <a href="/signup.html">Sign Up</a></span>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://sf-event-photo-backend.vercel.app';
+        
+        // Check if already logged in
+        document.addEventListener('DOMContentLoaded', () => {
+            const user = localStorage.getItem('user');
+            if (user) {
+                window.location.href = '/';
+            }
+            updateCartCount();
+        });
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+        
+        async function handleSignIn(e) {
+            e.preventDefault();
+            
+            const form = document.getElementById('signinForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const generalError = document.getElementById('generalError');
+            
+            // Clear previous errors
+            generalError.classList.remove('show');
+            document.querySelectorAll('.form-error').forEach(el => el.classList.remove('show'));
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            
+            // Basic validation
+            let hasError = false;
+            
+            if (!email) {
+                showError('emailError', 'Email is required');
+                hasError = true;
+            }
+            
+            if (!password) {
+                showError('passwordError', 'Password is required');
+                hasError = true;
+            }
+            
+            if (hasError) return;
+            
+            // Submit
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Signing In...';
+            form.classList.add('loading');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/signin`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Sign in failed');
+                }
+                
+                // Store user data and token
+                localStorage.setItem('user', JSON.stringify(data.user));
+                localStorage.setItem('token', data.token);
+                
+                // Redirect to home or intended page
+                const redirect = new URLSearchParams(window.location.search).get('redirect');
+                window.location.href = redirect || '/';
+                
+            } catch (error) {
+                generalError.textContent = error.message;
+                generalError.classList.add('show');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Sign In';
+                form.classList.remove('loading');
+            }
+        }
+        
+        function showError(elementId, message) {
+            const el = document.getElementById(elementId);
+            el.textContent = message;
+            el.classList.add('show');
+        }
+    </script>
+</body>
+</html>

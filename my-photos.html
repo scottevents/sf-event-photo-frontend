@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Photos - SF Event Photo</title>
+    
+    <link rel="preconnect" href="https://imagedelivery.net" crossorigin>
+    <link rel="preload" href="./fonts/PPNeueYork-NormalRegular.woff2" as="font" type="font/woff2" crossorigin>
+    
+    <style>
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e0e0e0;
+            --gray-dark: #888888;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            color: var(--black);
+            background: var(--white);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-mid);
+            z-index: 1000;
+            padding: 1.25rem 2rem;
+        }
+        
+        .header-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+        
+        .nav a {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 400;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+        
+        .nav a:hover {
+            opacity: 0.5;
+        }
+        
+        .nav a.active {
+            border-bottom: 1px solid var(--black);
+            padding-bottom: 2px;
+        }
+        
+        /* User menu */
+        .user-menu {
+            position: relative;
+        }
+        
+        .user-menu-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--black);
+            padding: 0.5rem;
+        }
+        
+        .user-menu-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .user-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border: 1px solid var(--gray-mid);
+            min-width: 200px;
+            display: none;
+            z-index: 100;
+        }
+        
+        .user-dropdown.show {
+            display: block;
+        }
+        
+        .user-dropdown a,
+        .user-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 1rem 1.25rem;
+            text-align: left;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            text-decoration: none;
+            color: var(--black);
+            background: none;
+            border: none;
+            border-bottom: 1px solid var(--gray-mid);
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .user-dropdown a:hover,
+        .user-dropdown button:hover {
+            background: var(--gray-light);
+        }
+        
+        .user-dropdown .signout-btn {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+        }
+        
+        .user-dropdown .signout-btn:hover {
+            opacity: 0.9;
+        }
+        
+        .user-dropdown .user-email {
+            font-size: 0.75rem;
+            color: var(--gray-dark);
+            text-transform: none;
+            letter-spacing: 0;
+        }
+        
+        .cart-btn {
+            position: relative;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: var(--black);
+            background: none;
+            border: none;
+        }
+        
+        .cart-btn:hover {
+            opacity: 0.5;
+        }
+        
+        .cart-btn svg {
+            width: 24px;
+            height: 24px;
+            stroke-width: 1.5;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -10px;
+            background: #e53935;
+            color: white;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 500;
+            min-width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Main Content */
+        .main {
+            margin-top: 75px;
+            padding: 2.5rem 3.5rem;
+            max-width: 1600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+        
+        .page-subtitle {
+            font-size: 1rem;
+            font-weight: 300;
+            color: var(--gray-dark);
+            margin-bottom: 2.5rem;
+        }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 2rem;
+            border-bottom: 1px solid var(--gray-mid);
+            margin-bottom: 2rem;
+        }
+        
+        .tab {
+            padding: 1rem 0;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: var(--gray-dark);
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+        
+        .tab:hover {
+            color: var(--black);
+        }
+        
+        .tab.active {
+            color: var(--black);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--black);
+        }
+        
+        .tab-count {
+            font-size: 0.75rem;
+            color: var(--gray-dark);
+            margin-left: 0.35rem;
+        }
+        
+        /* Content sections */
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Photos grid */
+        .photos-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        
+        .photo-card {
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+            border-radius: 4px;
+            height: 280px;
+            flex: 300 1 300px;
+            cursor: pointer;
+        }
+        
+        .photo-card.landscape { flex: 400 1 400px; }
+        .photo-card.portrait { flex: 200 1 200px; }
+        
+        .photo-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .photo-card:hover img {
+            transform: scale(1.02);
+        }
+        
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent 0%, rgba(0,0,0,0.75) 100%);
+            padding: 3rem 1rem 1rem;
+        }
+        
+        .photo-project {
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 400;
+            margin-bottom: 0.2rem;
+        }
+        
+        .photo-date {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8rem;
+            font-weight: 300;
+        }
+        
+        .photo-download-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.6);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        
+        .photo-card:hover .photo-download-btn {
+            opacity: 1;
+        }
+        
+        .photo-download-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        .photo-download-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: white;
+            fill: none;
+        }
+        
+        /* Galleries grid */
+        .galleries-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .gallery-card {
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+            border-radius: 4px;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+        }
+        
+        .gallery-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .gallery-card:hover img {
+            transform: scale(1.02);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent 0%, rgba(0,0,0,0.8) 100%);
+            padding: 3rem 1.25rem 1.25rem;
+        }
+        
+        .gallery-date {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.8rem;
+            font-weight: 300;
+            margin-bottom: 0.3rem;
+        }
+        
+        .gallery-title {
+            color: white;
+            font-size: 1rem;
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+        }
+        
+        .gallery-venue {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.85rem;
+            font-weight: 300;
+        }
+        
+        .gallery-count {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
+        }
+        
+        /* Empty state */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--gray-dark);
+        }
+        
+        .empty-state h3 {
+            font-size: 1.25rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+            color: var(--black);
+        }
+        
+        .empty-state p {
+            font-size: 0.95rem;
+            font-weight: 300;
+            margin-bottom: 1.5rem;
+        }
+        
+        .empty-state a {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 1px solid var(--black);
+            color: var(--black);
+            transition: all 0.2s;
+        }
+        
+        .empty-state a:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+        
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: var(--gray-dark);
+        }
+        
+        .loading-spinner {
+            border: 3px solid var(--gray-mid);
+            border-top: 3px solid var(--black);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 900px) {
+            .main { padding: 2rem 1.5rem; }
+            .page-title { font-size: 2rem; }
+            .photo-card { height: 240px; }
+        }
+        
+        @media (max-width: 600px) {
+            .header { padding: 1rem; }
+            .logo { font-size: 1.2rem; }
+            .nav { gap: 1rem; }
+            .nav a:not(.cart-btn) { display: none; }
+            
+            .tabs { gap: 1rem; overflow-x: auto; }
+            .tab { font-size: 0.8rem; white-space: nowrap; }
+            
+            .photo-card,
+            .photo-card.landscape,
+            .photo-card.portrait {
+                height: auto;
+                flex: 0 0 100%;
+            }
+            .photo-card img {
+                aspect-ratio: 4/3;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <nav class="nav">
+                <a href="/">Projects</a>
+                <a href="/my-photos.html" class="active">My Photos</a>
+                
+                <div class="user-menu">
+                    <button class="user-menu-btn" onclick="toggleUserMenu()">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                        <span id="userName">Account</span>
+                    </button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <a href="/my-photos.html">My Photos</a>
+                        <button class="signout-btn" onclick="signOut()">
+                            Sign Out
+                            <div class="user-email" id="userEmail"></div>
+                        </button>
+                    </div>
+                </div>
+                
+                <a href="/cart.html" class="cart-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                    <span class="cart-count" id="cartCount">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <h1 class="page-title">My Photos</h1>
+        <p class="page-subtitle">Photos and galleries you've purchased or downloaded</p>
+        
+        <div class="tabs">
+            <button class="tab active" data-tab="photos" onclick="switchTab('photos')">
+                Photos <span class="tab-count" id="photosCount">(0)</span>
+            </button>
+            <button class="tab" data-tab="galleries" onclick="switchTab('galleries')">
+                Galleries <span class="tab-count" id="galleriesCount">(0)</span>
+            </button>
+        </div>
+        
+        <div id="photosContent" class="tab-content active">
+            <div class="loading" id="photosLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading your photos...</p>
+            </div>
+            <div class="photos-grid" id="photosGrid"></div>
+            <div class="empty-state" id="photosEmpty" style="display: none;">
+                <h3>No photos yet</h3>
+                <p>Photos you purchase or download will appear here.</p>
+                <a href="/">Browse Projects</a>
+            </div>
+        </div>
+        
+        <div id="galleriesContent" class="tab-content">
+            <div class="loading" id="galleriesLoading">
+                <div class="loading-spinner"></div>
+                <p>Loading your galleries...</p>
+            </div>
+            <div class="galleries-grid" id="galleriesGrid"></div>
+            <div class="empty-state" id="galleriesEmpty" style="display: none;">
+                <h3>No galleries yet</h3>
+                <p>Galleries you've accessed with a client code will appear here.</p>
+                <a href="/">Browse Projects</a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const API_URL = 'https://sf-event-photo-backend.vercel.app';
+        let currentUser = null;
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication
+            const userStr = localStorage.getItem('user');
+            const token = localStorage.getItem('token');
+            
+            if (!userStr || !token) {
+                window.location.href = '/signin.html?redirect=/my-photos.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userStr);
+            document.getElementById('userName').textContent = currentUser.name.split(' ')[0];
+            document.getElementById('userEmail').textContent = currentUser.email;
+            
+            updateCartCount();
+            loadMyPhotos();
+            loadMyGalleries();
+        });
+        
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            document.getElementById('cartCount').textContent = cart.length;
+        }
+        
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.user-menu')) {
+                document.getElementById('userDropdown').classList.remove('show');
+            }
+        });
+        
+        function signOut() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+            document.getElementById(`${tab}Content`).classList.add('active');
+        }
+        
+        async function loadMyPhotos() {
+            const token = localStorage.getItem('token');
+            const loading = document.getElementById('photosLoading');
+            const grid = document.getElementById('photosGrid');
+            const empty = document.getElementById('photosEmpty');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/user/photos`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        signOut();
+                        return;
+                    }
+                    throw new Error('Failed to load photos');
+                }
+                
+                const data = await response.json();
+                loading.style.display = 'none';
+                
+                document.getElementById('photosCount').textContent = `(${data.photos?.length || 0})`;
+                
+                if (!data.photos || data.photos.length === 0) {
+                    empty.style.display = 'block';
+                    return;
+                }
+                
+                grid.innerHTML = data.photos.map(photo => `
+                    <div class="photo-card ${getOrientationClass(photo)}" onclick="viewPhoto('${photo.id}')">
+                        <img src="${photo.thumbnail_url || photo.large_url}" alt="Photo" loading="lazy">
+                        <div class="photo-overlay">
+                            <div class="photo-project">${photo.project_title || 'Untitled'}</div>
+                            <div class="photo-date">${formatDate(photo.purchased_at || photo.downloaded_at)}</div>
+                        </div>
+                        <button class="photo-download-btn" onclick="event.stopPropagation(); downloadPhoto('${photo.id}')" title="Download">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="7 10 12 15 17 10"/>
+                                <line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading photos:', error);
+                loading.innerHTML = '<p>Error loading photos. Please try again.</p>';
+            }
+        }
+        
+        async function loadMyGalleries() {
+            const token = localStorage.getItem('token');
+            const loading = document.getElementById('galleriesLoading');
+            const grid = document.getElementById('galleriesGrid');
+            const empty = document.getElementById('galleriesEmpty');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/user/galleries`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        signOut();
+                        return;
+                    }
+                    throw new Error('Failed to load galleries');
+                }
+                
+                const data = await response.json();
+                loading.style.display = 'none';
+                
+                document.getElementById('galleriesCount').textContent = `(${data.galleries?.length || 0})`;
+                
+                if (!data.galleries || data.galleries.length === 0) {
+                    empty.style.display = 'block';
+                    return;
+                }
+                
+                grid.innerHTML = data.galleries.map(gallery => `
+                    <a href="/project.html?slug=${gallery.slug}" class="gallery-card">
+                        <img src="${gallery.cover_url}" alt="${gallery.title}" loading="lazy">
+                        <div class="gallery-overlay">
+                            <div class="gallery-date">${formatDate(gallery.event_date)}</div>
+                            <div class="gallery-title">${gallery.title}</div>
+                            ${gallery.venue ? `<div class="gallery-venue">${gallery.venue}</div>` : ''}
+                            <div class="gallery-count">${gallery.photo_count} photos</div>
+                        </div>
+                    </a>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading galleries:', error);
+                loading.innerHTML = '<p>Error loading galleries. Please try again.</p>';
+            }
+        }
+        
+        function getOrientationClass(photo) {
+            // Default to landscape if no dimensions available
+            if (!photo.width || !photo.height) return 'landscape';
+            const ratio = photo.width / photo.height;
+            if (ratio > 1.2) return 'landscape';
+            if (ratio < 0.8) return 'portrait';
+            return 'square';
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+        
+        function viewPhoto(photoId) {
+            // Could open lightbox or go to photo detail page
+            console.log('View photo:', photoId);
+        }
+        
+        async function downloadPhoto(photoId) {
+            const token = localStorage.getItem('token');
+            
+            try {
+                const response = await fetch(`${API_URL}/api/photos/${photoId}/download`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                
+                if (!response.ok) throw new Error('Download failed');
+                
+                const data = await response.json();
+                window.open(data.download_url, '_blank');
+                
+            } catch (error) {
+                console.error('Download error:', error);
+                alert('Failed to download photo. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>
