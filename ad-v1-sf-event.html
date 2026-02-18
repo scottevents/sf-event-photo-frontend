@@ -1944,30 +1944,34 @@
             const headline = document.getElementById('heroHeadline');
             const slogan = document.getElementById('heroSlogan');
             const scrollIndicator = document.querySelector('.scroll-indicator');
+            const heroSpacer = document.querySelector('.hero-spacer');
+            const tagStrip = document.querySelector('.tag-strip');
 
             if (!headline) return;
 
-            let crossfadeProgress = 0;   // 0 → 1 drives the text swap
+            let targetProgress = 0;      // where we want to be (0–1)
+            let displayProgress = 0;     // smoothly animated current value
             let crossfadeDone = false;
-            const WHEEL_SENSITIVITY = 0.003; // how fast wheel drives the crossfade
+            let animFrame = null;
+            const WHEEL_SENSITIVITY = 0.0015; // slower crossfade
+            const TOUCH_SENSITIVITY = 0.003;
+            const EASE_SPEED = 0.08;          // lerp factor for smoothing
 
             // Lock page scroll at start
             document.body.classList.add('hero-locked');
             window.scrollTo(0, 0);
 
-            function renderCrossfade() {
-                const p = crossfadeProgress;
-
-                // Slogan: fades out 0–50%
+            function renderCrossfade(p) {
+                // Slogan: fades out 0–60% with gentle drift
                 if (slogan) {
-                    const sloganP = Math.min(p / 0.5, 1);
+                    const sloganP = Math.min(p / 0.6, 1);
                     slogan.style.opacity = 1 - sloganP;
-                    slogan.style.transform = `translate(-50%, calc(-50% + ${-sloganP * 30}px))`;
+                    slogan.style.transform = `translate(-50%, calc(-50% + ${-sloganP * 25}px))`;
                 }
 
-                // Headline: fades in 30–80%
-                const hlStart = 0.3;
-                const hlEnd = 0.8;
+                // Headline: fades in 35–85%
+                const hlStart = 0.35;
+                const hlEnd = 0.85;
                 let hlOpacity = 0;
                 if (p < hlStart) {
                     hlOpacity = 0;
@@ -1980,31 +1984,77 @@
 
                 // Scroll indicator
                 if (scrollIndicator) {
-                    const indicatorP = Math.min(p / 0.2, 1);
+                    const indicatorP = Math.min(p / 0.25, 1);
                     scrollIndicator.style.opacity = (1 - indicatorP) * 0.6;
                 }
             }
 
-            function onWheel(e) {
-                if (crossfadeDone) return;
+            // Smooth animation loop — lerps displayProgress toward targetProgress
+            function animateCrossfade() {
+                displayProgress += (targetProgress - displayProgress) * EASE_SPEED;
 
-                // Only capture forward scrolls (deltaY > 0)
-                if (e.deltaY > 0) {
-                    e.preventDefault();
-                    crossfadeProgress = Math.min(crossfadeProgress + e.deltaY * WHEEL_SENSITIVITY, 1);
-                    renderCrossfade();
-
-                    if (crossfadeProgress >= 1) {
-                        crossfadeDone = true;
-                        document.body.classList.remove('hero-locked');
-                        window.removeEventListener('wheel', onWheel);
-                    }
-                } else if (e.deltaY < 0 && crossfadeProgress > 0) {
-                    // Allow scrolling back up to reverse the crossfade
-                    e.preventDefault();
-                    crossfadeProgress = Math.max(crossfadeProgress + e.deltaY * WHEEL_SENSITIVITY, 0);
-                    renderCrossfade();
+                // Snap when close enough
+                if (Math.abs(displayProgress - targetProgress) < 0.002) {
+                    displayProgress = targetProgress;
                 }
+
+                renderCrossfade(displayProgress);
+
+                // Check if crossfade completed
+                if (displayProgress >= 0.99 && targetProgress >= 1) {
+                    displayProgress = 1;
+                    renderCrossfade(1);
+                    crossfadeDone = true;
+                    document.body.classList.remove('hero-locked');
+                    animFrame = null;
+                    return;
+                }
+
+                // Keep animating if not settled
+                if (Math.abs(displayProgress - targetProgress) > 0.001) {
+                    animFrame = requestAnimationFrame(animateCrossfade);
+                } else {
+                    animFrame = null;
+                }
+            }
+
+            function startAnimation() {
+                if (!animFrame) {
+                    animFrame = requestAnimationFrame(animateCrossfade);
+                }
+            }
+
+            // Re-lock scroll and reverse crossfade when user scrolls back to top
+            function reLockForReverse() {
+                crossfadeDone = false;
+                document.body.classList.add('hero-locked');
+                window.scrollTo(0, 0);
+                // targetProgress and displayProgress are already at 1
+                // They'll be driven back down by the wheel handler
+            }
+
+            function onWheel(e) {
+                // If crossfade is done and user scrolls back to top, re-lock
+                if (crossfadeDone) {
+                    const scrollY = window.pageYOffset || window.scrollY;
+                    if (e.deltaY < 0 && scrollY <= 0) {
+                        reLockForReverse();
+                        e.preventDefault();
+                        targetProgress = Math.max(targetProgress - 0.05, 0);
+                        startAnimation();
+                    }
+                    return;
+                }
+
+                e.preventDefault();
+
+                if (e.deltaY > 0) {
+                    targetProgress = Math.min(targetProgress + e.deltaY * WHEEL_SENSITIVITY, 1);
+                } else if (e.deltaY < 0) {
+                    targetProgress = Math.max(targetProgress + e.deltaY * WHEEL_SENSITIVITY, 0);
+                }
+
+                startAnimation();
             }
 
             window.addEventListener('wheel', onWheel, { passive: false });
@@ -2012,37 +2062,42 @@
             // Touch support for mobile
             let touchStartY = 0;
             function onTouchStart(e) {
-                if (crossfadeDone) return;
                 touchStartY = e.touches[0].clientY;
             }
             function onTouchMove(e) {
-                if (crossfadeDone) return;
-                const deltaY = touchStartY - e.touches[0].clientY;
-                if (deltaY > 0 || crossfadeProgress > 0) {
-                    e.preventDefault();
-                    crossfadeProgress = Math.min(Math.max(crossfadeProgress + deltaY * 0.005, 0), 1);
-                    touchStartY = e.touches[0].clientY;
-                    renderCrossfade();
-
-                    if (crossfadeProgress >= 1) {
-                        crossfadeDone = true;
-                        document.body.classList.remove('hero-locked');
-                        window.removeEventListener('touchstart', onTouchStart);
-                        window.removeEventListener('touchmove', onTouchMove);
+                if (crossfadeDone) {
+                    const scrollY = window.pageYOffset || window.scrollY;
+                    const deltaY = touchStartY - e.touches[0].clientY;
+                    if (deltaY < 0 && scrollY <= 0) {
+                        reLockForReverse();
+                        e.preventDefault();
+                        targetProgress = Math.max(targetProgress - 0.05, 0);
+                        startAnimation();
                     }
+                    touchStartY = e.touches[0].clientY;
+                    return;
+                }
+
+                const deltaY = touchStartY - e.touches[0].clientY;
+                if (deltaY > 0 || targetProgress > 0) {
+                    e.preventDefault();
+                    targetProgress = Math.min(Math.max(targetProgress + deltaY * TOUCH_SENSITIVITY, 0), 1);
+                    touchStartY = e.touches[0].clientY;
+                    startAnimation();
                 }
             }
             window.addEventListener('touchstart', onTouchStart, { passive: false });
             window.addEventListener('touchmove', onTouchMove, { passive: false });
 
-            // After crossfade done, toggle scrolled class on normal scroll
+            // Toggle scrolled class when tag strip actually touches the header
             window.addEventListener('scroll', function() {
                 if (!crossfadeDone) return;
-                const scrollY = window.pageYOffset || window.scrollY;
-                document.body.classList.toggle('scrolled', scrollY > 50);
+                const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
+                const tagStripTop = tagStrip ? tagStrip.getBoundingClientRect().top : 999;
+                document.body.classList.toggle('scrolled', tagStripTop <= headerH + 2);
             }, { passive: true });
 
-            renderCrossfade();
+            renderCrossfade(0);
         }
 
         /* ── Inline Search Toggle ── */
