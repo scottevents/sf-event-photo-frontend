@@ -465,14 +465,92 @@
 
         .video-hero-headline {
             font-family: 'PP Neue York', Georgia, serif;
-            font-size: 4.5rem;
-            font-weight: 400;
+            font-size: clamp(3rem, 7vw, 5.5rem);
+            font-weight: 500;
             color: #fff;
             letter-spacing: -0.03em;
-            line-height: 1.1;
-            margin-bottom: 2rem;
+            line-height: 1.05;
+            margin-bottom: 0;
             text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+            will-change: opacity, transform;
         }
+
+        .video-hero-slogan {
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.85);
+            letter-spacing: 0.04em;
+            line-height: 1.4;
+            margin-top: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            will-change: opacity, transform;
+            text-shadow: 0 1px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Toolbar search icon */
+        .tag-strip-search-icon {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            margin-left: 0.5rem;
+        }
+
+        .tb-search-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.7rem 0.5rem;
+            opacity: 0.35;
+            transition: opacity 0.2s;
+        }
+
+        .tb-search-toggle svg { stroke: #fff; }
+        .tb-search-toggle:hover { opacity: 0.7; }
+
+        /* Inline search in toolbar */
+        .tag-strip-inline-search {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            max-width: 300px;
+            margin: 0 0.75rem;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .tag-strip-inline-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #d4d4d4;
+            padding: 0.6rem 0;
+            min-width: 0;
+        }
+
+        .tag-strip-inline-input:focus { outline: none; }
+        .tag-strip-inline-input::placeholder { color: rgba(255,255,255,0.25); }
+
+        .tag-strip-inline-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            opacity: 0.35;
+            transition: opacity 0.2s;
+        }
+
+        .tag-strip-inline-close svg { stroke: #fff; }
+        .tag-strip-inline-close:hover { opacity: 0.7; }
 
         .video-hero-search {
             display: flex;
@@ -563,16 +641,8 @@
                 height: 70vh;
                 min-height: 400px;
             }
-            .video-hero-headline {
-                font-size: 2.5rem;
-            }
-            .video-hero-search input {
-                padding: 0.85rem 1rem;
-                font-size: 0.9rem;
-            }
-            .video-hero-search button {
-                padding: 0.85rem 1rem;
-            }
+            .tag-strip-search-icon { margin-left: 0.25rem; }
+            .tag-strip-inline-search { max-width: 200px; }
         }
 
         @media (max-width: 500px) {
@@ -583,10 +653,6 @@
             .hero-spacer {
                 height: 60vh;
                 min-height: 350px;
-            }
-            .video-hero-headline {
-                font-size: 2rem;
-                margin-bottom: 1.5rem;
             }
             .scroll-indicator {
                 bottom: 1.5rem;
@@ -1262,13 +1328,8 @@
         </video>
         <div class="video-hero-overlay"></div>
         <div class="video-hero-content">
-            <h1 class="video-hero-headline">San Francisco Event Photographers</h1>
-            <div class="video-hero-search">
-                <input type="text" id="heroSearchInput" placeholder="Search people, brands, or events">
-                <button onclick="doHeroSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
-                </button>
-            </div>
+            <h1 class="video-hero-headline" id="heroHeadline">SF Event Photo</h1>
+            <p class="video-hero-slogan" id="heroSlogan">San Francisco's Premier Event Photography Agency</p>
         </div>
         <div class="scroll-indicator">
             <span>Scroll</span>
@@ -1344,6 +1405,21 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                 </button>
             </div>
+        </div>
+
+        <!-- Search icon (opens inline search) -->
+        <div class="tag-strip-search-icon">
+            <button class="tb-search-toggle" id="searchToggleBtn" onclick="toggleInlineSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="16" height="16"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+            </button>
+        </div>
+
+        <!-- Inline search (hidden by default, shown on toggle) -->
+        <div class="tag-strip-inline-search" id="inlineSearchWrap" style="display:none;">
+            <input type="text" class="tag-strip-inline-input" id="inlineSearchInput" placeholder="Search...">
+            <button class="tag-strip-inline-close" onclick="toggleInlineSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
         </div>
 
         <!-- Press Feed toggle (far right) -->
@@ -1787,13 +1863,14 @@
             }
         }
 
-        /* ── Fixed Hero Scroll Effects ── */
+        /* ── Fixed Hero Scroll Effects — Two-stage crossfade ── */
         function initHeroScroll() {
-            const heroContent = document.querySelector('.video-hero-content');
+            const headline = document.getElementById('heroHeadline');
+            const slogan = document.getElementById('heroSlogan');
             const scrollIndicator = document.querySelector('.scroll-indicator');
             const heroSpacer = document.querySelector('.hero-spacer');
 
-            if (!heroContent || !heroSpacer) return;
+            if (!headline || !heroSpacer) return;
 
             let ticking = false;
 
@@ -1801,16 +1878,47 @@
                 const scrollY = window.pageYOffset || window.scrollY;
                 const spacerHeight = heroSpacer.offsetHeight;
 
-                // Fade headline: gone by 60% through the spacer
-                const fadeProgress = Math.min(scrollY / (spacerHeight * 0.6), 1);
-                const opacity = 1 - fadeProgress;
-                const translateY = -scrollY * 0.3;
-                heroContent.style.opacity = opacity;
-                heroContent.style.transform = `translateY(${translateY}px)`;
+                // Phase 1 (0–30% scroll): Headline fades out + drifts up
+                const headlineFade = Math.min(scrollY / (spacerHeight * 0.3), 1);
+                headline.style.opacity = 1 - headlineFade;
+                headline.style.transform = `translateY(${-scrollY * 0.25}px) scale(${1 - headlineFade * 0.05})`;
 
-                // Scroll indicator: fades out faster (gone by 20%)
+                // Phase 2 (20–55% scroll): Slogan fades in, then fades out (55–80%)
+                if (slogan) {
+                    const sloganInStart = spacerHeight * 0.2;
+                    const sloganInEnd = spacerHeight * 0.45;
+                    const sloganOutStart = spacerHeight * 0.55;
+                    const sloganOutEnd = spacerHeight * 0.8;
+
+                    let sloganOpacity = 0;
+                    let sloganY = 20;
+
+                    if (scrollY < sloganInStart) {
+                        sloganOpacity = 0;
+                        sloganY = 20;
+                    } else if (scrollY < sloganInEnd) {
+                        const p = (scrollY - sloganInStart) / (sloganInEnd - sloganInStart);
+                        sloganOpacity = p;
+                        sloganY = 20 * (1 - p);
+                    } else if (scrollY < sloganOutStart) {
+                        sloganOpacity = 1;
+                        sloganY = 0;
+                    } else if (scrollY < sloganOutEnd) {
+                        const p = (scrollY - sloganOutStart) / (sloganOutEnd - sloganOutStart);
+                        sloganOpacity = 1 - p;
+                        sloganY = -15 * p;
+                    } else {
+                        sloganOpacity = 0;
+                        sloganY = -15;
+                    }
+
+                    slogan.style.opacity = sloganOpacity;
+                    slogan.style.transform = `translateY(${sloganY}px)`;
+                }
+
+                // Scroll indicator: gone by 15%
                 if (scrollIndicator) {
-                    const indicatorFade = Math.min(scrollY / (spacerHeight * 0.2), 1);
+                    const indicatorFade = Math.min(scrollY / (spacerHeight * 0.15), 1);
                     scrollIndicator.style.opacity = (1 - indicatorFade) * 0.6;
                 }
 
@@ -1824,13 +1932,34 @@
                 }
             }, { passive: true });
 
-            // Run once on load in case page is already scrolled
             updateHeroOnScroll();
+        }
+
+        /* ── Inline Search Toggle ── */
+        function toggleInlineSearch() {
+            const wrap = document.getElementById('inlineSearchWrap');
+            const btn = document.getElementById('searchToggleBtn');
+            const input = document.getElementById('inlineSearchInput');
+            const isOpen = wrap.style.display !== 'none';
+
+            if (isOpen) {
+                wrap.style.display = 'none';
+                btn.style.display = 'flex';
+            } else {
+                wrap.style.display = 'flex';
+                btn.style.display = 'none';
+                input.focus();
+            }
+        }
+
+        function doInlineSearch() {
+            const q = document.getElementById('inlineSearchInput').value.trim();
+            if (q) location.href = `/search.html?q=${encodeURIComponent(q)}`;
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth(); updateCartUI(); loadProjects(); initHeroScroll();
-            document.getElementById('heroSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doHeroSearch(); });
+            document.getElementById('inlineSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doInlineSearch(); });
             document.getElementById('tbSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doToolbarSearch(); });
 
             // Measure header height for sticky tag strip offset
