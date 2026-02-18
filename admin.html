@@ -2085,9 +2085,17 @@
             }
             currentPhotos=d.photos||d||[];
             if(!Array.isArray(currentPhotos))currentPhotos=[];
-            // Deduplicate by photo id
+            // Deduplicate by photo id, then by image URL
             const seenIds=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
+            const seenUrls=new Set();
+            currentPhotos=currentPhotos.filter(p=>{
+                const url=p.thumbnail_url||p.large_url||p.original_url;
+                if(!url)return true;
+                if(seenUrls.has(url))return false;
+                seenUrls.add(url);
+                return true;
+            });
             currentPhotos.sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
             const coverUrl=d.project?.cover_image_url||currentProject.cover_image_url;
             
@@ -2770,7 +2778,9 @@
         }catch(e){showToast('Error: '+e.message,'error');}
     }
     
+    let mainUploadBound = false;
     function setupUpload(){
+        if (mainUploadBound) return;
         // Main upload zone (Upload tab)
         const zone=document.getElementById('uploadZone');
         const input=document.getElementById('fileInput');
@@ -2780,6 +2790,7 @@
             zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
             zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');handleFiles(e.dataTransfer.files);});
             input.addEventListener('change',e=>handleFiles(e.target.files));
+            mainUploadBound = true;
         }
     }
     
@@ -2802,34 +2813,41 @@
         document.getElementById('setFileInput').click();
     }
     
+    let isUploading = false;
+
     async function handleSetFiles(files) {
         if (!currentProject) {
             showToast('No project selected', 'error');
             return;
         }
-        
+        if (isUploading) {
+            showToast('Upload already in progress', 'error');
+            return;
+        }
+        isUploading = true;
+        try {
         const setName = (currentSetFilter && currentSetFilter !== '__favorites__') ? currentSetFilter : null;
         const total = files.length;
-        
+
         // Show popup
         const popup = document.getElementById('uploadPopup');
         const list = document.getElementById('uploadList');
         const title = document.getElementById('uploadTitle');
         const count = document.getElementById('uploadCount');
-        
+
         popup.classList.add('show');
         popup.classList.remove('completed', 'collapsed');
         title.textContent = setName ? `Uploading to "${setName}"...` : 'Uploading...';
         count.textContent = `0 of ${total} items`;
         list.innerHTML = '';
-        
+
         let completed = 0, failed = 0;
         const BATCH = 5;
-        
+
         async function uploadOne(file, idx) {
             const sizeKB = (file.size/1024).toFixed(0);
             const itemId = `up-${Date.now()}-${idx}`;
-            
+
             // Add a simple row (no blob preview to save memory)
             const row = document.createElement('div');
             row.className = 'upload-popup-item';
@@ -2852,12 +2870,15 @@
                 return;
             }
 
-            // Upload with 1 retry on failure
+            // Upload with step-level retry (reuse presign data to avoid duplicate DB records)
+            let pd = null;
             for (let attempt = 0; attempt < 2; attempt++) {
                 try {
-                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
-                    const pd = await pr.json();
-                    if (pd.error) throw new Error(pd.error);
+                    if (!pd) {
+                        const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
+                        pd = await pr.json();
+                        if (pd.error) { const errMsg = pd.error; pd = null; throw new Error(errMsg); }
+                    }
 
                     const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
                     if (!ur.ok) throw new Error('Upload failed');
@@ -2885,20 +2906,23 @@
             }
             count.textContent = `${completed} of ${total} items`;
         }
-        
+
         // Process in batches of BATCH concurrent uploads
         const fileArr = [...files];
         for (let i = 0; i < fileArr.length; i += BATCH) {
             const batch = fileArr.slice(i, i + BATCH);
             await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
         }
-        
+
         popup.classList.add('completed');
         title.textContent = 'Upload completed';
         count.textContent = failed ? `${completed} uploaded, ${failed} failed` : `${completed} items uploaded`;
         loadProjects();
         await reloadProjectPhotosKeepSet();
         document.getElementById('setFileInput').value='';
+        } finally {
+            isUploading = false;
+        }
     }
     
     async function reloadProjectPhotosKeepSet() {
@@ -2917,9 +2941,17 @@
             }
             currentPhotos=d.photos||d||[];
             if(!Array.isArray(currentPhotos))currentPhotos=[];
-            // Deduplicate by photo id
+            // Deduplicate by photo id, then by image URL
             const seenIds2=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
+            const seenUrls2=new Set();
+            currentPhotos=currentPhotos.filter(p=>{
+                const url=p.thumbnail_url||p.large_url||p.original_url;
+                if(!url)return true;
+                if(seenUrls2.has(url))return false;
+                seenUrls2.add(url);
+                return true;
+            });
 
             manualSets = savedManual;
             selectSet(savedFilter);
@@ -2934,28 +2966,34 @@
     async function handleFiles(files){
         const projectId=document.getElementById('uploadProjectSelect').value;
         if(!projectId){showToast('Select collection first!','error');return;}
+        if (isUploading) {
+            showToast('Upload already in progress', 'error');
+            return;
+        }
+        isUploading = true;
+        try {
         const project=projects.find(p=>p.id===projectId);
         const total = files.length;
-        
+
         // Show popup
         const popup = document.getElementById('uploadPopup');
         const list = document.getElementById('uploadList');
         const title = document.getElementById('uploadTitle');
         const count = document.getElementById('uploadCount');
-        
+
         popup.classList.add('show');
         popup.classList.remove('completed', 'collapsed');
         title.textContent = 'Uploading...';
         count.textContent = `0 of ${total} items`;
         list.innerHTML = '';
-        
+
         let completed = 0, failed = 0;
         const BATCH = 5;
-        
+
         async function uploadOne(file, idx) {
             const sizeKB = (file.size/1024).toFixed(0);
             const itemId = `up-${Date.now()}-${idx}`;
-            
+
             const row = document.createElement('div');
             row.className = 'upload-popup-item';
             row.id = itemId;
@@ -2967,7 +3005,7 @@
                 </div>
                 <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
             list.appendChild(row);
-            
+
             // Check file size before uploading (Cloudflare limit ~10MB)
             if (file.size > 10 * 1024 * 1024) {
                 row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(file.size/1024/1024).toFixed(1)}MB, max 10MB)`;
@@ -2977,12 +3015,15 @@
                 return;
             }
 
-            // Upload with 1 retry on failure
+            // Upload with step-level retry (reuse presign data to avoid duplicate DB records)
+            let pd = null;
             for (let attempt = 0; attempt < 2; attempt++) {
                 try {
-                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
-                    const pd = await pr.json();
-                    if (pd.error) throw new Error(pd.error);
+                    if (!pd) {
+                        const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
+                        pd = await pr.json();
+                        if (pd.error) { const errMsg = pd.error; pd = null; throw new Error(errMsg); }
+                    }
 
                     const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
                     if (!ur.ok) throw new Error('Upload failed');
@@ -3008,20 +3049,23 @@
             }
             count.textContent = `${completed} of ${total} items`;
         }
-        
+
         // Process in batches of BATCH concurrent uploads
         const fileArr = [...files];
         for (let i = 0; i < fileArr.length; i += BATCH) {
             const batch = fileArr.slice(i, i + BATCH);
             await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
         }
-        
+
         popup.classList.add('completed');
         title.textContent = 'Upload completed';
         count.textContent = failed ? `${completed} uploaded, ${failed} failed` : `${completed} items uploaded`;
         loadProjects();
-        if(currentProject) loadProjectPhotos();
+        if(currentProject) await loadProjectPhotos();
         document.getElementById('fileInput').value='';
+        } finally {
+            isUploading = false;
+        }
     }
     
     async function loadOrders(){const el=document.getElementById('ordersList');try{const r=await fetch(`${API_URL}/api/admin/orders`,{headers:{'x-admin-key':ADMIN_PASSWORD}});const d=await r.json();if(!d.orders?.length){el.innerHTML='<div class="empty-state"><p>No orders yet</p></div>';return;}el.innerHTML=`<table style="width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;"><thead><tr style="background:var(--gray-50);text-align:left;"><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Order</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Date</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Customer</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Total</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Status</th></tr></thead><tbody>${d.orders.map(o=>`<tr style="border-top:1px solid var(--gray-200);"><td style="padding:0.75rem 1rem;font-weight:500;">${o.order_number||o.id.slice(0,8)}</td><td style="padding:0.75rem 1rem;color:var(--gray-600);">${new Date(o.created_at).toLocaleDateString()}</td><td style="padding:0.75rem 1rem;">${o.customer_email||'-'}</td><td style="padding:0.75rem 1rem;font-weight:500;">$${((o.total_amount||0)/100).toFixed(2)}</td><td style="padding:0.75rem 1rem;"><span style="background:${o.status==='completed'?'var(--success)':'var(--gray-400)'};color:white;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600;">${o.status}</span></td></tr>`).join('')}</tbody></table>`;}catch(e){el.innerHTML='<div class="empty-state"><p>Error</p></div>';}}
