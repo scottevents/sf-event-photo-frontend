@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - Event Photography, Video & Creative Services | SF Event Photo</title>
+    <meta name="description" content="Professional event photography, video, and production services in San Francisco and Los Angeles. Event coverage, brand activations, corporate events, creative direction, and same-day delivery.">
+    <style>
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalThin.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalThin.woff') format('woff');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e8e8e8;
+            --gray-dark: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ═══════════════════════════════════════
+           HEADER
+           ═══════════════════════════════════════ */
+        .header {
+            position: sticky; top: 0;
+            background: #0a0a0a; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-inner {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 1.25rem 1.5rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .hamburger svg {
+            width: 24px;
+            height: 24px;
+            stroke: #e0e0e0;
+            stroke-width: 1.5;
+        }
+
+        .logo {
+            font-size: 0.9rem; font-weight: 400;
+            letter-spacing: 0.08em; text-decoration: none; color: #e0e0e0;
+        }
+
+        .nav { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav a {
+            text-decoration: none; color: #e0e0e0;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        .nav a:hover { opacity: 0.5; }
+
+        .nav-actions {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .cart-link { position: relative; display: flex; align-items: center; text-decoration: none; }
+        .cart-link svg { width: 24px; height: 24px; stroke-width: 1.5; }
+
+        .cart-badge {
+            position: absolute; top: -6px; right: -10px;
+            background: #e53935; color: white;
+            font-size: 0.65rem; font-weight: 500;
+            min-width: 18px; height: 18px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+        }
+
+        .cart-badge.show { display: flex; }
+
+        .auth-link {
+            text-decoration: none; color: #e0e0e0;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s;
+        }
+
+        .auth-link:hover { opacity: 0.5; }
+
+        /* User Menu */
+        .user-menu { position: relative; }
+
+        .user-menu-btn {
+            background: none; border: none; cursor: pointer;
+            display: flex; align-items: center; gap: 0.4rem;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: #e0e0e0; padding: 0; transition: opacity 0.2s;
+        }
+
+        .user-menu-btn:hover { opacity: 0.5; }
+        .user-menu-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
+
+        .user-dropdown {
+            position: absolute; top: calc(100% + 10px); right: 0;
+            background: var(--white); border: 1px solid var(--gray-mid);
+            min-width: 200px; display: none; z-index: 100;
+        }
+
+        .user-dropdown.show { display: block; }
+
+        .user-dropdown a, .user-dropdown button {
+            display: block; width: 100%; padding: 1rem 1.25rem;
+            text-align: left; font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem; font-weight: 400; letter-spacing: 0.05em;
+            text-transform: uppercase; text-decoration: none;
+            color: var(--black); background: none; border: none;
+            border-bottom: 1px solid var(--gray-mid);
+            cursor: pointer; transition: background 0.2s;
+        }
+
+        .user-dropdown a:hover, .user-dropdown button:hover { background: var(--gray-light); }
+        .user-dropdown .signout-btn { background: var(--black); color: var(--white); border: none; }
+        .user-dropdown .signout-btn:hover { opacity: 0.9; background: var(--black); }
+
+        .user-dropdown .user-email {
+            font-size: 0.7rem; color: rgba(255,255,255,0.7);
+            text-transform: none; letter-spacing: 0; margin-top: 0.25rem;
+        }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            z-index: 2000;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .mobile-menu-close {
+            background: none; border: none; cursor: pointer; padding: 0.25rem;
+        }
+
+        .mobile-menu-close svg {
+            width: 28px; height: 28px; stroke: var(--black); stroke-width: 1.5;
+        }
+
+        .mobile-menu-links {
+            display: flex; flex-direction: column; gap: 0;
+        }
+
+        .mobile-menu-links a {
+            display: block; padding: 1.25rem 0; text-decoration: none;
+            color: var(--black); font-size: 1.25rem; font-weight: 400;
+            letter-spacing: 0.05em; border-bottom: 1px solid var(--gray-mid);
+        }
+
+        .mobile-menu-links a:first-child { border-top: 1px solid var(--gray-mid); }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+            .nav { gap: 1.5rem; }
+            .nav-actions { gap: 1.25rem; }
+            .auth-link { font-size: 0.75rem; }
+        }
+
+        @media (max-width: 500px) {
+            .header-inner { padding: 1rem 0.75rem; }
+        }
+
+        /* ═══════════════════════════════════════
+           PAGE INTRO
+           ═══════════════════════════════════════ */
+        .page-intro {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+        }
+
+        .page-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 2rem;
+        }
+
+        .page-statement {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 300;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* ═══════════════════════════════════════
+           FULL-BLEED IMAGE SECTIONS (PARALLAX)
+           ═══════════════════════════════════════ */
+        .parallax-image {
+            position: relative;
+            height: 70vh;
+            min-height: 400px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .parallax-image.shorter {
+            height: 60vh;
+        }
+
+        .parallax-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                to bottom,
+                rgba(10,10,10,0.35) 0%,
+                rgba(10,10,10,0.5) 40%,
+                rgba(10,10,10,0.65) 100%
+            );
+        }
+
+        .parallax-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(20%) brightness(0.85);
+        }
+
+        .parallax-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .parallax-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 1rem;
+        }
+
+        .parallax-heading {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 100;
+            color: var(--white);
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+        }
+
+        .parallax-sub {
+            margin-top: 1rem;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.6);
+            max-width: 450px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* ═══════════════════════════════════════
+           SERVICE LIST SECTIONS (DARK)
+           ═══════════════════════════════════════ */
+        .service-list-section {
+            padding: 5rem 2rem;
+            background: #0a0a0a;
+        }
+
+        .service-list-inner {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .service-list-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0 4rem;
+        }
+
+        .service-list-item {
+            padding: 0.85rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.55);
+            transition: color 0.2s, padding-left 0.25s;
+        }
+
+        .service-list-item:hover {
+            color: var(--white);
+            padding-left: 0.75rem;
+        }
+
+        .service-list-desc {
+            grid-column: 1 / -1;
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.65;
+            max-width: 600px;
+        }
+
+        /* ═══════════════════════════════════════
+           CTA SECTION
+           ═══════════════════════════════════════ */
+        .cta-section {
+            padding: 7rem 2rem;
+            text-align: center;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .cta-inner {
+            max-width: 650px;
+            margin: 0 auto;
+        }
+
+        .cta-heading {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .cta-sub {
+            font-size: 1rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .cta-email {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .cta-email:hover {
+            background: var(--white);
+            color: #0a0a0a;
+        }
+
+        /* ═══════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════ */
+        .footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            background: #0a0a0a;
+        }
+
+        .footer-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-col h4 {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover { color: var(--white); }
+
+        .footer-bottom {
+            max-width: 900px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* ═══════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════ */
+
+        /* iOS and most mobile browsers don't support background-attachment: fixed */
+        @supports (-webkit-touch-callout: none) {
+            .parallax-image {
+                background-attachment: scroll;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .parallax-image {
+                background-attachment: scroll;
+                height: 50vh;
+            }
+
+            .parallax-image.shorter {
+                height: 45vh;
+            }
+
+            .service-list-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .page-intro { padding: 4rem 1.5rem 3rem; }
+            .service-list-section { padding: 3rem 1.5rem; }
+            .cta-section { padding: 4rem 1.5rem; }
+            .footer { padding: 3rem 1.5rem; }
+            .footer-inner { flex-direction: column; }
+
+            .parallax-image {
+                height: 45vh;
+                min-height: 300px;
+            }
+
+            .parallax-image.shorter {
+                height: 40vh;
+                min-height: 280px;
+            }
+
+            .parallax-heading {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="header-left">
+                <button class="hamburger" onclick="openMobileMenu()" aria-label="Open menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+                <a href="/" class="logo">SF EVENT PHOTO</a>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="/about.html">About</a>
+                    <a href="/services.html">Services</a>
+                    <a href="/contact.html">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="/signin.html" class="auth-link" id="signInLink">Sign In</a>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-menu-btn" onclick="toggleUserMenu()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <span id="userName">Account</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="/my-photos.html">My Photos</a>
+                            <button class="signout-btn" onclick="signOut()">
+                                Sign Out
+                                <div class="user-email" id="userEmail"></div>
+                            </button>
+                        </div>
+                    </div>
+                    <a href="#" class="cart-link" onclick="toggleCart(); return false;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge" id="cartCount">0</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Close menu">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="mobile-menu-links">
+            <a href="/">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/services.html">Services</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Page Intro -->
+    <section class="page-intro">
+        <div class="page-label">Services</div>
+        <p class="page-statement">Full-service event photography, video production, and creative direction for brands that set the standard.</p>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         PHOTOGRAPHY
+         ════════════════════════════════════════ -->
+
+    <!-- Full-Bleed Photography Image -->
+    <section class="parallax-image" style="background-image: url('https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80');">
+        <img src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80" alt="Conference wide shot" loading="eager" style="display: none;">
+        <div class="parallax-content">
+            <div class="parallax-label">01</div>
+            <h2 class="parallax-heading">Photography</h2>
+            <p class="parallax-sub">Every frame tells a story. We capture the moments that define your event.</p>
+        </div>
+    </section>
+
+    <!-- Photography Service List -->
+    <section class="service-list-section">
+        <div class="service-list-inner">
+            <div class="service-list-grid">
+                <div class="service-list-item">Event Coverage</div>
+                <div class="service-list-item">Brand Activations</div>
+                <div class="service-list-item">Corporate Events</div>
+                <div class="service-list-item">Conferences</div>
+                <div class="service-list-item">Product Launches</div>
+                <div class="service-list-item">Executive Portraits</div>
+                <div class="service-list-item">Lifestyle & Editorial</div>
+                <div class="service-list-item">Red Carpet</div>
+                <p class="service-list-desc">Our photographers work discreetly and efficiently, moving through your event to capture candid interactions, key moments, and the atmosphere that makes each gathering unique.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         VIDEO
+         ════════════════════════════════════════ -->
+
+    <!-- Full-Bleed Video Image -->
+    <section class="parallax-image shorter" style="background-image: url('https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&q=80');">
+        <img src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=1200&q=80" alt="Speaker at event podium" loading="lazy" style="display: none;">
+        <div class="parallax-content">
+            <div class="parallax-label">02</div>
+            <h2 class="parallax-heading">Video</h2>
+            <p class="parallax-sub">From highlight reels to live streams, motion tells the full story.</p>
+        </div>
+    </section>
+
+    <!-- Video Service List -->
+    <section class="service-list-section">
+        <div class="service-list-inner">
+            <div class="service-list-grid">
+                <div class="service-list-item">Event Recap Videos</div>
+                <div class="service-list-item">Highlight Reels</div>
+                <div class="service-list-item">Social Content</div>
+                <div class="service-list-item">Live Streaming</div>
+                <div class="service-list-item">Interview Capture</div>
+                <div class="service-list-item">Behind-the-Scenes</div>
+                <div class="service-list-item">Drone Coverage</div>
+                <div class="service-list-item">Same-Day Edits</div>
+                <p class="service-list-desc">Whether it's a polished recap for stakeholders or raw social content cut on-site, our video team adapts to your format, timeline, and platform requirements.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+         PRODUCTION
+         ════════════════════════════════════════ -->
+
+    <!-- Full-Bleed Production Image -->
+    <section class="parallax-image shorter" style="background-image: url('https://images.unsplash.com/photo-1591115765373-5f9cf1da241c?w=1200&q=80');">
+        <img src="https://images.unsplash.com/photo-1591115765373-5f9cf1da241c?w=1200&q=80" alt="Corporate event production setup" loading="lazy" style="display: none;">
+        <div class="parallax-content">
+            <div class="parallax-label">03</div>
+            <h2 class="parallax-heading">Production</h2>
+            <p class="parallax-sub">End-to-end management from creative brief to final asset delivery.</p>
+        </div>
+    </section>
+
+    <!-- Production Service List -->
+    <section class="service-list-section">
+        <div class="service-list-inner">
+            <div class="service-list-grid">
+                <div class="service-list-item">Creative Direction</div>
+                <div class="service-list-item">Shot List Planning</div>
+                <div class="service-list-item">On-Site Editing</div>
+                <div class="service-list-item">Same-Day Delivery</div>
+                <div class="service-list-item">Photo Distribution</div>
+                <div class="service-list-item">Media Management</div>
+                <div class="service-list-item">Retouching</div>
+                <div class="service-list-item">Licensing</div>
+                <p class="service-list-desc">We handle logistics, creative planning, on-site editing, and post-production so your internal team can focus on the event itself. Every deliverable, on time.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-inner">
+            <h2 class="cta-heading">Have an event on the horizon?</h2>
+            <p class="cta-sub">Reach out and we'll put together a custom scope and estimate for your project. No templates, no guesswork.</p>
+            <a href="mailto:hello@sfeventphoto.com" class="cta-email">hello@sfeventphoto.com</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>Email</h4>
+                <a href="mailto:hello@sfeventphoto.com">hello@sfeventphoto.com</a>
+            </div>
+            <div class="footer-col">
+                <h4>Follow</h4>
+                <a href="https://instagram.com/sfeventphoto" target="_blank">Instagram</a>
+                <a href="https://linkedin.com/company/sfeventphoto" target="_blank">LinkedIn</a>
+            </div>
+            <div class="footer-col">
+                <h4>Location</h4>
+                <a href="#">San Francisco</a>
+                <a href="#">Los Angeles</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 SF Event Photo. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // ── Header Nav Functions ──
+        function openMobileMenu() {
+            document.getElementById('mobileMenu').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+            if (user && token) {
+                document.getElementById('signInLink').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('userName').textContent = user.name || 'Account';
+                document.getElementById('userEmail').textContent = user.email || '';
+            }
+        }
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+        function signOut() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+        function toggleCart() {
+            const overlay = document.getElementById('cartOverlay');
+            const sidebar = document.getElementById('cartSidebar');
+            if (overlay && sidebar) { overlay.classList.toggle('open'); sidebar.classList.toggle('open'); }
+            else { window.location.href = '/cart.html'; }
+        }
+        function updateCartUI() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const badge = document.getElementById('cartCount');
+            if (badge) { badge.textContent = cart.length; badge.classList.toggle('show', cart.length > 0); }
+        }
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() { checkAuth(); updateCartUI(); });
+    </script>
+</body>
+</html>
