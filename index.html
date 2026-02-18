@@ -3,113 +3,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SF Event Photo - Professional Event Photography in San Francisco & Los Angeles</title>
-    
+    <title>San Francisco Event Photographers - SF Event Photo</title>
+
     <!-- SEO Meta Tags -->
-    <meta name="description" content="SF Event Photo is a premier event photography agency serving San Francisco and Los Angeles. We specialize in corporate events, brand activations, conferences, product launches, and executive portraits. Same-day delivery available.">
-    <meta name="keywords" content="event photography, San Francisco photographer, Los Angeles event photographer, corporate photography, brand activation photography, conference photographer, product launch photos, executive portraits, professional event photos">
+    <meta name="description" content="San Francisco's premier event photography agency. Cinematic event coverage trusted by the world's top brands. Same-day delivery available.">
+    <meta name="keywords" content="San Francisco event photographers, event photography SF, corporate photography, brand activation photography, conference photographer, professional event photos">
     <meta name="author" content="SF Event Photo">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://sfeventphoto.com/">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sfeventphoto.com/">
-    <meta property="og:title" content="SF Event Photo - Professional Event Photography">
-    <meta property="og:description" content="Premier event photography agency for brands and agencies in San Francisco and Los Angeles. Corporate events, brand activations, conferences, and more.">
+    <meta property="og:title" content="San Francisco Event Photographers - SF Event Photo">
+    <meta property="og:description" content="San Francisco's premier event photography agency. Cinematic event coverage trusted by the world's top brands.">
     <meta property="og:image" content="https://sfeventphoto.com/og-image.jpg">
     <meta property="og:site_name" content="SF Event Photo">
-    
+
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://sfeventphoto.com/">
-    <meta name="twitter:title" content="SF Event Photo - Professional Event Photography">
-    <meta name="twitter:description" content="Premier event photography agency for brands and agencies in San Francisco and Los Angeles.">
+    <meta name="twitter:title" content="San Francisco Event Photographers - SF Event Photo">
+    <meta name="twitter:description" content="San Francisco's premier event photography agency. Cinematic event coverage trusted by the world's top brands.">
     <meta name="twitter:image" content="https://sfeventphoto.com/og-image.jpg">
-    
-    <!-- Structured Data for Organization -->
+
+    <!-- Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "ProfessionalService",
         "name": "SF Event Photo",
-        "description": "Professional event photography agency specializing in corporate events, brand activations, conferences, and executive portraits in San Francisco and Los Angeles.",
+        "description": "Professional event photography agency specializing in corporate events, brand activations, conferences, and executive portraits in San Francisco.",
         "url": "https://sfeventphoto.com",
         "logo": "https://sfeventphoto.com/logo.png",
         "image": "https://sfeventphoto.com/og-image.jpg",
         "telephone": "+1-415-555-1234",
         "email": "hello@sfeventphoto.com",
-        "address": [
-            {
-                "@type": "PostalAddress",
-                "addressLocality": "San Francisco",
-                "addressRegion": "CA",
-                "addressCountry": "US"
-            },
-            {
-                "@type": "PostalAddress",
-                "addressLocality": "Los Angeles",
-                "addressRegion": "CA",
-                "addressCountry": "US"
-            }
-        ],
-        "areaServed": [
-            {
-                "@type": "City",
-                "name": "San Francisco"
-            },
-            {
-                "@type": "City",
-                "name": "Los Angeles"
-            }
-        ],
-        "serviceType": [
-            "Event Photography",
-            "Corporate Photography",
-            "Brand Activation Photography",
-            "Conference Photography",
-            "Executive Portraits",
-            "Product Launch Photography",
-            "Video Production"
-        ],
-        "priceRange": "$$",
-        "sameAs": [
-            "https://instagram.com/sfeventphoto",
-            "https://linkedin.com/company/sfeventphoto"
-        ]
-    }
-    </script>
-    
-    <!-- Structured Data for Local Business -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "LocalBusiness",
-        "name": "SF Event Photo",
-        "image": "https://sfeventphoto.com/og-image.jpg",
-        "@id": "https://sfeventphoto.com",
-        "url": "https://sfeventphoto.com",
-        "telephone": "+1-415-555-1234",
         "address": {
             "@type": "PostalAddress",
             "addressLocality": "San Francisco",
             "addressRegion": "CA",
             "addressCountry": "US"
         },
-        "geo": {
-            "@type": "GeoCoordinates",
-            "latitude": 37.7749,
-            "longitude": -122.4194
+        "areaServed": {
+            "@type": "City",
+            "name": "San Francisco"
         },
-        "openingHoursSpecification": {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-            "opens": "09:00",
-            "closes": "18:00"
-        }
+        "serviceType": [
+            "Event Photography",
+            "Corporate Photography",
+            "Brand Activation Photography",
+            "Conference Photography",
+            "Executive Portraits",
+            "Video Production"
+        ]
     }
     </script>
-    
+
+    <!-- Preload fonts -->
+    <link rel="preload" href="./fonts/PPNeueYork-NormalLight.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/PPNeueYork-NormalRegular.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="./fonts/PPNeueYork-NormalMedium.woff2" as="font" type="font/woff2" crossorigin>
+    <!-- Preconnect to CDN -->
+    <link rel="preconnect" href="https://imagedelivery.net">
+
     <style>
         @font-face {
             font-family: 'PP Neue York';
@@ -149,13 +106,150 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* ═══════════════════════════════════════
+        /* =======================================
            HEADER
-           ═══════════════════════════════════════ */
+           ======================================= */
         .header {
             position: sticky; top: 0;
-            background: #0a0a0a; z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: #0a0a0a;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: background 0.4s, border-color 0.4s;
+        }
+
+        /* ── Scrolled state: white header + tag strip ── */
+        body.scrolled .header {
+            background: #ffffff;
+            border-bottom-color: rgba(0,0,0,0.08);
+        }
+        body.scrolled .logo,
+        body.scrolled .nav a,
+        body.scrolled .hamburger svg {
+            color: #1a1a1a;
+            stroke: #1a1a1a;
+        }
+        body.scrolled .nav a { color: #1a1a1a; }
+        body.scrolled .cart-count {
+            background: #1a1a1a;
+            color: #fff;
+        }
+        body.scrolled .tag-strip {
+            background: #fff;
+        }
+        body.scrolled .tag-pill {
+            color: rgba(0,0,0,0.5);
+            border-color: rgba(0,0,0,0.15);
+        }
+        body.scrolled .tag-pill:hover {
+            color: rgba(0,0,0,0.9);
+            border-color: rgba(0,0,0,0.4);
+        }
+        body.scrolled .tag-pill.active {
+            color: #fff;
+            background: #1a1a1a;
+            border-color: #1a1a1a;
+        }
+        body.scrolled .tb-btn {
+            color: rgba(0,0,0,0.5);
+        }
+        body.scrolled .tb-btn:hover {
+            color: #1a1a1a;
+        }
+        body.scrolled .tb-btn svg {
+            stroke: #1a1a1a;
+        }
+        body.scrolled .tag-strip-inline-close svg {
+            stroke: #1a1a1a;
+        }
+        body.scrolled .tag-strip-inline-input {
+            color: #1a1a1a;
+            border-color: rgba(0,0,0,0.15);
+        }
+        body.scrolled .tag-strip-inline-input::placeholder {
+            color: rgba(0,0,0,0.35);
+        }
+        body.scrolled .nav-dropdown-trigger {
+            color: #1a1a1a;
+        }
+        body.scrolled .nav-dropdown-trigger svg {
+            stroke: #1a1a1a;
+        }
+        body.scrolled .cart-link svg {
+            stroke: #1a1a1a;
+        }
+        body.scrolled .auth-link {
+            color: #1a1a1a;
+        }
+        body.scrolled .press-feed-btn {
+            color: rgba(0,0,0,0.6);
+            border-color: rgba(0,0,0,0.3);
+        }
+        body.scrolled .press-feed-btn svg {
+            stroke: rgba(0,0,0,0.6);
+        }
+        body.scrolled .press-feed-btn:hover,
+        body.scrolled .press-feed-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #1a1a1a;
+        }
+        body.scrolled .press-feed-btn:hover svg,
+        body.scrolled .press-feed-btn.active svg {
+            stroke: #fff;
+        }
+
+        /* Scrolled state: white gallery + reviews background */
+        body.scrolled .main-content {
+            background: #fff;
+        }
+        body.scrolled .gallery-section {
+            background: #fff;
+        }
+        body.scrolled .g-project {
+            background: #eee;
+        }
+        body.scrolled .g-review-slideshow {
+            background: #f5f5f5;
+            border-color: rgba(0,0,0,0.08);
+        }
+        body.scrolled .g-review-slide .quote-text {
+            color: #1a1a1a;
+        }
+        body.scrolled .g-review-slide .quote-attr {
+            color: rgba(0,0,0,0.5);
+        }
+        body.scrolled .g-review-slide .quote-attr span {
+            color: #1a1a1a;
+        }
+        body.scrolled .g-review-slide .quote-stars svg {
+            fill: #1a1a1a;
+        }
+        body.scrolled .g-review-dot {
+            background: rgba(0,0,0,0.2);
+        }
+        body.scrolled .g-review-dot.active {
+            background: #1a1a1a;
+        }
+        body.scrolled .footer {
+            background: #fff;
+            border-top-color: rgba(0,0,0,0.08);
+        }
+        body.scrolled .footer-left {
+            color: rgba(0,0,0,0.5);
+        }
+        body.scrolled .footer-left a {
+            color: rgba(0,0,0,0.5);
+        }
+        body.scrolled .footer-left a:hover {
+            color: #1a1a1a;
+        }
+        body.scrolled .footer-right a {
+            color: rgba(0,0,0,0.5);
+        }
+        body.scrolled .footer-right a:hover {
+            color: #1a1a1a;
         }
 
         .header-inner {
@@ -285,7 +379,7 @@
             gap: 2rem;
             align-items: center;
         }
-        
+
         .cart-link { position: relative; display: flex; align-items: center; text-decoration: none; }
         .cart-link svg { width: 24px; height: 24px; stroke-width: 1.5; }
 
@@ -304,6 +398,8 @@
             font-size: 0.85rem; font-weight: 400;
             letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s;
         }
+
+        .auth-link:hover { opacity: 0.5; }
 
         /* Mobile menu overlay */
         .mobile-menu {
@@ -383,8 +479,6 @@
             }
         }
 
-        .auth-link:hover { opacity: 0.5; }
-
         /* User Menu */
         .user-menu { position: relative; }
 
@@ -427,285 +521,442 @@
             text-transform: none; letter-spacing: 0; margin-top: 0.25rem;
         }
 
-        /* ═══════════════════════════════════════
-           HERO SECTION with headline
-           ═══════════════════════════════════════ */
-        .hero-section {
+        /* =======================================
+           VIDEO HERO - Full Viewport
+           ======================================= */
+        .video-hero {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            min-height: 500px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1;
+        }
+
+        /* Spacer pushes .main-content below the viewport so fixed video is visible */
+        .hero-spacer {
+            height: 100vh;
+            min-height: 500px;
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Lock scroll during crossfade */
+        body.hero-locked {
+            overflow: hidden;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 10;
             background: #0a0a0a;
-            padding: 4rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            transition: background 0.4s;
         }
-        
-        .hero-headline {
-            font-family: 'PP Neue York', Georgia, serif;
-            font-size: 2.75rem;
-            font-weight: 400;
-            color: #e0e0e0;
-            margin-bottom: 2rem;
-            letter-spacing: -0.02em;
-            display: none; /* Hidden on desktop */
+
+        .main-content::before {
+            display: none;
+        }
+
+        .video-hero-bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .video-hero-overlay {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                rgba(10, 10, 10, 0.3) 0%,
+                rgba(10, 10, 10, 0.15) 40%,
+                rgba(10, 10, 10, 0.3) 70%,
+                rgba(10, 10, 10, 0.85) 100%
+            );
+            z-index: 1;
+        }
+
+        .video-hero-content {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .video-hero-headline,
+        .video-hero-slogan {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
             text-align: center;
+            padding: 0 2rem;
+            will-change: opacity, transform;
         }
 
-        .search-info-wrapper {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .search-side { 
-            flex: 1;
-            display: flex;
-            justify-content: flex-end;
-            padding-right: 2.5rem;
-        }
-
-        .search-container {
-            display: flex;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
-        }
-
-        .search-input {
-            flex: 1; padding: 0.9rem 1.25rem; border: none;
+        /* Slogan: shows first — light, uppercase, Matte-style tagline */
+        .video-hero-slogan {
             font-family: 'PP Neue York', Georgia, serif;
-            font-size: 0.95rem; font-weight: 300; min-width: 340px;
-            background: transparent;
-            color: #e0e0e0;
+            font-size: clamp(1rem, 1.6vw, 1.25rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.75);
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            line-height: 1.6;
+            white-space: nowrap;
+            text-shadow: 0 1px 20px rgba(0,0,0,0.3);
         }
 
-        .search-input:focus { outline: none; }
-        .search-input::placeholder { color: rgba(255,255,255,0.35); }
+        /* Headline: fades in on scroll, stays centered until content covers it */
+        .video-hero-headline {
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 500;
+            font-style: italic;
+            color: #fff;
+            letter-spacing: -0.03em;
+            line-height: 1;
+            opacity: 0;
+            text-shadow: 0 2px 40px rgba(0,0,0,0.5);
+        }
 
-        .search-btn {
+        /* Inline search in toolbar — absolute overlay so tags stay centered */
+        .tag-strip-inline-search {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 400px;
+            max-width: 50%;
+            padding-left: 1.5rem;
+            z-index: 10;
+            background: inherit;
+            border-bottom: none;
+        }
+
+        .tag-strip-inline-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #d4d4d4;
+            padding: 0.6rem 0;
+            min-width: 0;
+        }
+
+        .tag-strip-inline-input:focus { outline: none; }
+        .tag-strip-inline-input::placeholder { color: rgba(255,255,255,0.25); }
+
+        .tag-strip-inline-close {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0.9rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            opacity: 0.35;
+            transition: opacity 0.2s;
+        }
+
+        .tag-strip-inline-close svg { stroke: #fff; }
+        .tag-strip-inline-close:hover { opacity: 0.7; }
+
+        .video-hero-search {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .video-hero-search input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.95rem;
+            font-weight: 300;
+            background: transparent;
+            color: #fff;
+            min-width: 0;
+        }
+
+        .video-hero-search input:focus { outline: none; }
+        .video-hero-search input::placeholder { color: rgba(255,255,255,0.5); }
+
+        .video-hero-search button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 1.25rem;
             background: none;
             border: none;
             cursor: pointer;
         }
 
-        .search-btn svg {
+        .video-hero-search button svg {
             width: 20px;
             height: 20px;
-            stroke: #fff;
+            stroke: rgba(255,255,255,0.8);
             stroke-width: 2;
         }
 
-        .search-btn:hover svg { opacity: 0.6; }
+        .video-hero-search button:hover svg { stroke: #fff; }
 
-        .divider-line {
-            width: 1px;
-            height: 70px;
-            background: rgba(255,255,255,0.15);
-            flex-shrink: 0;
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0.6;
+            animation: scrollPulse 2s ease-in-out infinite;
         }
 
-        .info-side {
-            flex: 1;
-            padding-left: 2.5rem;
-            text-align: left;
+        .scroll-indicator span {
+            font-size: 0.65rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: #fff;
         }
 
-        .info-side .info-line {
-            display: flex; 
-            gap: 1rem;
-            font-size: 0.85rem; 
-            line-height: 1.5;
-            margin-bottom: 0.25rem;
+        .scroll-indicator svg {
+            width: 20px;
+            height: 20px;
+            stroke: #fff;
+            stroke-width: 1.5;
         }
 
-        .info-side .info-line:last-child { margin-bottom: 0; }
-
-        .info-side .info-label {
-            font-weight: 400; font-size: 0.8rem;
-            letter-spacing: 0.02em; color: rgba(255,255,255,0.4);
-            min-width: 70px; flex-shrink: 0;
-            text-align: left;
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.4; transform: translateX(-50%) translateY(0); }
+            50% { opacity: 0.8; transform: translateX(-50%) translateY(6px); }
         }
 
-        .info-side .info-value { font-weight: 400; color: rgba(255,255,255,0.8); }
-
-        @media (max-width: 1100px) {
-            .search-info-wrapper { flex-direction: column; gap: 1.5rem; }
-            .search-side { flex: none; padding-right: 0; justify-content: center; }
-            .search-input { min-width: 280px; }
-            .divider-line { display: none; }
-            .info-side { 
-                flex: none; 
-                padding-left: 0; 
-                display: flex;
-                justify-content: center;
+        @media (max-width: 768px) {
+            .video-hero {
+                height: 100vh;
+                min-height: 500px;
             }
-            .info-side .info-block {
-                text-align: left;
+            .hero-spacer {
+                height: 100vh;
+                min-height: 500px;
             }
-            .info-side .info-line { justify-content: flex-start; }
-            .info-side .info-label { text-align: left; }
+            .video-hero-slogan {
+                white-space: normal;
+                letter-spacing: 0.08em;
+                font-size: clamp(0.75rem, 3.2vw, 1rem);
+                padding: 0 1.5rem;
+            }
+            .tag-strip-inline-search { max-width: 200px; }
+            .tag-strip-inline-input { font-size: 16px; }
+            .tag-strip-search-input { font-size: 16px; }
         }
 
-        @media (max-width: 600px) {
-            .hero-section { padding: 1.5rem 0.75rem; }
-            .hero-headline { 
-                display: block;
-                font-size: 1.75rem; 
-                margin-bottom: 1.5rem; 
+        @media (max-width: 500px) {
+            .hero-spacer {
+                height: 100vh;
+                min-height: 450px;
             }
-            .search-input { padding: 0.75rem 1rem; font-size: 0.9rem; min-width: 0; }
-            .search-btn { padding: 0.75rem 0.75rem; }
-            .search-btn svg { width: 18px; height: 18px; }
-            .info-side { display: none; }
+            .video-hero {
+                height: 100vh;
+                min-height: 450px;
+            }
+            .scroll-indicator {
+                bottom: 1.5rem;
+            }
         }
 
-        /* ═══════════════════════════════════════
-           TOOLBAR — sticky below header, light gray bg
-           ═══════════════════════════════════════ */
-        .toolbar {
+        /* =======================================
+           TAG STRIP - Sticky below header
+           ======================================= */
+        .tag-strip {
             display: flex;
             align-items: center;
-            justify-content: space-between;
             background: #0a0a0a;
             padding: 0 1.5rem;
             position: sticky;
             top: var(--header-h, 56px);
             z-index: 999;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            gap: 0;
+            transition: background 0.3s, border-color 0.3s;
         }
-        
-        .tb-left {
+
+        .tag-strip-left {
             display: flex;
             align-items: center;
             flex-shrink: 0;
         }
-        
-        .tb-center {
+
+        /* Search toggle (far left of tag strip) */
+        .tag-strip-search-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.75rem 0.75rem 0.75rem 0;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+
+        .tag-strip-search-toggle svg {
+            stroke: #fff;
+        }
+
+        .tag-strip-search-toggle:hover {
+            opacity: 0.8;
+        }
+
+        .search-cursor {
+            display: inline-block;
+            width: 1px;
+            height: 14px;
+            background: #fff;
+            margin-left: 5px;
+            animation: cursorBlink 1.2s ease-in-out infinite;
+        }
+
+        @keyframes cursorBlink {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 0; }
+        }
+
+        body.scrolled .tag-strip-search-toggle svg {
+            stroke: #1a1a1a;
+        }
+
+        body.scrolled .search-cursor {
+            background: #1a1a1a;
+        }
+
+        .tag-strip-center {
             display: flex;
             align-items: center;
             justify-content: center;
             flex: 1;
+            overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            padding: 0 1rem;
         }
-        
-        .tb-tabs-wrapper {
+
+        .tag-strip-center::-webkit-scrollbar { display: none; }
+
+        .tag-pills {
             display: flex;
             align-items: center;
-            overflow-x: auto;
-            overflow-y: hidden;
-            scrollbar-width: none;
-        }
-        
-        .tb-tabs-wrapper::-webkit-scrollbar {
-            display: none;
-        }
-        
-        /* Mobile/Desktop visibility */
-        .tb-mobile-only {
-            display: none;
-        }
-        
-        .tb-desktop-only {
-            display: flex;
-        }
-        
-        /* Category tabs */
-        .tb-tabs {
-            display: flex;
-            align-items: center;
-            gap: 0;
+            gap: 0.5rem;
+            padding: 0.75rem 0;
             flex-shrink: 0;
         }
-        
-        .tb-tab {
-            padding: 1rem 1.5rem;
+
+        .tag-pill {
+            padding: 0.45rem 1.1rem;
             background: none;
-            border: none;
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 20px;
             font-family: 'PP Neue York', Georgia, serif;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 400;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.5);
             cursor: pointer;
             transition: all 0.2s;
             white-space: nowrap;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
             flex-shrink: 0;
         }
-        
-        .tb-tab:hover {
-            color: rgba(255,255,255,0.8);
+
+        .tag-pill:hover {
+            color: rgba(255,255,255,0.9);
+            border-color: rgba(255,255,255,0.4);
         }
 
-        .tb-tab.active {
-            color: #fff;
-            border-bottom-color: #fff;
+        .tag-pill.active {
+            color: #0a0a0a;
+            background: #fff;
+            border-color: #fff;
         }
-        
-        @media (max-width: 900px) {
-            .toolbar {
-                padding: 0 0.5rem;
-            }
-            .tb-center {
-                padding: 0;
-            }
-            .tb-tab { padding: 0.9rem 1rem; font-size: 0.85rem; }
+
+        /* More dropdown — hidden by default */
+        .ts-more-wrap { display: none; }
+        .ts-more-btn { display: flex; align-items: center; }
+        .ts-more-panel { min-width: 130px; }
+
+        /* Progressive collapse breakpoints */
+        @media (max-width: 1100px) {
+            .tag-pill.tag-p1 { display: none; }
+            .ts-more-wrap { display: block; }
+            /* Hide options that are still visible as pills */
+            .ts-more-panel .ts-more-option[data-cat="video"],
+            .ts-more-panel .ts-more-option[data-cat="corporate"] { display: none; }
         }
-        
+
+        @media (max-width: 950px) {
+            .tag-pill.tag-p2 { display: none; }
+            .ts-more-panel .ts-more-option[data-cat="corporate"] { display: block; }
+        }
+
+        @media (max-width: 850px) {
+            .tag-pill.tag-p3 { display: none; }
+            .ts-more-panel .ts-more-option[data-cat="video"] { display: block; }
+        }
+
+        /* Mobile: Event Type dropdown for tag strip */
+        .tag-strip-mobile-dropdown {
+            display: none;
+        }
+
         @media (max-width: 768px) {
-            /* On mobile: hide tabs and More, show Event Type dropdown */
-            .tb-desktop-only {
+            .tag-strip {
+                padding: 0 0.75rem;
+            }
+            .tag-pills-desktop, .ts-more-wrap {
                 display: none !important;
             }
-            .tb-mobile-only {
-                display: flex !important;
+            .tag-strip-mobile-dropdown {
+                display: none !important;
             }
-            .toolbar {
-                justify-content: flex-start;
-                padding: 0 0.5rem;
+            .tag-strip-center {
+                display: none;
             }
-            .tb-left {
-                flex-shrink: 0;
-            }
-            .tb-center {
-                justify-content: flex-start;
-                flex: 0;
-                padding: 0;
-            }
-            .tb-stats {
-                flex-shrink: 0;
-            }
-            .tb-dropdown {
-                display: flex;
-                align-items: stretch;
-            }
-            .tb-btn {
-                padding: 1rem 1.25rem;
-                font-size: 0.9rem;
-                display: flex;
-                align-items: center;
-            }
-            .tb-option {
-                font-size: 0.9rem;
+            .tag-strip-left {
+                flex: 1;
             }
         }
 
-        /* Shared dropdown trigger */
+        /* Sort dropdown (inside tag strip) */
         .tb-dropdown {
             position: relative;
             flex-shrink: 0;
-        }
-
-        .tb-dropdown:first-child {
-            padding-left: 0;
-        }
-
-        .tb-left .tb-btn {
-            padding-left: 0;
         }
 
         .tb-btn {
@@ -717,9 +968,11 @@
             color: rgba(255,255,255,0.4); cursor: pointer;
             white-space: nowrap; transition: color 0.2s;
             height: 100%;
-            border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
             flex-shrink: 0;
+        }
+
+        .tag-strip-left .tb-btn {
+            padding-left: 0;
         }
 
         .tb-btn:hover { color: rgba(255,255,255,0.8); }
@@ -731,7 +984,6 @@
 
         .tb-btn.open svg { transform: rotate(180deg); }
 
-        /* Dropdown panel */
         .tb-panel {
             position: absolute; top: 100%; left: 0;
             min-width: 140px; background: #1a1a1a;
@@ -755,41 +1007,160 @@
         .tb-option:hover { background: rgba(255,255,255,0.05); color: #fff; }
         .tb-option.active { color: #fff; font-weight: 500; }
 
-        /* Stats counter - hidden for cleaner design */
-        .tb-stats {
-            display: none;
-        }
-        
-        .tb-stats-item {
+        /* Press Feed toggle */
+        .tag-strip-right {
             display: flex;
             align-items: center;
-            padding: 0 0.75rem;
-        }
-        
-        .tb-stats-item:not(:last-child) {
-            border-right: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .tb-stats-value {
-            font-weight: 500;
-            color: rgba(255,255,255,0.5);
-            margin-right: 0.35rem;
-        }
-        
-        .tb-stats-label {
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.5);
-        }
-        
-        @media (max-width: 768px) {
-            .tb-stats { display: none; }
+            margin-left: auto;
+            flex-shrink: 0;
         }
 
-        /* ═══════════════════════════════════════
-           GALLERY GRID - Three View Modes
-           ═══════════════════════════════════════ */
-        .gallery-section { padding: var(--gap) 1.5rem 5rem; background: #0a0a0a; }
-        
+        .press-feed-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: none;
+            border: 1.5px solid rgba(255,255,255,0.4);
+            border-radius: 20px;
+            padding: 0.45rem 1rem;
+            font-family: inherit;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .press-feed-btn svg {
+            stroke: rgba(255,255,255,0.7);
+        }
+
+        .press-feed-btn:hover,
+        .press-feed-btn.active {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+
+        .press-feed-btn:hover svg,
+        .press-feed-btn.active svg {
+            stroke: var(--black);
+        }
+
+        /* Prevent :hover from sticking on touch devices (but keep .active style) */
+        @media (hover: none) {
+            .press-feed-btn:hover:not(.active) {
+                background: none;
+                color: rgba(255,255,255,0.7);
+                border-color: rgba(255,255,255,0.4);
+            }
+            .press-feed-btn:hover:not(.active) svg {
+                stroke: rgba(255,255,255,0.7);
+            }
+            body.scrolled .press-feed-btn:hover:not(.active) {
+                background: none;
+                color: rgba(0,0,0,0.6);
+                border-color: rgba(0,0,0,0.3);
+            }
+            body.scrolled .press-feed-btn:hover:not(.active) svg {
+                stroke: rgba(0,0,0,0.6);
+            }
+        }
+
+        /* Toolbar search bar -- visible only in press feed mode */
+        .tag-strip-search {
+            display: none;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 1rem;
+        }
+
+        .tag-strip-search-container {
+            display: flex;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .tag-strip-search-input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            background: transparent;
+            color: #e0e0e0;
+            min-width: 0;
+        }
+
+        .tag-strip-search-input:focus { outline: none; }
+        .tag-strip-search-input::placeholder { color: rgba(255,255,255,0.35); }
+
+        .tag-strip-search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 0.75rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tag-strip-search-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        .tag-strip-search-btn:hover svg { opacity: 0.6; }
+
+        /* Press Feed active state */
+        body.press-feed-active .video-hero { display: none; }
+        body.press-feed-active .hero-spacer { display: none; }
+        body.press-feed-active .tag-strip-center { display: none; }
+        body.press-feed-active .tag-strip-search { display: flex; }
+
+        @media (max-width: 768px) {
+            .tag-strip-right {
+                margin-right: 0;
+            }
+            .press-feed-btn {
+                padding: 0.35rem 0.75rem;
+                font-size: 0.65rem;
+            }
+            body.press-feed-active .tag-strip {
+                overflow: visible;
+            }
+            body.press-feed-active .tag-strip-left {
+                flex: 0 0 auto;
+            }
+            body.press-feed-active .tag-strip-search {
+                display: none;
+            }
+            .tag-strip-search {
+                padding: 0.5rem 0.5rem;
+                min-width: 0;
+                overflow: hidden;
+            }
+            .tag-strip-search-container { max-width: 100%; min-width: 0; }
+            .tag-strip-search-input { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-width: 0; }
+            .tag-strip-search-btn { padding: 0.5rem 0.6rem; flex-shrink: 0; }
+            .tag-strip-search-btn svg { width: 16px; height: 16px; }
+            .tb-btn { padding: 1rem 1.25rem; font-size: 0.9rem; }
+            .tb-option { font-size: 0.9rem; }
+        }
+
+        /* =======================================
+           GALLERY GRID
+           ======================================= */
+        .gallery-section { padding: var(--gap) 1.5rem 5rem; background: #0a0a0a; transition: background 0.4s; }
 
         .unified-grid {
             display: grid;
@@ -797,7 +1168,7 @@
             gap: var(--gap);
         }
 
-        /* ── CLASSIC VIEW (default) ── */
+        /* CLASSIC VIEW */
         .g-project {
             position: relative; overflow: hidden;
             cursor: pointer; background: #222;
@@ -850,33 +1221,10 @@
         .g-venue { font-size: 0.8rem; font-weight: 300; opacity: 0.85; margin-bottom: 0.5rem; }
         .g-count { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 300; opacity: 0.8; }
         .g-count svg { width: 14px; height: 14px; }
-        
-        /* ── Mobile Menu View Options ── */
-        .mobile-menu-divider {
-            height: 1px;
-            background: var(--gray-mid);
-            margin: 1rem 0;
-        }
-        
-        .mobile-menu-section {
-            padding: 0;
-        }
-        
-        .mobile-menu-label {
-            display: block;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--gray-dark);
-            padding: 0.5rem 0;
-            margin-bottom: 0.5rem;
-        }
-        
 
-        /* ═══════════════════════════════════════
+        /* =======================================
            REVIEW SLIDESHOW TILE
-           ═══════════════════════════════════════ */
+           ======================================= */
         .g-review-slideshow {
             grid-column: span 2; grid-row: span 2;
             position: relative; overflow: hidden;
@@ -934,9 +1282,9 @@
 
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ═══════════════════════════════════════
+        /* =======================================
            CART SIDEBAR
-           ═══════════════════════════════════════ */
+           ======================================= */
         .cart-overlay {
             position: fixed; inset: 0;
             background: rgba(0,0,0,0.4); z-index: 1999;
@@ -1009,137 +1357,9 @@
         .checkout-btn:hover:not(:disabled) { opacity: 0.8; }
         .checkout-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.3); cursor: not-allowed; }
 
-        /* ═══════════════════════════════════════
-           PRESS FEED - Toggle mode
-           ═══════════════════════════════════════ */
-        .tb-press-feed {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            margin-right: 1rem;
-        }
-
-        .press-feed-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: none;
-            border: 1.5px solid rgba(255,255,255,0.4);
-            border-radius: 20px;
-            padding: 0.45rem 1rem;
-            font-family: inherit;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.7);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .press-feed-btn svg {
-            stroke: rgba(255,255,255,0.7);
-        }
-
-        .press-feed-btn:hover,
-        .press-feed-btn.active {
-            background: var(--white);
-            color: var(--black);
-            border-color: var(--white);
-        }
-
-        .press-feed-btn:hover svg,
-        .press-feed-btn.active svg {
-            stroke: var(--black);
-        }
-
-        /* Toolbar search bar — visible only in press feed mode */
-        .tb-search {
-            display: none;
-            flex: 1;
-            justify-content: center;
-            align-items: center;
-            padding: 0.5rem 1rem;
-        }
-
-        .tb-search-container {
-            display: flex;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.05);
-            width: 100%;
-            max-width: 480px;
-        }
-
-        .tb-search-input {
-            flex: 1;
-            padding: 0.6rem 1rem;
-            border: none;
-            font-family: 'PP Neue York', Georgia, serif;
-            font-size: 0.85rem;
-            font-weight: 300;
-            background: transparent;
-            color: #e0e0e0;
-            min-width: 0;
-        }
-
-        .tb-search-input:focus { outline: none; }
-        .tb-search-input::placeholder { color: rgba(255,255,255,0.35); }
-
-        .tb-search-btn {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.6rem 0.75rem;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        .tb-search-btn svg {
-            width: 18px;
-            height: 18px;
-            stroke: #fff;
-            stroke-width: 2;
-        }
-
-        .tb-search-btn:hover svg { opacity: 0.6; }
-
-        /* Press Feed active state */
-        body.press-feed-active .hero-section { display: none; }
-        body.press-feed-active .tb-center { display: none; }
-        body.press-feed-active .tb-search { display: flex; }
-
-        @media (max-width: 768px) {
-            .tb-press-feed {
-                margin-left: auto;
-                margin-right: 0;
-                flex-shrink: 0;
-            }
-            .press-feed-btn {
-                padding: 0.35rem 0.75rem;
-                font-size: 0.65rem;
-            }
-            body.press-feed-active .toolbar {
-                overflow: hidden;
-            }
-            body.press-feed-active .tb-left {
-                flex-shrink: 0;
-            }
-            .tb-search {
-                padding: 0.5rem 0.5rem;
-                min-width: 0;
-                overflow: hidden;
-            }
-            .tb-search-container { max-width: 100%; min-width: 0; }
-            .tb-search-input { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-width: 0; }
-            .tb-search-btn { padding: 0.5rem 0.6rem; flex-shrink: 0; }
-            .tb-search-btn svg { width: 16px; height: 16px; }
-        }
-
-        /* ═══════════════════════════════════════
+        /* =======================================
            FOOTER
-           ═══════════════════════════════════════ */
+           ======================================= */
         .footer {
             padding: 3rem 1.5rem;
             background: #0a0a0a;
@@ -1188,9 +1408,9 @@
             color: var(--white);
         }
 
-        /* ═══════════════════════════════════════
+        /* =======================================
            RESPONSIVE
-           ═══════════════════════════════════════ */
+           ======================================= */
         @media (max-width: 1100px) {
             .g-review-slideshow { grid-column: 1 / -1; grid-row: span 1; min-height: 220px; }
             .g-review-slide { padding: 2rem 2.5rem 2.5rem; }
@@ -1201,7 +1421,6 @@
             .header-inner { padding: 1.25rem 0.75rem; }
             .unified-grid { grid-template-columns: repeat(2, 1fr); }
             .gallery-section { padding: 0 0.75rem 3rem; }
-            .toolbar { padding: 0 0.75rem; }
             .g-review-slideshow { min-height: 240px; }
             .g-review-slide { padding: 1.75rem 1.75rem 3rem; }
             .g-review-slide .quote-text { font-size: 1.1rem; }
@@ -1230,7 +1449,7 @@
     </style>
 </head>
 <body>
-    <!-- ── Header ── -->
+    <!-- Header -->
     <header class="header">
         <div class="header-inner">
             <div class="header-left">
@@ -1274,25 +1493,6 @@
                         </div>
                     </div>
                     <a href="/contact.html">Contact</a>
-                    <div class="nav-dropdown" id="adsDropdown">
-                        <button class="nav-dropdown-trigger" onclick="toggleNavDropdown('adsDropdown')">
-                            Ads
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
-                        </button>
-                        <div class="nav-dropdown-panel">
-                            <a href="/ad-sf-event.html">SF Event Photographers</a>
-                            <a href="/ad-la-event.html">LA Event Photographers</a>
-                            <a href="/ad-corporate.html">Corporate Photography</a>
-                            <a href="/ad-brand-activation.html">Brand Activation</a>
-                            <a href="/ad-conference.html">Conference Photography</a>
-                            <a href="/ad-v1-sf-event.html">V1 — Video Hero</a>
-                            <a href="/ad-v2-sf-event.html">V2 — Split Editorial</a>
-                            <a href="/ad-v3-sf-event.html">V3 — Marquee</a>
-                            <a href="/ad-v4-sf-event.html">V4 — Matte Projects</a>
-                            <a href="/ad-v5-sf-event.html">V5 — Bold Snap-Scroll</a>
-                            <a href="/ad-v6-sf-event.html">V6 — Droga5</a>
-                        </div>
-                    </div>
                 </div>
                 <div class="nav-actions">
                     <a href="/signin.html" class="auth-link" id="signInLink">Sign In</a>
@@ -1341,89 +1541,75 @@
         </nav>
     </div>
 
-    <!-- ── Hero Section with Headline ── -->
-    <section class="hero-section">
-        <h1 class="hero-headline">Event Photographers for Brands & Agencies</h1>
-        <div class="search-info-wrapper">
-            <div class="search-side">
-                <div class="search-container">
-                    <input type="text" class="search-input" id="searchInput" placeholder="Search people, brands, or events">
-                    <button class="search-btn" onclick="doSearch()">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
-                    </button>
-                </div>
-            </div>
-            <div class="divider-line"></div>
-            <div class="info-side">
-                <div class="info-block">
-                    <div class="info-line">
-                        <span class="info-label">About</span>
-                        <span class="info-value">Boutique event photography agency trusted by top brands & agencies</span>
-                    </div>
-                    <div class="info-line">
-                        <span class="info-label">Locations</span>
-                        <span class="info-value">San Francisco & Los Angeles with projects worldwide</span>
-                    </div>
-                    <div class="info-line">
-                        <span class="info-label">Services</span>
-                        <span class="info-value">Event photography, videography & distribution</span>
-                    </div>
-                </div>
-            </div>
+    <!-- Video Hero - Full Viewport -->
+    <section class="video-hero">
+        <video class="video-hero-bg" autoplay muted loop playsinline poster="">
+            <source src="./videos/HomePage-BannerVideo_LA.mp4" type="video/mp4">
+        </video>
+        <div class="video-hero-overlay"></div>
+        <div class="video-hero-content">
+            <p class="video-hero-slogan" id="heroSlogan">San Francisco's Premier Event Photography Agency</p>
+            <h1 class="video-hero-headline" id="heroHeadline">SF Event Photo</h1>
+        </div>
+        <div class="scroll-indicator">
+            <span>Scroll</span>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7-7-7"/>
+            </svg>
         </div>
     </section>
 
-    <!-- ── Toolbar ── -->
-    <div class="toolbar">
-        <!-- Sort dropdown (far left) -->
-        <div class="tb-left">
-            <div class="tb-dropdown" id="sortDropdownWrap">
-                <button class="tb-btn" id="sortBtn" onclick="toggleDropdown('sort')">
-                    <span id="sortLabel">Sort</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
+    <!-- Spacer: holds scroll height so fixed video stays visible -->
+    <div class="hero-spacer"></div>
+
+    <!-- Main content: scrolls over the fixed video -->
+    <div class="main-content">
+
+    <!-- Tag Strip - Sticky below header -->
+    <div class="tag-strip">
+        <!-- Search (far left) -->
+        <div class="tag-strip-left">
+            <button class="tag-strip-search-toggle" id="searchToggleBtn" onclick="toggleInlineSearch()" aria-label="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="15" height="15"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                <span class="search-cursor"></span>
+            </button>
+            <div class="tag-strip-inline-search" id="inlineSearchWrap" style="display:none;">
+                <input type="text" class="tag-strip-inline-input" id="inlineSearchInput" placeholder="Search people, brands, or events...">
+                <button class="tag-strip-inline-close" onclick="toggleInlineSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
                 </button>
-                <div class="tb-panel" id="sortPanel">
-                    <button class="tb-option active" onclick="selectSort('featured','Featured')">Featured</button>
-                    <button class="tb-option" onclick="selectSort('newest','Newest')">Newest</button>
-                    <button class="tb-option" onclick="selectSort('oldest','Oldest')">Oldest</button>
-                </div>
             </div>
         </div>
-        
-        <!-- Center: Category tabs (desktop) / Event Type dropdown (mobile) -->
-        <div class="tb-center">
-            <!-- Desktop: Category tabs -->
-            <div class="tb-tabs-wrapper tb-desktop-only">
-                <div class="tb-tabs">
-                    <button class="tb-tab active" onclick="selectCategory('all', this)">All</button>
-                    <button class="tb-tab" onclick="selectCategory('activation', this)">Activations</button>
-                    <button class="tb-tab" onclick="selectCategory('conference', this)">Conferences</button>
-                    <button class="tb-tab" onclick="selectCategory('video', this)">Video</button>
-                </div>
+
+        <!-- Center: Category pill tags (desktop) / Event Type dropdown (mobile) -->
+        <div class="tag-strip-center">
+            <!-- Desktop: Pill tags -->
+            <div class="tag-pills tag-pills-desktop">
+                <button class="tag-pill active" onclick="selectTag('all', this)">All</button>
+                <button class="tag-pill" onclick="selectTag('activation', this)">Activations</button>
+                <button class="tag-pill" onclick="selectTag('conference', this)">Conferences</button>
+                <button class="tag-pill tag-p3" onclick="selectTag('video', this)">Video</button>
+                <button class="tag-pill tag-p2" onclick="selectTag('corporate', this)">Corporate</button>
+                <button class="tag-pill tag-p1" onclick="selectTag('portraits', this)">Portraits</button>
+                <button class="tag-pill tag-p1" onclick="selectTag('party', this)">Party</button>
             </div>
-            
-            <!-- Desktop: More dropdown -->
-            <div class="tb-dropdown tb-desktop-only" id="moreDropdownWrap">
-                <button class="tb-btn" id="moreBtn" onclick="toggleDropdown('more')">
-                    <span>More</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
+
+            <!-- More dropdown (appears as tags collapse) -->
+            <div class="tb-dropdown ts-more-wrap" id="moreDropdownWrap">
+                <button class="tag-pill ts-more-btn" onclick="toggleMoreDropdown()">
+                    More
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:10px;height:10px;stroke-width:2.5;margin-left:4px;vertical-align:middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
                 </button>
-                <div class="tb-panel" id="morePanel">
-                    <button class="tb-option" onclick="selectCategoryFromMore('activation', 'Activations')">Activations</button>
-                    <button class="tb-option" onclick="selectCategoryFromMore('conference', 'Conferences')">Conferences</button>
-                    <button class="tb-option" onclick="selectCategoryFromMore('video', 'Video')">Video</button>
-                    <button class="tb-option" onclick="selectCategoryFromMore('corporate', 'Corporate')">Corporate</button>
-                    <button class="tb-option" onclick="selectCategoryFromMore('portraits', 'Portraits')">Portraits</button>
-                    <button class="tb-option" onclick="selectCategoryFromMore('party', 'Party')">Party</button>
+                <div class="tb-panel ts-more-panel" id="morePanel">
+                    <button class="tb-option ts-more-option" data-cat="video" onclick="selectCategoryFromMore('video', this)">Video</button>
+                    <button class="tb-option ts-more-option" data-cat="corporate" onclick="selectCategoryFromMore('corporate', this)">Corporate</button>
+                    <button class="tb-option ts-more-option" data-cat="portraits" onclick="selectCategoryFromMore('portraits', this)">Portraits</button>
+                    <button class="tb-option ts-more-option" data-cat="party" onclick="selectCategoryFromMore('party', this)">Party</button>
                 </div>
             </div>
-            
+
             <!-- Mobile: Event Type dropdown -->
-            <div class="tb-dropdown tb-mobile-only" id="eventTypeDropdownWrap">
+            <div class="tb-dropdown tag-strip-mobile-dropdown" id="eventTypeDropdownWrap">
                 <button class="tb-btn" id="eventTypeBtn" onclick="toggleDropdown('eventType')">
                     <span id="eventTypeLabel">Event Type</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1443,17 +1629,17 @@
         </div>
 
         <!-- Toolbar Search (visible only in press feed mode) -->
-        <div class="tb-search">
-            <div class="tb-search-container">
-                <input type="text" class="tb-search-input" id="tbSearchInput" placeholder="Search people, brands, or events">
-                <button class="tb-search-btn" onclick="doToolbarSearch()">
+        <div class="tag-strip-search">
+            <div class="tag-strip-search-container">
+                <input type="text" class="tag-strip-search-input" id="tbSearchInput" placeholder="Search people, brands, or events">
+                <button class="tag-strip-search-btn" onclick="doToolbarSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                 </button>
             </div>
         </div>
 
-        <!-- Press Feed toggle -->
-        <div class="tb-press-feed">
+        <!-- Press Feed toggle (far right) -->
+        <div class="tag-strip-right">
             <button class="press-feed-btn" id="pressFeedBtn" onclick="togglePressFeed()">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="14" height="14">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/>
@@ -1461,28 +1647,20 @@
                 Press Feed
             </button>
         </div>
-
-        <!-- Stats counter (far right) -->
-        <div class="tb-stats">
-            <div class="tb-stats-item">
-                <span class="tb-stats-value" id="totalPhotosCount">—</span>
-                <span class="tb-stats-label">Photos</span>
-            </div>
-        </div>
     </div>
 
-    <!-- ── Gallery Grid ── -->
+    <!-- Gallery Grid -->
     <section class="gallery-section">
         <div class="unified-grid" id="unifiedGrid">
             <div class="loading"><div class="spinner"></div></div>
         </div>
     </section>
 
-    <!-- ── Footer ── -->
+    <!-- Footer -->
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-left">
-                <span>© 2026 SF Event Photo</span>
+                <span>&copy; 2026 SF Event Photo</span>
                 <a href="/privacy.html">Privacy Policy</a>
             </div>
             <div class="footer-right">
@@ -1493,7 +1671,9 @@
         </div>
     </footer>
 
-    <!-- ── Cart Sidebar ── -->
+    </div><!-- /.main-content -->
+
+    <!-- Cart Sidebar -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
@@ -1530,11 +1710,10 @@
 
         const starSVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
 
-        /* ── Nav Dropdowns ── */
+        /* -- Nav Dropdowns -- */
         function toggleNavDropdown(id) {
             const dropdown = document.getElementById(id);
             const isOpen = dropdown.classList.contains('open');
-            // Close all nav dropdowns
             document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
             if (!isOpen) dropdown.classList.add('open');
         }
@@ -1545,7 +1724,7 @@
             }
         });
 
-        /* ── Mobile Menu ── */
+        /* -- Mobile Menu -- */
         function openMobileMenu() {
             document.getElementById('mobileMenu').classList.add('open');
             document.body.style.overflow = 'hidden';
@@ -1555,8 +1734,8 @@
             document.getElementById('mobileMenu').classList.remove('open');
             document.body.style.overflow = '';
         }
-        
-        /* ── Auth ── */
+
+        /* -- Auth -- */
         function checkAuth() {
             const u = localStorage.getItem('user');
             if (u) {
@@ -1576,7 +1755,7 @@
 
         function signOut() { localStorage.removeItem('user'); localStorage.removeItem('token'); location.reload(); }
 
-        /* ── Cart ── */
+        /* -- Cart -- */
         function toggleCart() {
             document.getElementById('cartSidebar').classList.toggle('open');
             document.getElementById('cartOverlay').classList.toggle('open');
@@ -1603,9 +1782,9 @@
 
         function removeFromCart(i) { cart.splice(i,1); localStorage.setItem('cart',JSON.stringify(cart)); updateCartUI(); }
 
-        /* ── Search ── */
-        function doSearch() {
-            const q = document.getElementById('searchInput').value.trim();
+        /* -- Search -- */
+        function doHeroSearch() {
+            const q = document.getElementById('heroSearchInput').value.trim();
             if (q) location.href = `/search.html?q=${encodeURIComponent(q)}`;
         }
 
@@ -1614,23 +1793,20 @@
             if (q) location.href = `/search.html?q=${encodeURIComponent(q)}`;
         }
 
-        /* ── Toolbar Dropdowns ── */
+        /* -- Toolbar Dropdowns -- */
         function toggleDropdown(which) {
             const panels = {
                 sort: { panel: 'sortPanel', btn: 'sortBtn' },
-                more: { panel: 'morePanel', btn: 'moreBtn' },
                 eventType: { panel: 'eventTypePanel', btn: 'eventTypeBtn' }
             };
-            
-            // Close all other dropdowns first
+
             Object.keys(panels).forEach(key => {
                 if (key !== which) {
                     document.getElementById(panels[key].panel)?.classList.remove('show');
                     document.getElementById(panels[key].btn)?.classList.remove('open');
                 }
             });
-            
-            // Toggle the requested dropdown
+
             const panel = document.getElementById(panels[which].panel);
             const btn = document.getElementById(panels[which].btn);
             panel?.classList.toggle('show');
@@ -1638,69 +1814,63 @@
         }
 
         document.addEventListener('click', e => {
-            if (!e.target.closest('.tb-dropdown')) {
+            if (!e.target.closest('.tb-dropdown') && !e.target.closest('.ts-more-wrap')) {
                 document.querySelectorAll('.tb-panel').forEach(p => p.classList.remove('show'));
                 document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('open'));
             }
         });
 
-        function selectCategory(val, btn) {
+        /* -- Category Tag Selection -- */
+        function selectTag(val, btn) {
             currentFilter = val;
-            // Update active tab
-            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
             btn.classList.add('active');
-            // Clear active state from More dropdown options
-            document.querySelectorAll('#morePanel .tb-option').forEach(o => o.classList.remove('active'));
-            // Sync mobile Event Type dropdown
+            document.querySelector('.ts-more-btn')?.classList.remove('active');
             syncEventTypeDropdown(val);
             renderGallery();
         }
-        
-        function selectCategoryFromMore(val, label) {
-            currentFilter = val;
-            // Remove active from tabs
-            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
-            // Update active state in More dropdown
-            document.querySelectorAll('#morePanel .tb-option').forEach(o => {
-                o.classList.toggle('active', o.textContent.trim() === label);
-            });
-            // Close dropdown
-            document.getElementById('morePanel').classList.remove('show');
-            document.getElementById('moreBtn').classList.remove('open');
-            // Sync mobile Event Type dropdown
-            syncEventTypeDropdown(val);
-            renderGallery();
-        }
-        
+
         function selectEventType(val, label) {
             currentFilter = val;
-            // Update label
             document.getElementById('eventTypeLabel').textContent = label;
-            // Update active state
             document.querySelectorAll('#eventTypePanel .tb-option').forEach(o => {
                 o.classList.toggle('active', o.textContent.trim() === label);
             });
-            // Close dropdown
             document.getElementById('eventTypePanel').classList.remove('show');
             document.getElementById('eventTypeBtn').classList.remove('open');
-            // Sync desktop tabs
-            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('#morePanel .tb-option').forEach(o => o.classList.remove('active'));
-            // If it's one of the main tabs, activate it
-            document.querySelectorAll('.tb-tab').forEach(tab => {
-                if (tab.textContent.trim().toLowerCase() === label.toLowerCase() || 
-                    (val === 'all' && tab.textContent.trim() === 'All')) {
-                    tab.classList.add('active');
+            // Sync desktop pills
+            document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
+            document.querySelectorAll('.tag-pill').forEach(pill => {
+                if (pill.textContent.trim().toLowerCase() === label.toLowerCase() ||
+                    (val === 'all' && pill.textContent.trim() === 'All')) {
+                    pill.classList.add('active');
                 }
             });
             renderGallery();
         }
-        
+
+        /* -- More Dropdown (progressive collapse) -- */
+        function toggleMoreDropdown() {
+            const panel = document.getElementById('morePanel');
+            panel.classList.toggle('show');
+        }
+
+        function selectCategoryFromMore(val, btn) {
+            currentFilter = val;
+            // Close More panel
+            document.getElementById('morePanel').classList.remove('show');
+            // Clear all pill actives
+            document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
+            // Mark the More button as active
+            document.querySelector('.ts-more-btn')?.classList.add('active');
+            syncEventTypeDropdown(val);
+            renderGallery();
+        }
+
         function syncEventTypeDropdown(val) {
-            // Find the matching option and update label
             const options = document.querySelectorAll('#eventTypePanel .tb-option');
             options.forEach(o => {
-                const isActive = o.textContent.trim().toLowerCase().includes(val) || 
+                const isActive = o.textContent.trim().toLowerCase().includes(val) ||
                                  (val === 'all' && o.textContent.trim() === 'All');
                 o.classList.toggle('active', isActive);
                 if (isActive) {
@@ -1721,7 +1891,7 @@
             renderGallery();
         }
 
-        /* ── Press Feed ── */
+        /* -- Press Feed -- */
         let pressFeedActive = false;
 
         function activatePressFeed() {
@@ -1734,9 +1904,9 @@
             document.querySelectorAll('#sortPanel .tb-option').forEach(o => {
                 o.classList.toggle('active', o.textContent.trim() === 'Newest');
             });
-            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tb-tab').forEach(tab => {
-                if (tab.textContent.trim() === 'All') tab.classList.add('active');
+            document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
+            document.querySelectorAll('.tag-pill').forEach(pill => {
+                if (pill.textContent.trim() === 'All') pill.classList.add('active');
             });
             syncEventTypeDropdown('all');
             renderGallery();
@@ -1748,6 +1918,14 @@
             document.body.classList.remove('press-feed-active');
             document.getElementById('pressFeedBtn')?.classList.remove('active');
             document.getElementById('tbSearchInput').value = '';
+            // Re-evaluate scrolled state after hero spacer is restored
+            requestAnimationFrame(() => {
+                const headerH = parseFloat(getComputedStyle(document.documentElement)
+                    .getPropertyValue('--header-h')) || 56;
+                const ts = document.querySelector('.tag-strip');
+                const tsTop = ts ? ts.getBoundingClientRect().top : 999;
+                document.body.classList.toggle('scrolled', tsTop <= headerH + 2);
+            });
         }
 
         function togglePressFeed() {
@@ -1759,7 +1937,7 @@
             }
         }
 
-        /* ── Helpers ── */
+        /* -- Helpers -- */
         function formatDateRange(s, e) {
             if (!s) return '';
             const d = new Date(s), sm = d.toLocaleDateString('en-US',{month:'short'}), sd = d.getDate(), sy = d.getFullYear();
@@ -1772,13 +1950,13 @@
 
         function viewProject(slug) { location.href = `/project.html?slug=${slug}`; }
 
-        /* ── Tiles ── */
+        /* -- Tiles -- */
         const lockIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>`;
         const photoIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>`;
-        
+
         function tile(p) {
             const tag = Array.isArray(p.tags) && p.tags.length ? p.tags[0] : (p.event_type || '');
-            const tagDisplay = Array.isArray(p.tags) && p.tags.length ? p.tags.join(' · ') : (p.event_type || '');
+            const tagDisplay = Array.isArray(p.tags) && p.tags.length ? p.tags.join(' \u00b7 ') : (p.event_type || '');
             const topLine = currentSort === 'featured'
                 ? tagDisplay
                 : formatDateRange(p.event_date, p.event_end_date);
@@ -1810,7 +1988,7 @@
             return `<div class="g-review-slideshow" id="reviewSlideshow">${slides}<div class="g-review-dots">${dots}</div></div>`;
         }
 
-        /* ── Review Slideshow ── */
+        /* -- Review Slideshow -- */
         let currentReview = 0, reviewInterval;
 
         function goToReview(idx) {
@@ -1833,7 +2011,7 @@
             reviewInterval = setInterval(() => goToReview((currentReview+1)%reviews.length), 5000);
         }
 
-        /* ── Sort helpers ── */
+        /* -- Sort helpers -- */
         function sortProjects(list) {
             if (currentSort === 'newest') {
                 return [...list].sort((a,b) => {
@@ -1849,27 +2027,23 @@
                     return da - db;
                 });
             }
-            // featured = featured projects first (by featured_order), then non-featured by date (newest first)
             return [...list].sort((a,b) => {
-                // Featured projects come first
                 if (a.featured && !b.featured) return -1;
                 if (!a.featured && b.featured) return 1;
-                // Among featured, sort by featured_order
                 if (a.featured && b.featured) {
                     return (a.featured_order || 0) - (b.featured_order || 0);
                 }
-                // Among non-featured, sort by date (newest first)
                 const da = a.event_date ? new Date(a.event_date) : new Date(0);
                 const db = b.event_date ? new Date(b.event_date) : new Date(0);
                 return db - da;
             });
         }
 
-        /* ── Gallery Render ── */
+        /* -- Gallery Render -- */
         function renderGallery() {
             const grid = document.getElementById('unifiedGrid');
             let filtered = projects;
-            
+
             if (currentFilter !== 'all') {
                 filtered = projects.filter(p => {
                     const tags = (Array.isArray(p.tags) ? p.tags : []).map(t => t.toLowerCase());
@@ -1879,8 +2053,17 @@
             }
             filtered = sortProjects(filtered);
 
+            /* Preserve scroll position & scrolled-mode colors across innerHTML swap.
+               minHeight persists until the NEXT renderGallery() call clears it,
+               preventing the grid from collapsing while lazy images load. */
+            const wasScrolled = document.body.classList.contains('scrolled');
+            grid.style.minHeight = '';
+            const prevHeight = grid.offsetHeight;
+            grid.style.minHeight = prevHeight + 'px';
+
             if (!filtered.length) {
                 grid.innerHTML = '<div class="empty-state"><p>No projects found.</p></div>';
+                if (wasScrolled) document.body.classList.add('scrolled');
                 return;
             }
 
@@ -1895,48 +2078,264 @@
 
             while (pi < filtered.length) html += tile(filtered[pi++]);
             grid.innerHTML = html;
+            if (wasScrolled) document.body.classList.add('scrolled');
             startReviewSlideshow();
         }
-        
-        /* ── Load ── */
+
+        /* -- Load -- */
         async function loadProjects() {
             try {
                 const res = await fetch(`${API_URL}/api/projects`);
                 const data = await res.json();
                 if (data.error) throw new Error(data.error);
                 projects = (data.projects||[]).sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
-                
-                // Calculate total photos for stats display
-                const totalPhotos = projects.reduce((sum, p) => sum + (p.photo_count || 0), 0);
-                
-                // Format: 1.2k for thousands, otherwise show full number
-                const formatCount = (n) => {
-                    if (n >= 1000) {
-                        return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
-                    }
-                    return n.toString();
-                };
-                
-                document.getElementById('totalPhotosCount').textContent = formatCount(totalPhotos);
-                
                 renderGallery();
             } catch(e) {
                 document.getElementById('unifiedGrid').innerHTML = `<div class="empty-state"><h3>Error</h3><p>${e.message}</p></div>`;
             }
         }
-        
+
+        /* -- Checkout -- */
+        async function checkout() {
+            const token = localStorage.getItem('token');
+            if (!token) { location.href = '/signin.html'; return; }
+            const btn = document.getElementById('checkoutBtn');
+            btn.disabled = true; btn.textContent = 'Processing...';
+            try {
+                const res = await fetch(`${API_URL}/api/checkout`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({ items: cart })
+                });
+                const data = await res.json();
+                if (data.url) window.location.href = data.url;
+                else throw new Error(data.error || 'Checkout failed');
+            } catch(e) {
+                alert('Checkout error: ' + e.message);
+                btn.disabled = false; btn.textContent = 'Proceed to Checkout';
+            }
+        }
+
+        /* ── Hero Crossfade: wheel-driven, then normal scroll ── */
+        function initHeroScroll() {
+            const headline = document.getElementById('heroHeadline');
+            const slogan = document.getElementById('heroSlogan');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const heroSpacer = document.querySelector('.hero-spacer');
+            const tagStrip = document.querySelector('.tag-strip');
+
+            if (!headline) return;
+
+            // Mobile: skip crossfade, allow immediate scrolling
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (isMobile) {
+                if (slogan) slogan.style.opacity = '1';
+                headline.style.opacity = '0';
+                /* Keep scroll indicator visible on mobile */
+                // Still need the scrolled-class listener
+                window.addEventListener('scroll', function() {
+                    const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
+                    const tagStripTop = tagStrip ? tagStrip.getBoundingClientRect().top : 999;
+                    document.body.classList.toggle('scrolled', tagStripTop <= headerH + 2);
+                }, { passive: true });
+                return;
+            }
+
+            let targetProgress = 0;      // where we want to be (0–1)
+            let displayProgress = 0;     // smoothly animated current value
+            let crossfadeDone = false;
+            let animFrame = null;
+            const WHEEL_SENSITIVITY = 0.0015; // slower crossfade
+            const TOUCH_SENSITIVITY = 0.003;
+            const EASE_SPEED = 0.08;          // lerp factor for smoothing
+
+            // Lock page scroll at start
+            document.body.classList.add('hero-locked');
+            window.scrollTo(0, 0);
+
+            function renderCrossfade(p) {
+                // Slogan: fades out 0–60% with gentle drift
+                if (slogan) {
+                    const sloganP = Math.min(p / 0.6, 1);
+                    slogan.style.opacity = 1 - sloganP;
+                    slogan.style.transform = `translate(-50%, calc(-50% + ${-sloganP * 25}px))`;
+                }
+
+                // Headline: fades in 35–85%
+                const hlStart = 0.35;
+                const hlEnd = 0.85;
+                let hlOpacity = 0;
+                if (p < hlStart) {
+                    hlOpacity = 0;
+                } else if (p < hlEnd) {
+                    hlOpacity = (p - hlStart) / (hlEnd - hlStart);
+                } else {
+                    hlOpacity = 1;
+                }
+                headline.style.opacity = hlOpacity;
+
+                // Scroll indicator
+                if (scrollIndicator) {
+                    const indicatorP = Math.min(p / 0.25, 1);
+                    scrollIndicator.style.opacity = (1 - indicatorP) * 0.6;
+                }
+            }
+
+            // Smooth animation loop — lerps displayProgress toward targetProgress
+            function animateCrossfade() {
+                displayProgress += (targetProgress - displayProgress) * EASE_SPEED;
+
+                // Snap when close enough
+                if (Math.abs(displayProgress - targetProgress) < 0.002) {
+                    displayProgress = targetProgress;
+                }
+
+                renderCrossfade(displayProgress);
+
+                // Check if crossfade completed
+                if (displayProgress >= 0.99 && targetProgress >= 1) {
+                    displayProgress = 1;
+                    renderCrossfade(1);
+                    crossfadeDone = true;
+                    document.body.classList.remove('hero-locked');
+                    animFrame = null;
+                    return;
+                }
+
+                // Keep animating if not settled
+                if (Math.abs(displayProgress - targetProgress) > 0.001) {
+                    animFrame = requestAnimationFrame(animateCrossfade);
+                } else {
+                    animFrame = null;
+                }
+            }
+
+            function startAnimation() {
+                if (!animFrame) {
+                    animFrame = requestAnimationFrame(animateCrossfade);
+                }
+            }
+
+            // Re-lock scroll and reverse crossfade when user scrolls back to top
+            function reLockForReverse() {
+                crossfadeDone = false;
+                document.body.classList.add('hero-locked');
+                window.scrollTo(0, 0);
+                // targetProgress and displayProgress are already at 1
+                // They'll be driven back down by the wheel handler
+            }
+
+            function onWheel(e) {
+                // If crossfade is done and user scrolls back to top, re-lock
+                if (crossfadeDone) {
+                    const scrollY = window.pageYOffset || window.scrollY;
+                    if (e.deltaY < 0 && scrollY <= 0) {
+                        reLockForReverse();
+                        e.preventDefault();
+                        targetProgress = Math.max(targetProgress - 0.05, 0);
+                        startAnimation();
+                    }
+                    return;
+                }
+
+                e.preventDefault();
+
+                if (e.deltaY > 0) {
+                    targetProgress = Math.min(targetProgress + e.deltaY * WHEEL_SENSITIVITY, 1);
+                } else if (e.deltaY < 0) {
+                    targetProgress = Math.max(targetProgress + e.deltaY * WHEEL_SENSITIVITY, 0);
+                }
+
+                startAnimation();
+            }
+
+            window.addEventListener('wheel', onWheel, { passive: false });
+
+            // Touch support for mobile
+            let touchStartY = 0;
+            function onTouchStart(e) {
+                touchStartY = e.touches[0].clientY;
+            }
+            function onTouchMove(e) {
+                if (crossfadeDone) {
+                    const scrollY = window.pageYOffset || window.scrollY;
+                    const deltaY = touchStartY - e.touches[0].clientY;
+                    if (deltaY < 0 && scrollY <= 0) {
+                        reLockForReverse();
+                        e.preventDefault();
+                        targetProgress = Math.max(targetProgress - 0.05, 0);
+                        startAnimation();
+                    }
+                    touchStartY = e.touches[0].clientY;
+                    return;
+                }
+
+                const deltaY = touchStartY - e.touches[0].clientY;
+                if (deltaY > 0 || targetProgress > 0) {
+                    e.preventDefault();
+                    targetProgress = Math.min(Math.max(targetProgress + deltaY * TOUCH_SENSITIVITY, 0), 1);
+                    touchStartY = e.touches[0].clientY;
+                    startAnimation();
+                }
+            }
+            window.addEventListener('touchstart', onTouchStart, { passive: false });
+            window.addEventListener('touchmove', onTouchMove, { passive: false });
+
+            // Toggle scrolled class when tag strip actually touches the header
+            window.addEventListener('scroll', function() {
+                if (!crossfadeDone) return;
+                const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
+                const tagStripTop = tagStrip ? tagStrip.getBoundingClientRect().top : 999;
+                document.body.classList.toggle('scrolled', tagStripTop <= headerH + 2);
+            }, { passive: true });
+
+            renderCrossfade(0);
+        }
+
+        /* ── Inline Search Toggle ── */
+        function toggleInlineSearch() {
+            const wrap = document.getElementById('inlineSearchWrap');
+            const btn = document.getElementById('searchToggleBtn');
+            const input = document.getElementById('inlineSearchInput');
+            const isOpen = wrap.style.display !== 'none';
+
+            if (isOpen) {
+                wrap.style.display = 'none';
+                btn.style.visibility = 'visible';
+                btn.style.pointerEvents = '';
+            } else {
+                wrap.style.display = 'flex';
+                btn.style.visibility = 'hidden';
+                btn.style.pointerEvents = 'none';
+                input.focus();
+            }
+        }
+
+        function doInlineSearch() {
+            const q = document.getElementById('inlineSearchInput').value.trim();
+            if (q) location.href = `/search.html?q=${encodeURIComponent(q)}`;
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            checkAuth(); updateCartUI(); loadProjects();
-            document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key==='Enter') doSearch(); });
+            checkAuth(); updateCartUI(); loadProjects(); initHeroScroll();
+            document.getElementById('inlineSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doInlineSearch(); });
             document.getElementById('tbSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doToolbarSearch(); });
 
-            // Measure header height for sticky toolbar offset
+            // Measure header height for sticky tag strip offset
             const header = document.querySelector('.header');
             function setHeaderHeight() {
                 document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
             }
             setHeaderHeight();
             window.addEventListener('resize', setHeaderHeight);
+
+            // Ensure video plays and loops
+            const vid = document.querySelector('.video-hero-bg');
+            if (vid) {
+                vid.loop = true;
+                vid.muted = true;
+                vid.play().catch(() => {});
+            }
         });
     </script>
 </body>
