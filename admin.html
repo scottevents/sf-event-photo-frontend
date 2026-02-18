@@ -93,8 +93,11 @@
         
         .project-layout { display:flex; gap:2rem; }
         .project-sidebar { width:280px; flex-shrink:0; }
-        .project-cover-preview { aspect-ratio:16/10; border-radius:8px; overflow:hidden; background:var(--gray-200); margin-bottom:1rem; }
+        .project-cover-preview { aspect-ratio:16/10; border-radius:8px; overflow:hidden; background:var(--gray-200); margin-bottom:1rem; position:relative; cursor:crosshair; }
         .project-cover-preview img { width:100%; height:100%; object-fit:cover; }
+        .focal-point-indicator { position:absolute; width:20px; height:20px; border:2px solid #fff; border-radius:50%; background:rgba(20,184,166,0.5); box-shadow:0 0 0 1px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.3); transform:translate(-50%,-50%); pointer-events:none; z-index:5; display:none; }
+        .focal-point-indicator.active { display:block; }
+        .focal-point-label { position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,0.7); color:#fff; font-size:0.65rem; padding:0.2rem 0.4rem; border-radius:4px; pointer-events:none; z-index:5; }
         .sidebar-section { margin-bottom:1.5rem; }
         .sidebar-section-title { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-400); margin-bottom:0.5rem; }
         
@@ -750,8 +753,10 @@
                 <div class="page-content" id="projectEditContent">
                     <div class="project-layout-pixieset">
                         <div class="project-sidebar-pixieset">
-                            <div class="project-cover-preview">
+                            <div class="project-cover-preview" id="coverPreviewContainer" onclick="handleFocalPointClick(event)">
                                 <img id="projectCover" src="" alt="">
+                                <div class="focal-point-indicator" id="focalPointDot"></div>
+                                <div class="focal-point-label" id="focalPointLabel" style="display:none;">Focal Point</div>
                             </div>
                             
                             <div class="sidebar-tabs">
@@ -1438,6 +1443,9 @@
         document.getElementById('projectTitle').textContent=currentProject.title;
         document.getElementById('projectMeta').textContent=`${formatDateRange(currentProject.event_date, currentProject.event_end_date)} • ${currentProject.photo_count||0} photos`;
         document.getElementById('projectCover').src=currentProject.cover_image_url||'';
+        const fp=currentProject.cover_focal_point||'50% 50%';
+        document.getElementById('projectCover').style.objectPosition=fp;
+        if(currentProject.cover_focal_point){const parts=currentProject.cover_focal_point.replace(/%/g,'').split(' ');updateFocalPointIndicator(parseFloat(parts[0]),parseFloat(parts[1]));}else{document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';}
         document.getElementById('projectCode').value=currentProject.download_code||'';
         document.getElementById('projectBrands').value=(currentProject.brands||[]).join(', ');
         document.getElementById('publishBtn').textContent=currentProject.published?'Unpublish':'Publish';
@@ -2405,7 +2413,31 @@
     
     async function saveTags(id){const people=document.getElementById(`tags-${id}`).value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});showToast('Saved!','success');}catch(e){showToast('Error','error');}}
     async function saveAllTags(){showToast('Saving...','');let n=0;for(const p of currentPhotos){const el=document.getElementById(`tags-${p.id}`);if(!el)continue;const people=el.value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${p.id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});n++;}catch(e){}}showToast(`${n} saved!`,'success');}
-    async function setCover(id){const photo=currentPhotos.find(p=>p.id===id);if(!photo)return;const url=photo.original_url||photo.large_url||photo.thumbnail_url;try{await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_image_url:url})});currentProject.cover_image_url=url;document.getElementById('projectCover').src=url;loadProjectPhotos();showToast('Cover set!','success');}catch(e){showToast('Error','error');}}
+    async function setCover(id){const photo=currentPhotos.find(p=>p.id===id);if(!photo)return;const url=photo.original_url||photo.large_url||photo.thumbnail_url;try{await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_image_url:url,cover_focal_point:'50% 50%'})});currentProject.cover_image_url=url;currentProject.cover_focal_point='50% 50%';document.getElementById('projectCover').src=url;document.getElementById('projectCover').style.objectPosition='50% 50%';document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';loadProjectPhotos();showToast('Cover set!','success');}catch(e){showToast('Error','error');}}
+    function handleFocalPointClick(event){
+        const container=document.getElementById('coverPreviewContainer');
+        const img=document.getElementById('projectCover');
+        if(!img.src||!currentProject)return;
+        const rect=container.getBoundingClientRect();
+        const x=((event.clientX-rect.left)/rect.width*100).toFixed(1);
+        const y=((event.clientY-rect.top)/rect.height*100).toFixed(1);
+        const focalPoint=x+'% '+y+'%';
+        updateFocalPointIndicator(x,y);
+        img.style.objectPosition=focalPoint;
+        saveFocalPoint(focalPoint);
+    }
+    function updateFocalPointIndicator(xPercent,yPercent){
+        const dot=document.getElementById('focalPointDot');
+        const label=document.getElementById('focalPointLabel');
+        dot.style.left=xPercent+'%';
+        dot.style.top=yPercent+'%';
+        dot.classList.add('active');
+        label.style.display='block';
+        label.textContent='Focal: '+Math.round(xPercent)+'% '+Math.round(yPercent)+'%';
+    }
+    async function saveFocalPoint(focalPoint){
+        try{await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_focal_point:focalPoint})});currentProject.cover_focal_point=focalPoint;showToast('Focal point saved','success');}catch(e){showToast('Error saving focal point','error');}
+    }
     async function deletePhoto(id){if(!confirm('Delete?'))return;try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'DELETE',headers:{'x-admin-key':ADMIN_PASSWORD}});showToast('Deleted','success');loadProjectPhotos();loadProjects();}catch(e){showToast('Error','error');}}
     
     function renderDomains(){const list=document.getElementById('projectDomains');const domains=currentProject.whitelisted_domains||[];if(!domains.length){list.innerHTML='<span style="font-size:0.75rem;color:var(--gray-400);">None</span>';return;}list.innerHTML=domains.map(d=>`<span class="domain-tag">${d}<button onclick="removeDomain('${d}')">×</button></span>`).join('');}
@@ -3385,11 +3417,15 @@
                     'Content-Type': 'application/json',
                     'x-admin-key': ADMIN_PASSWORD 
                 },
-                body: JSON.stringify({ cover_image_url: photo.url })
+                body: JSON.stringify({ cover_image_url: photo.url, cover_focal_point: '50% 50%' })
             });
-            
+
             currentProject.cover_image_url = photo.url;
+            currentProject.cover_focal_point = '50% 50%';
             document.getElementById('projectCover').src = photo.url;
+            document.getElementById('projectCover').style.objectPosition = '50% 50%';
+            document.getElementById('focalPointDot').classList.remove('active');
+            document.getElementById('focalPointLabel').style.display = 'none';
             showToast('Cover image updated', 'success');
         } catch (err) {
             console.error('Error setting cover:', err);

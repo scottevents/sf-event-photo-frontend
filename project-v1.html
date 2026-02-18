@@ -98,9 +98,10 @@
         body {
             font-family: 'PP Neue York', Georgia, serif;
             color: var(--black);
-            background: var(--white);
+            background: #0a0a0a;
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
+            transition: background 0.3s;
         }
         
         /* ═══════════════════════════════════════
@@ -121,6 +122,7 @@
         body.scrolled .auth-link { color: #1a1a1a; }
         body.scrolled .cart-link svg { stroke: #1a1a1a; }
         body.scrolled .hamburger svg { stroke: #1a1a1a; }
+        body.scrolled { background: #fff; }
 
         .header-inner {
             display: flex; justify-content: space-between;
@@ -301,7 +303,10 @@
         /* Main Content */
         .main {
             padding: 0;
+            background: #0a0a0a;
+            transition: background 0.3s;
         }
+        body.scrolled .main { background: #fff; }
 
         @media (max-width: 900px) {
             .main { padding: 0; }
@@ -746,7 +751,7 @@
         .project-cover {
             position: relative;
             width: 100%;
-            height: 60vh;
+            height: calc(100vh - var(--header-h, 56px) - 48px);
             min-height: 400px;
             overflow: hidden;
             margin-bottom: 0;
@@ -785,7 +790,7 @@
 
         @media (max-width: 768px) {
             .project-cover {
-                height: 50vh;
+                height: calc(100vh - var(--header-h, 56px) - 44px);
                 min-height: 300px;
             }
             .project-cover-overlay {
@@ -814,7 +819,9 @@
             border-radius: 0;
             height: auto;
             contain: layout style paint;
+            transition: background 0.3s;
         }
+        body.scrolled .photo-card { background: #f5f5f5; }
         
         .photo-image {
             width: 100%;
@@ -2385,8 +2392,6 @@
     </div>
 
     <main class="main">
-        <a href="/" class="back-link">← Back to Projects</a>
-        
         <div id="projectContainer">
             <div class="loading">
                 <div class="loading-spinner"></div>
@@ -2895,10 +2900,11 @@
             // Update SEO meta tags dynamically
             updateSEO(project);
 
-            const coverPhoto = project.photos && project.photos[0] ? (project.photos[0].large_url || project.photos[0].thumbnail_url) : '';
+            const coverPhoto = project.cover_image_url || (project.photos && project.photos[0] ? (project.photos[0].large_url || project.photos[0].thumbnail_url) : '');
+            const focalPoint = project.cover_focal_point || '50% 50%';
             const coverHtml = coverPhoto ? `
                 <div class="project-cover">
-                    <img src="${coverPhoto}" alt="${project.title}">
+                    <img src="${coverPhoto}" alt="${project.title}" style="object-position: ${focalPoint}">
                     <div class="project-cover-overlay">
                         <h1 class="project-cover-title">${project.title || ''}</h1>
                         <div class="project-cover-meta">${project.venue ? project.venue : ''}${project.venue && project.event_date ? ' · ' : ''}${project.event_date ? formatDate(project.event_date) : ''}</div>
