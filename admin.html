@@ -1454,7 +1454,7 @@
         document.getElementById('projectFeaturedToggle').checked=currentProject.featured===true;
         // Load site settings to get latest licenses
         await loadLicenses();
-        renderDomains();renderVideos();renderProjectLicenses();loadProjectPhotos();loadSeoData();
+        renderDomains();renderVideos();renderProjectLicenses();await loadProjectPhotos();loadSeoData();
     }
     
     // Video management
@@ -2079,10 +2079,17 @@
             try {
                 const r=await fetch(`${API_URL}/api/admin/projects/${currentProject.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
                 d=await r.json();
-            } catch(e) {
-                const r2=await fetch(`${API_URL}/api/projects/${currentProject.slug}`);
-                d=await r2.json();
+            } catch(e) {}
+            // If admin returned no photos, fall back to public API
+            if (!d || !(d.photos||[]).length) {
+                try {
+                    const r2=await fetch(`${API_URL}/api/projects/${currentProject.slug}`);
+                    const d2=await r2.json();
+                    const pub=d2.photos||d2||[];
+                    if(Array.isArray(pub)&&pub.length>0) d=d2;
+                } catch(e2) {}
             }
+            if(!d) d={photos:[]};
             currentPhotos=d.photos||d||[];
             if(!Array.isArray(currentPhotos))currentPhotos=[];
             // Deduplicate by photo id, then by image URL
@@ -2935,10 +2942,17 @@
             try {
                 const r=await fetch(`${API_URL}/api/admin/projects/${currentProject.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
                 d=await r.json();
-            } catch(e) {
-                const r2=await fetch(`${API_URL}/api/projects/${currentProject.slug}`);
-                d=await r2.json();
+            } catch(e) {}
+            // If admin returned no photos, fall back to public API
+            if (!d || !(d.photos||[]).length) {
+                try {
+                    const r2=await fetch(`${API_URL}/api/projects/${currentProject.slug}`);
+                    const d2=await r2.json();
+                    const pub=d2.photos||d2||[];
+                    if(Array.isArray(pub)&&pub.length>0) d=d2;
+                } catch(e2) {}
             }
+            if(!d) d={photos:[]};
             currentPhotos=d.photos||d||[];
             if(!Array.isArray(currentPhotos))currentPhotos=[];
             // Deduplicate by photo id, then by image URL
