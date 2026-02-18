@@ -160,7 +160,6 @@
         body.scrolled .tb-btn svg {
             stroke: #1a1a1a;
         }
-        body.scrolled .tb-search-toggle svg,
         body.scrolled .tag-strip-inline-close svg {
             stroke: #1a1a1a;
         }
@@ -582,29 +581,6 @@
             text-shadow: 0 2px 40px rgba(0,0,0,0.5);
         }
 
-        /* Toolbar search icon */
-        .tag-strip-search-icon {
-            display: flex;
-            align-items: center;
-            flex-shrink: 0;
-            margin-left: 0.5rem;
-        }
-
-        .tb-search-toggle {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.7rem 0.5rem;
-            opacity: 0.35;
-            transition: opacity 0.2s;
-        }
-
-        .tb-search-toggle svg { stroke: #fff; }
-        .tb-search-toggle:hover { opacity: 0.7; }
-
         /* Inline search in toolbar */
         .tag-strip-inline-search {
             display: flex;
@@ -734,7 +710,6 @@
                 height: 70vh;
                 min-height: 400px;
             }
-            .tag-strip-search-icon { margin-left: 0.25rem; }
             .tag-strip-inline-search { max-width: 200px; }
         }
 
@@ -773,72 +748,29 @@
             flex-shrink: 0;
         }
 
-        /* Question mark help icon */
-        .tag-strip-help {
-            position: relative;
-            display: flex;
-            align-items: center;
-            padding: 0.75rem 1rem 0.75rem 0;
-        }
-
-        .tag-strip-help-btn {
+        /* Search toggle (far left of tag strip) */
+        .tag-strip-search-toggle {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 22px;
-            height: 22px;
-            border-radius: 50%;
-            border: 1px solid rgba(255,255,255,0.25);
             background: none;
-            font-family: 'PP Neue York', Georgia, serif;
-            font-size: 0.7rem;
-            font-weight: 400;
-            color: rgba(255,255,255,0.45);
+            border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            padding: 0.75rem 0.75rem 0.75rem 0;
+            opacity: 0.4;
+            transition: opacity 0.2s;
         }
 
-        .tag-strip-help-btn:hover {
-            color: rgba(255,255,255,0.9);
-            border-color: rgba(255,255,255,0.5);
+        .tag-strip-search-toggle svg {
+            stroke: #fff;
         }
 
-        .tag-strip-help-tooltip {
-            display: none;
-            position: absolute;
-            top: calc(100% + 4px);
-            left: 0;
-            background: #1a1a1a;
-            color: rgba(255,255,255,0.8);
-            font-family: 'PP Neue York', Georgia, serif;
-            font-size: 0.75rem;
-            font-weight: 300;
-            letter-spacing: 0.02em;
-            padding: 0.6rem 0.9rem;
-            border-radius: 6px;
-            white-space: nowrap;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-            z-index: 100;
-            pointer-events: none;
+        .tag-strip-search-toggle:hover {
+            opacity: 0.8;
         }
 
-        .tag-strip-help:hover .tag-strip-help-tooltip,
-        .tag-strip-help.show-tooltip .tag-strip-help-tooltip {
-            display: block;
-        }
-
-        body.scrolled .tag-strip-help-btn {
-            color: rgba(0,0,0,0.4);
-            border-color: rgba(0,0,0,0.2);
-        }
-        body.scrolled .tag-strip-help-btn:hover {
-            color: rgba(0,0,0,0.8);
-            border-color: rgba(0,0,0,0.4);
-        }
-        body.scrolled .tag-strip-help-tooltip {
-            background: #fff;
-            color: #1a1a1a;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        body.scrolled .tag-strip-search-toggle svg {
+            stroke: #1a1a1a;
         }
 
         .tag-strip-center {
@@ -1508,11 +1440,16 @@
 
     <!-- Tag Strip - Sticky below header -->
     <div class="tag-strip">
-        <!-- Help icon (far left) -->
+        <!-- Search (far left) -->
         <div class="tag-strip-left">
-            <div class="tag-strip-help" id="tagStripHelp" onclick="this.classList.toggle('show-tooltip')">
-                <button class="tag-strip-help-btn" aria-label="Help">?</button>
-                <div class="tag-strip-help-tooltip">Search people, brands, or events</div>
+            <button class="tag-strip-search-toggle" id="searchToggleBtn" onclick="toggleInlineSearch()" aria-label="Search">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="15" height="15"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+            </button>
+            <div class="tag-strip-inline-search" id="inlineSearchWrap" style="display:none;">
+                <input type="text" class="tag-strip-inline-input" id="inlineSearchInput" placeholder="Search people, brands, or events...">
+                <button class="tag-strip-inline-close" onclick="toggleInlineSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
             </div>
         </div>
 
@@ -1557,21 +1494,6 @@
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                 </button>
             </div>
-        </div>
-
-        <!-- Search icon (opens inline search) -->
-        <div class="tag-strip-search-icon">
-            <button class="tb-search-toggle" id="searchToggleBtn" onclick="toggleInlineSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="16" height="16"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
-            </button>
-        </div>
-
-        <!-- Inline search (hidden by default, shown on toggle) -->
-        <div class="tag-strip-inline-search" id="inlineSearchWrap" style="display:none;">
-            <input type="text" class="tag-strip-inline-input" id="inlineSearchInput" placeholder="Search...">
-            <button class="tag-strip-inline-close" onclick="toggleInlineSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" width="14" height="14"><path stroke-linecap="round" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
         </div>
 
         <!-- Press Feed toggle (far right) -->
