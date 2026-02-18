@@ -2244,10 +2244,12 @@
 
             if (isOpen) {
                 wrap.style.display = 'none';
-                btn.style.display = 'flex';
+                btn.style.visibility = 'visible';
+                btn.style.pointerEvents = '';
             } else {
                 wrap.style.display = 'flex';
-                btn.style.display = 'none';
+                btn.style.visibility = 'hidden';
+                btn.style.pointerEvents = 'none';
                 input.focus();
             }
         }
