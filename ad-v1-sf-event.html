@@ -512,16 +512,23 @@
         }
 
         .video-hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            max-width: 1100px;
+            position: absolute;
+            top: 0; left: 0;
             width: 100%;
-            padding: 0 2rem;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
         }
 
         .video-hero-headline,
         .video-hero-slogan {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            text-align: center;
+            padding: 0 2rem;
             will-change: opacity, transform;
         }
 
@@ -538,7 +545,7 @@
             text-shadow: 0 1px 20px rgba(0,0,0,0.3);
         }
 
-        /* Headline: fades in on scroll, stays until content covers it */
+        /* Headline: fades in on scroll, stays centered until content covers it */
         .video-hero-headline {
             font-family: 'PP Neue York', Georgia, serif;
             font-size: clamp(3.5rem, 8vw, 7rem);
@@ -547,11 +554,6 @@
             color: #fff;
             letter-spacing: -0.03em;
             line-height: 1;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
             opacity: 0;
             text-shadow: 0 2px 40px rgba(0,0,0,0.5);
         }
@@ -1946,35 +1948,29 @@
                 // Crossfade happens over the spacer scroll distance
                 const progress = Math.min(scrollY / spacerHeight, 1);
 
-                // Slogan: fades out 0–50%
+                // Slogan: fades out 0–50%, drifts up slightly
                 if (slogan) {
                     const sloganP = Math.min(progress / 0.5, 1);
                     slogan.style.opacity = 1 - sloganP;
-                    slogan.style.transform = `translateY(${-sloganP * 30}px)`;
+                    slogan.style.transform = `translate(-50%, calc(-50% + ${-sloganP * 30}px))`;
                 }
 
-                // Headline: fades in 30–70%, then stays at full opacity forever
-                // — it disappears naturally as .main-content scrolls over it
+                // Headline: fades in 30–70%, then stays at dead center forever
+                // — disappears naturally as .main-content scrolls over it
                 if (headline) {
                     const hlStart = 0.3;
                     const hlEnd = 0.7;
                     let hlOpacity = 0;
-                    let hlY = 25;
 
                     if (progress < hlStart) {
                         hlOpacity = 0;
-                        hlY = 25;
                     } else if (progress < hlEnd) {
-                        const p = (progress - hlStart) / (hlEnd - hlStart);
-                        hlOpacity = p;
-                        hlY = 25 * (1 - p);
+                        hlOpacity = (progress - hlStart) / (hlEnd - hlStart);
                     } else {
                         hlOpacity = 1;
-                        hlY = 0;
                     }
 
                     headline.style.opacity = hlOpacity;
-                    headline.style.transform = `translate(-50%, calc(-50% + ${hlY}px))`;
                 }
 
                 // Scroll indicator: gone quickly
