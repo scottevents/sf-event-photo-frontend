@@ -4,26 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Corporate Event Photography - SF Event Photo</title>
-    <meta name="description" content="Polished, professional photography for the corporate world. Executive portraits, annual conferences, team events, and investor days. Trusted by Goldman Sachs, Deloitte, McKinsey, and more.">
-    <meta name="keywords" content="corporate event photographer, corporate photography, executive portraits, conference photographer, investor day photographer, corporate headshots">
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Polished, professional photography for the corporate world. Executive portraits, annual conferences, team events, and investor days. Trusted by leading enterprises.">
+    <meta name="keywords" content="event photography, San Francisco photographer, Los Angeles event photographer, corporate photography, brand activation photography, conference photographer, product launch photos, executive portraits, professional event photos">
+    <meta name="author" content="SF Event Photo">
+    <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://sfeventphoto.com/ad-corporate.html">
 
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://sfeventphoto.com/ad-corporate.html">
     <meta property="og:title" content="Corporate Event Photography - SF Event Photo">
     <meta property="og:description" content="Polished, professional photography for the corporate world. Executive portraits, conferences, team events, and investor days.">
     <meta property="og:image" content="https://sfeventphoto.com/og-image.jpg">
+    <meta property="og:site_name" content="SF Event Photo">
 
-    <link rel="preload" href="./fonts/PPNeueYork-NormalLight.woff2" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="./fonts/PPNeueYork-NormalRegular.woff2" as="font" type="font/woff2" crossorigin>
-
-    <style>
-        @font-face {
-            font-family: 'PP Neue York';
-            src: url('./fonts/PPNeueYork-NormalThin.woff2') format('woff2'),
-                 url('./fonts/PPNeueYork-NormalThin.woff') format('woff');
-            font-weight: 200; font-style: normal; font-display: swap;
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://sfeventphoto.com/ad-corporate.html">
+    <meta name="twitter:title" content="Corporate Event Photography - SF Event Photo">
+    <meta name="twitter:description" content="Polished, professional photography for the corporate world. Executive portraits, conferences, team events, and investor days.">
+    <meta name="twitter:image" content="https://sfeventphoto.com/og-image.jpg">
+    
+    <!-- Structured Data for Organization -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ProfessionalService",
+        "name": "SF Event Photo",
+        "description": "Professional event photography agency specializing in corporate events, brand activations, conferences, and executive portraits in San Francisco and Los Angeles.",
+        "url": "https://sfeventphoto.com",
+        "logo": "https://sfeventphoto.com/logo.png",
+        "image": "https://sfeventphoto.com/og-image.jpg",
+        "telephone": "+1-415-555-1234",
+        "email": "hello@sfeventphoto.com",
+        "address": [
+            {
+                "@type": "PostalAddress",
+                "addressLocality": "San Francisco",
+                "addressRegion": "CA",
+                "addressCountry": "US"
+            },
+            {
+                "@type": "PostalAddress",
+                "addressLocality": "Los Angeles",
+                "addressRegion": "CA",
+                "addressCountry": "US"
+            }
+        ],
+        "areaServed": [
+            {
+                "@type": "City",
+                "name": "San Francisco"
+            },
+            {
+                "@type": "City",
+                "name": "Los Angeles"
+            }
+        ],
+        "serviceType": [
+            "Event Photography",
+            "Corporate Photography",
+            "Brand Activation Photography",
+            "Conference Photography",
+            "Executive Portraits",
+            "Product Launch Photography",
+            "Video Production"
+        ],
+        "priceRange": "$$",
+        "sameAs": [
+            "https://instagram.com/sfeventphoto",
+            "https://linkedin.com/company/sfeventphoto"
+        ]
+    }
+    </script>
+    
+    <!-- Structured Data for Local Business -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "SF Event Photo",
+        "image": "https://sfeventphoto.com/og-image.jpg",
+        "@id": "https://sfeventphoto.com",
+        "url": "https://sfeventphoto.com",
+        "telephone": "+1-415-555-1234",
+        "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "San Francisco",
+            "addressRegion": "CA",
+            "addressCountry": "US"
+        },
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 37.7749,
+            "longitude": -122.4194
+        },
+        "openingHoursSpecification": {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+            "opens": "09:00",
+            "closes": "18:00"
         }
+    }
+    </script>
+    
+    <style>
         @font-face {
             font-family: 'PP Neue York';
             src: url('./fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
@@ -49,6 +136,7 @@
             --gray-light: #f8f8f8;
             --gray-mid: #e8e8e8;
             --gray-dark: #888888;
+            --gap: 6px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -65,12 +153,9 @@
            HEADER
            ═══════════════════════════════════════ */
         .header {
-            position: fixed; top: 0; left: 0; right: 0;
-            background: rgba(10,10,10,0.9);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            position: sticky; top: 0;
+            background: #0a0a0a; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .header-inner {
@@ -121,12 +206,86 @@
 
         .nav a:hover { opacity: 0.5; }
 
+        /* Nav Dropdowns */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            text-decoration: none;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            padding: 0;
+        }
+
+        .nav-dropdown-trigger:hover { opacity: 0.5; }
+
+        .nav-dropdown-trigger svg {
+            width: 8px;
+            height: 8px;
+            stroke: #e0e0e0;
+            stroke-width: 2.5;
+            transition: transform 0.2s;
+        }
+
+        .nav-dropdown.open .nav-dropdown-trigger svg {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-panel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 0;
+            min-width: 180px;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.12);
+            z-index: 100;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .nav-dropdown.open .nav-dropdown-panel {
+            display: block;
+        }
+
+        .nav-dropdown-panel a {
+            display: block;
+            padding: 0.7rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: none;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: all 0.15s;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .nav-dropdown-panel a:last-child { border-bottom: none; }
+
+        .nav-dropdown-panel a:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+            opacity: 1;
+        }
+
         .nav-actions {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
-
+        
         .cart-link { position: relative; display: flex; align-items: center; text-decoration: none; }
         .cart-link svg { width: 24px; height: 24px; stroke-width: 1.5; }
 
@@ -144,6 +303,84 @@
             text-decoration: none; color: #e0e0e0;
             font-size: 0.85rem; font-weight: 400;
             letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s;
+        }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--white);
+            z-index: 2000;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .mobile-menu.open {
+            display: flex;
+        }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .mobile-menu-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .mobile-menu-close svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--black);
+            stroke-width: 1.5;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .mobile-menu-links a {
+            display: block;
+            padding: 1.25rem 0;
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+
+        .mobile-menu-links a:first-child {
+            border-top: 1px solid var(--gray-mid);
+        }
+
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            .nav-links {
+                display: none;
+            }
+            .nav {
+                gap: 1.5rem;
+            }
+            .nav-actions {
+                gap: 1.25rem;
+            }
+            .auth-link {
+                font-size: 0.75rem;
+            }
         }
 
         .auth-link:hover { opacity: 0.5; }
@@ -190,338 +427,512 @@
             text-transform: none; letter-spacing: 0; margin-top: 0.25rem;
         }
 
-        /* Mobile menu overlay */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--white);
-            z-index: 2000;
-            flex-direction: column;
-            padding: 1.5rem;
-        }
-
-        .mobile-menu.open { display: flex; }
-
-        .mobile-menu-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-
-        .mobile-menu-close {
-            background: none; border: none;
-            cursor: pointer; padding: 0.25rem;
-        }
-
-        .mobile-menu-close svg {
-            width: 28px; height: 28px;
-            stroke: var(--black); stroke-width: 1.5;
-        }
-
-        .mobile-menu-links {
-            display: flex;
-            flex-direction: column;
-            gap: 0;
-        }
-
-        .mobile-menu-links a {
-            display: block;
-            padding: 1.25rem 0;
-            text-decoration: none;
-            color: var(--black);
-            font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: 0.05em;
-            border-bottom: 1px solid var(--gray-mid);
-        }
-
-        .mobile-menu-links a:first-child {
-            border-top: 1px solid var(--gray-mid);
-        }
-
         /* ═══════════════════════════════════════
-           HERO
+           HERO SECTION with headline
            ═══════════════════════════════════════ */
-        .hero {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            min-height: 600px;
+        .hero-section {
+            background: #0a0a0a;
+            padding: 4rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .hero-headline {
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 2.75rem;
+            font-weight: 400;
+            color: #e0e0e0;
+            margin-bottom: 2rem;
+            letter-spacing: -0.02em;
+            display: block; /* Always visible on ad landing pages */
+            text-align: center;
+        }
+
+        .search-info-wrapper {
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            gap: 0;
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            background: url('https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1600&q=80') center/cover no-repeat;
-            filter: brightness(0.35);
-            transform: scale(1.05);
-        }
-
-        .hero-overlay {
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                180deg,
-                rgba(10,10,10,0.4) 0%,
-                rgba(10,10,10,0.2) 40%,
-                rgba(10,10,10,0.6) 100%
-            );
-        }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-            padding: 0 1.5rem;
-            max-width: 700px;
-            width: 100%;
-        }
-
-        .hero-headline {
-            font-family: 'PP Neue York', Georgia, serif;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 300;
-            color: #ffffff;
-            letter-spacing: -0.02em;
-            line-height: 1.15;
-            margin-bottom: 2rem;
+        .search-side { 
+            flex: 1;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 2.5rem;
         }
 
         .search-container {
             display: flex;
-            max-width: 500px;
-            margin: 0 auto 1.25rem;
             border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255,255,255,0.06);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255,255,255,0.05);
         }
 
         .search-input {
-            flex: 1;
-            padding: 0.9rem 1.25rem;
-            background: transparent;
-            border: none;
-            color: #ffffff;
+            flex: 1; padding: 0.9rem 1.25rem; border: none;
             font-family: 'PP Neue York', Georgia, serif;
-            font-size: 0.9rem;
-            font-weight: 300;
-            outline: none;
+            font-size: 0.95rem; font-weight: 300; min-width: 340px;
+            background: transparent;
+            color: #e0e0e0;
         }
 
-        .search-input::placeholder {
-            color: rgba(255,255,255,0.4);
-        }
+        .search-input:focus { outline: none; }
+        .search-input::placeholder { color: rgba(255,255,255,0.35); }
 
         .search-btn {
-            padding: 0.9rem 1.1rem;
-            background: none;
-            border: none;
-            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 0.9rem 1rem;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
 
         .search-btn svg {
             width: 20px;
             height: 20px;
-            stroke: rgba(255,255,255,0.7);
+            stroke: #fff;
             stroke-width: 2;
         }
 
-        .search-btn:hover svg {
-            stroke: #ffffff;
+        .search-btn:hover svg { opacity: 0.6; }
+
+        .divider-line {
+            width: 1px;
+            height: 70px;
+            background: rgba(255,255,255,0.15);
+            flex-shrink: 0;
         }
 
-        .hero-tagline {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.5);
-            letter-spacing: 0.02em;
+        .info-side {
+            flex: 1;
+            padding-left: 2.5rem;
+            text-align: left;
+        }
+
+        .info-side .info-line {
+            display: flex; 
+            gap: 1rem;
+            font-size: 0.85rem; 
+            line-height: 1.5;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-side .info-line:last-child { margin-bottom: 0; }
+
+        .info-side .info-label {
+            font-weight: 400; font-size: 0.8rem;
+            letter-spacing: 0.02em; color: rgba(255,255,255,0.4);
+            min-width: 70px; flex-shrink: 0;
+            text-align: left;
+        }
+
+        .info-side .info-value { font-weight: 400; color: rgba(255,255,255,0.8); }
+
+        @media (max-width: 1100px) {
+            .search-info-wrapper { flex-direction: column; gap: 1.5rem; }
+            .search-side { flex: none; padding-right: 0; justify-content: center; }
+            .search-input { min-width: 280px; }
+            .divider-line { display: none; }
+            .info-side { 
+                flex: none; 
+                padding-left: 0; 
+                display: flex;
+                justify-content: center;
+            }
+            .info-side .info-block {
+                text-align: left;
+            }
+            .info-side .info-line { justify-content: flex-start; }
+            .info-side .info-label { text-align: left; }
+        }
+
+        @media (max-width: 600px) {
+            .hero-section { padding: 1.5rem 0.75rem; }
+            .hero-headline { 
+                display: block;
+                font-size: 1.75rem; 
+                margin-bottom: 1.5rem; 
+            }
+            .search-input { padding: 0.75rem 1rem; font-size: 0.9rem; min-width: 0; }
+            .search-btn { padding: 0.75rem 0.75rem; }
+            .search-btn svg { width: 18px; height: 18px; }
+            .info-side { display: none; }
         }
 
         /* ═══════════════════════════════════════
-           SELLING POINTS
+           TOOLBAR — sticky below header, light gray bg
            ═══════════════════════════════════════ */
-        .selling-points {
-            padding: 5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
+        .toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #0a0a0a;
+            padding: 0 1.5rem;
+            position: sticky;
+            top: var(--header-h, 56px);
+            z-index: 999;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        
+        .tb-left {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+        }
+        
+        .tb-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+        }
+        
+        .tb-tabs-wrapper {
+            display: flex;
+            align-items: center;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none;
+        }
+        
+        .tb-tabs-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+        
+        /* Mobile/Desktop visibility */
+        .tb-mobile-only {
+            display: none;
+        }
+        
+        .tb-desktop-only {
+            display: flex;
+        }
+        
+        /* Category tabs */
+        .tb-tabs {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-shrink: 0;
+        }
+        
+        .tb-tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            flex-shrink: 0;
+        }
+        
+        .tb-tab:hover {
+            color: rgba(255,255,255,0.8);
         }
 
-        .selling-points-inner {
-            max-width: 1000px;
-            margin: 0 auto;
+        .tb-tab.active {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+        
+        @media (max-width: 900px) {
+            .toolbar {
+                padding: 0 0.5rem;
+            }
+            .tb-center {
+                padding: 0;
+            }
+            .tb-tab { padding: 0.9rem 1rem; font-size: 0.85rem; }
+        }
+        
+        @media (max-width: 768px) {
+            /* On mobile: hide tabs and More, show Event Type dropdown */
+            .tb-desktop-only {
+                display: none !important;
+            }
+            .tb-mobile-only {
+                display: flex !important;
+            }
+            .toolbar {
+                justify-content: flex-start;
+                padding: 0 0.5rem;
+            }
+            .tb-left {
+                flex-shrink: 0;
+            }
+            .tb-center {
+                justify-content: flex-start;
+                flex: 0;
+                padding: 0;
+            }
+            .tb-stats {
+                flex-shrink: 0;
+            }
+            .tb-dropdown {
+                display: flex;
+                align-items: stretch;
+            }
+            .tb-btn {
+                padding: 1rem 1.25rem;
+                font-size: 0.9rem;
+                display: flex;
+                align-items: center;
+            }
+            .tb-option {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Shared dropdown trigger */
+        .tb-dropdown {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .tb-dropdown:first-child {
+            padding-left: 0;
+        }
+
+        .tb-left .tb-btn {
+            padding-left: 0;
+        }
+
+        .tb-btn {
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 1rem 1.5rem;
+            background: none; border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.9rem; font-weight: 400;
+            color: rgba(255,255,255,0.4); cursor: pointer;
+            white-space: nowrap; transition: color 0.2s;
+            height: 100%;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -1px;
+            flex-shrink: 0;
+        }
+
+        .tb-btn:hover { color: rgba(255,255,255,0.8); }
+
+        .tb-btn svg {
+            width: 10px; height: 10px; stroke-width: 2.5;
+            transition: transform 0.2s;
+        }
+
+        .tb-btn.open svg { transform: rotate(180deg); }
+
+        /* Dropdown panel */
+        .tb-panel {
+            position: absolute; top: 100%; left: 0;
+            min-width: 140px; background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.15);
+            z-index: 100; display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .tb-panel.show { display: block; }
+
+        .tb-option {
+            display: block; width: 100%;
+            padding: 0.75rem 1.25rem;
+            background: none; border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.9rem; font-weight: 400;
+            color: rgba(255,255,255,0.5); text-align: left;
+            cursor: pointer; transition: all 0.2s;
+        }
+
+        .tb-option:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .tb-option.active { color: #fff; font-weight: 500; }
+
+        /* Stats counter - hidden for cleaner design */
+        .tb-stats {
+            display: none;
+        }
+        
+        .tb-stats-item {
+            display: flex;
+            align-items: center;
+            padding: 0 0.75rem;
+        }
+        
+        .tb-stats-item:not(:last-child) {
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .tb-stats-value {
+            font-weight: 500;
+            color: rgba(255,255,255,0.5);
+            margin-right: 0.35rem;
+        }
+        
+        .tb-stats-label {
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.5);
+        }
+        
+        @media (max-width: 768px) {
+            .tb-stats { display: none; }
+        }
+
+        /* ═══════════════════════════════════════
+           GALLERY GRID - Three View Modes
+           ═══════════════════════════════════════ */
+        .gallery-section { padding: var(--gap) 1.5rem 5rem; background: #0a0a0a; }
+        
+
+        .unified-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 3rem;
+            gap: var(--gap);
         }
 
-        .selling-point h3 {
-            font-size: 1rem;
-            font-weight: 400;
-            color: #ffffff;
-            margin-bottom: 0.6rem;
-            letter-spacing: 0.01em;
+        /* ── CLASSIC VIEW (default) ── */
+        .g-project {
+            position: relative; overflow: hidden;
+            cursor: pointer; background: #222;
+            contain: layout style paint;
+            will-change: transform;
         }
 
-        .selling-point p {
-            font-size: 0.85rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.45);
-            line-height: 1.65;
+        .g-project img {
+            width: 100%; aspect-ratio: 4 / 3;
+            object-fit: cover; display: block;
+            transition: transform 0.4s ease;
+            content-visibility: auto;
         }
 
-        /* ═══════════════════════════════════════
-           CLIENT LOGOS
-           ═══════════════════════════════════════ */
-        .clients {
-            padding: 4.5rem 1.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
+        .g-project:hover img { transform: scale(1.03); }
 
-        .clients-inner {
-            max-width: 900px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .clients-label {
-            font-size: 0.7rem;
-            font-weight: 400;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.35);
-            margin-bottom: 2.5rem;
-        }
-
-        .clients-grid {
+        /* Private project overlay */
+        .g-private-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0, 0, 0, 0.65);
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 0;
-        }
-
-        .client-name {
-            font-size: 0.95rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.5);
-            padding: 0.6rem 1.4rem;
-            transition: color 0.2s;
-        }
-
-        .client-name:hover {
-            color: rgba(255,255,255,0.8);
-        }
-
-        /* ═══════════════════════════════════════
-           CTA
-           ═══════════════════════════════════════ */
-        .cta {
-            padding: 5rem 1.5rem;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.06);
-        }
-
-        .cta-inner {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .cta h2 {
-            font-size: clamp(1.5rem, 3vw, 2.25rem);
-            font-weight: 300;
-            color: #ffffff;
-            margin-bottom: 1rem;
-            letter-spacing: -0.01em;
-        }
-
-        .cta p {
-            font-size: 0.9rem;
-            font-weight: 300;
-            color: rgba(255,255,255,0.45);
-            margin-bottom: 2rem;
-            line-height: 1.7;
-        }
-
-        .cta-links {
-            display: flex;
-            justify-content: center;
-            gap: 2.5rem;
-            flex-wrap: wrap;
-        }
-
-        .cta-links a {
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 400;
-            letter-spacing: 0.05em;
-            padding-bottom: 2px;
-            border-bottom: 1px solid rgba(255,255,255,0.3);
-            transition: border-color 0.2s;
-        }
-
-        .cta-links a:hover {
-            border-color: #ffffff;
-        }
-
-        /* ═══════════════════════════════════════
-           FOOTER
-           ═══════════════════════════════════════ */
-        .footer {
-            padding: 3rem 1.5rem;
-            background: #0a0a0a;
-            border-top: 1px solid rgba(255,255,255,0.08);
-        }
-
-        .footer-inner {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            z-index: 1;
+            pointer-events: none;
         }
 
-        .footer-left {
+        .g-lock-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .g-lock-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: rgba(255, 255, 255, 0.7);
+        }
+
+        .g-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+            padding: 4rem 1rem 1rem; color: white;
+            z-index: 2;
+        }
+
+        .g-date { font-size: 0.75rem; font-weight: 300; letter-spacing: 0.02em; margin-bottom: 0.35rem; opacity: 0.9; }
+        .g-title { font-size: 0.9rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; line-height: 1.35; margin-bottom: 0.3rem; }
+        .g-venue { font-size: 0.8rem; font-weight: 300; opacity: 0.85; margin-bottom: 0.5rem; }
+        .g-count { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 300; opacity: 0.8; }
+        .g-count svg { width: 14px; height: 14px; }
+        
+        /* ── Mobile Menu View Options ── */
+        .mobile-menu-divider {
+            height: 1px;
+            background: var(--gray-mid);
+            margin: 1rem 0;
+        }
+        
+        .mobile-menu-section {
+            padding: 0;
+        }
+        
+        .mobile-menu-label {
+            display: block;
             font-size: 0.75rem;
-            color: rgba(255,255,255,0.5);
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gray-dark);
+            padding: 0.5rem 0;
+            margin-bottom: 0.5rem;
+        }
+        
+
+        /* ═══════════════════════════════════════
+           REVIEW SLIDESHOW TILE
+           ═══════════════════════════════════════ */
+        .g-review-slideshow {
+            grid-column: span 2; grid-row: span 2;
+            position: relative; overflow: hidden;
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.08);
         }
 
-        .footer-left a {
-            color: rgba(255,255,255,0.5);
-            text-decoration: none;
-            transition: color 0.2s;
+        .g-review-slide {
+            position: absolute; inset: 0;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 2.5rem 3rem 3rem;
+            opacity: 0; transition: opacity 0.8s ease; z-index: 0;
         }
 
-        .footer-left a:hover {
-            color: rgba(255,255,255,0.8);
+        .g-review-slide.active { opacity: 1; z-index: 1; }
+
+        .g-review-slide .quote-text {
+            font-size: 1.35rem; font-weight: 400;
+            line-height: 1.4; color: #e0e0e0; margin-bottom: 1.25rem;
         }
 
-        .footer-right {
-            display: flex;
-            gap: 2rem;
+        .g-review-slide .quote-text::before { content: '\201C'; }
+        .g-review-slide .quote-text::after  { content: '\201D'; }
+
+        .g-review-slide .quote-attr {
+            font-size: 0.8rem; font-weight: 400;
+            color: rgba(255,255,255,0.5); letter-spacing: 0.02em;
         }
 
-        .footer-right a {
-            color: rgba(255,255,255,0.7);
-            text-decoration: none;
-            font-size: 0.8rem;
-            transition: color 0.2s;
+        .g-review-slide .quote-attr span { color: #e0e0e0; }
+
+        .g-review-slide .quote-stars { display: flex; gap: 0.2rem; margin-bottom: 1rem; }
+        .g-review-slide .quote-stars svg { width: 16px; height: 16px; fill: #e0e0e0; }
+
+        .g-review-dots {
+            position: absolute; bottom: 1.25rem; left: 3rem;
+            display: flex; gap: 0.5rem; z-index: 2;
         }
 
-        .footer-right a:hover {
-            color: var(--white);
+        .g-review-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: rgba(255,255,255,0.2); cursor: pointer; transition: background 0.3s;
         }
+
+        .g-review-dot.active { background: #e0e0e0; }
+
+        /* Loading */
+        .loading, .empty-state { text-align: center; padding: 6rem 2rem; grid-column: 1 / -1; }
+
+        .spinner {
+            width: 28px; height: 28px;
+            border: 2px solid rgba(255,255,255,0.15); border-top-color: #e0e0e0;
+            border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         /* ═══════════════════════════════════════
            CART SIDEBAR
@@ -598,31 +1009,228 @@
         .checkout-btn:hover:not(:disabled) { opacity: 0.8; }
         .checkout-btn:disabled { background: rgba(255,255,255,0.15); color: rgba(255,255,255,0.3); cursor: not-allowed; }
 
-        .empty-state { text-align: center; color: rgba(255,255,255,0.3); padding: 3rem 0; font-size: 0.9rem; }
+        /* ═══════════════════════════════════════
+           PRESS FEED - Toggle mode
+           ═══════════════════════════════════════ */
+        .tb-press-feed {
+            display: flex;
+            align-items: center;
+            margin-left: auto;
+            margin-right: 1rem;
+        }
+
+        .press-feed-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: none;
+            border: 1.5px solid rgba(255,255,255,0.4);
+            border-radius: 20px;
+            padding: 0.45rem 1rem;
+            font-family: inherit;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .press-feed-btn svg {
+            stroke: rgba(255,255,255,0.7);
+        }
+
+        .press-feed-btn:hover,
+        .press-feed-btn.active {
+            background: var(--white);
+            color: var(--black);
+            border-color: var(--white);
+        }
+
+        .press-feed-btn:hover svg,
+        .press-feed-btn.active svg {
+            stroke: var(--black);
+        }
+
+        /* Toolbar search bar — visible only in press feed mode */
+        .tb-search {
+            display: none;
+            flex: 1;
+            justify-content: center;
+            align-items: center;
+            padding: 0.5rem 1rem;
+        }
+
+        .tb-search-container {
+            display: flex;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+            width: 100%;
+            max-width: 480px;
+        }
+
+        .tb-search-input {
+            flex: 1;
+            padding: 0.6rem 1rem;
+            border: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            background: transparent;
+            color: #e0e0e0;
+            min-width: 0;
+        }
+
+        .tb-search-input:focus { outline: none; }
+        .tb-search-input::placeholder { color: rgba(255,255,255,0.35); }
+
+        .tb-search-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 0.75rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .tb-search-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        .tb-search-btn:hover svg { opacity: 0.6; }
+
+        /* Press Feed active state */
+        body.press-feed-active .hero-section { display: none; }
+        body.press-feed-active .tb-center { display: none; }
+        body.press-feed-active .tb-search { display: flex; }
+
+        @media (max-width: 768px) {
+            .tb-press-feed {
+                margin-left: auto;
+                margin-right: 0;
+                flex-shrink: 0;
+            }
+            .press-feed-btn {
+                padding: 0.35rem 0.75rem;
+                font-size: 0.65rem;
+            }
+            body.press-feed-active .toolbar {
+                overflow: hidden;
+            }
+            body.press-feed-active .tb-left {
+                flex-shrink: 0;
+            }
+            .tb-search {
+                padding: 0.5rem 0.5rem;
+                min-width: 0;
+                overflow: hidden;
+            }
+            .tb-search-container { max-width: 100%; min-width: 0; }
+            .tb-search-input { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-width: 0; }
+            .tb-search-btn { padding: 0.5rem 0.6rem; flex-shrink: 0; }
+            .tb-search-btn svg { width: 16px; height: 16px; }
+        }
+
+        /* ═══════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════ */
+        .footer {
+            padding: 3rem 1.5rem;
+            background: #0a0a0a;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-left {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .footer-left a {
+            color: rgba(255,255,255,0.5);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-left a:hover {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .footer-right {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-right a {
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .footer-right a:hover {
+            color: var(--white);
+        }
 
         /* ═══════════════════════════════════════
            RESPONSIVE
            ═══════════════════════════════════════ */
-        @media (max-width: 768px) {
-            .hamburger { display: block; }
-            .nav-links { display: none; }
-            .nav { gap: 1.5rem; }
-            .nav-actions { gap: 1.25rem; }
-            .auth-link { font-size: 0.75rem; }
-            .selling-points-inner { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
-            .cart-sidebar { width: 100%; right: -100%; }
+        @media (max-width: 1100px) {
+            .g-review-slideshow { grid-column: 1 / -1; grid-row: span 1; min-height: 220px; }
+            .g-review-slide { padding: 2rem 2.5rem 2.5rem; }
+            .g-review-dots { left: 2.5rem; }
         }
 
-        @media (max-width: 480px) {
-            .selling-points-inner { grid-template-columns: 1fr; gap: 2rem; }
+        @media (max-width: 750px) {
+            .header-inner { padding: 1.25rem 0.75rem; }
+            .unified-grid { grid-template-columns: repeat(2, 1fr); }
+            .gallery-section { padding: 0 0.75rem 3rem; }
+            .toolbar { padding: 0 0.75rem; }
+            .g-review-slideshow { min-height: 240px; }
+            .g-review-slide { padding: 1.75rem 1.75rem 3rem; }
+            .g-review-slide .quote-text { font-size: 1.1rem; }
+            .g-review-dots { left: 1.75rem; bottom: 1.25rem; }
             .footer-inner { flex-direction: column; gap: 1rem; text-align: center; }
             .footer-left { flex-direction: column; gap: 0.5rem; }
-            .cta-links { flex-direction: column; gap: 1rem; }
+        }
+
+        @media (max-width: 500px) {
+            .unified-grid { grid-template-columns: 1fr; gap: 6px; }
+            .g-review-slideshow { grid-column: span 1; grid-row: span 1; }
+            .g-overlay { padding: 2rem 0.75rem 0.75rem; }
+            .g-title { font-size: 0.8rem; }
+            .g-venue { font-size: 0.7rem; }
+            .g-date { font-size: 0.65rem; }
+            .g-count { font-size: 0.65rem; }
+            .g-review-slideshow { min-height: 180px; }
+            .g-review-slide { padding: 1.5rem 1.25rem 2rem; }
+            .g-review-slide .quote-text { font-size: 1rem; }
+            .g-review-dots { left: 1.25rem; bottom: 0.75rem; }
+            .header-inner { padding: 1rem 0.75rem; }
+            .nav { gap: 1.5rem; }
+            .nav a { font-size: 0.75rem; }
+            .tb-btn { padding: 0.7rem 1rem; font-size: 0.75rem; }
         }
     </style>
 </head>
 <body>
-
+    <!-- ── Header ── -->
     <header class="header">
         <div class="header-inner">
             <div class="header-left">
@@ -635,9 +1243,50 @@
             </div>
             <nav class="nav">
                 <div class="nav-links">
-                    <a href="/about.html">About</a>
-                    <a href="/services.html">Services</a>
+                    <div class="nav-dropdown" id="aboutDropdown">
+                        <button class="nav-dropdown-trigger" onclick="toggleNavDropdown('aboutDropdown')">
+                            About
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="nav-dropdown-panel">
+                            <a href="/about.html">Current</a>
+                            <a href="/about-v1.html">V1 — Editorial</a>
+                            <a href="/about-v2.html">V2 — Info Grid</a>
+                            <a href="/about-v3.html">V3 — Cinematic</a>
+                            <a href="/about-v4.html">V4 — Photo Hero</a>
+                            <a href="/about-v5.html">V5 — Video + Grid</a>
+                            <a href="/about-v6.html">V6 — Magazine</a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown" id="servicesDropdown">
+                        <button class="nav-dropdown-trigger" onclick="toggleNavDropdown('servicesDropdown')">
+                            Services
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="nav-dropdown-panel">
+                            <a href="/services.html">Current</a>
+                            <a href="/services-v1.html">V1 — Accordion</a>
+                            <a href="/services-v2.html">V2 — Grid</a>
+                            <a href="/services-v3.html">V3 — Full-Width</a>
+                            <a href="/services-v4.html">V4 — Image Pairs</a>
+                            <a href="/services-v5.html">V5 — Video + Cards</a>
+                            <a href="/services-v6.html">V6 — Parallax</a>
+                        </div>
+                    </div>
                     <a href="/contact.html">Contact</a>
+                    <div class="nav-dropdown" id="adsDropdown">
+                        <button class="nav-dropdown-trigger" onclick="toggleNavDropdown('adsDropdown')">
+                            Ads
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="nav-dropdown-panel">
+                            <a href="/ad-sf-event.html">SF Event Photographers</a>
+                            <a href="/ad-la-event.html">LA Event Photographers</a>
+                            <a href="/ad-corporate.html">Corporate Photography</a>
+                            <a href="/ad-brand-activation.html">Brand Activation</a>
+                            <a href="/ad-conference.html">Conference Photography</a>
+                        </div>
+                    </div>
                 </div>
                 <div class="nav-actions">
                     <a href="/signin.html" class="auth-link" id="signInLink">Sign In</a>
@@ -686,92 +1335,159 @@
         </nav>
     </div>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <h1 class="hero-headline">Corporate Event Photography</h1>
-            <div class="search-container">
-                <input type="text" class="search-input" id="searchInput" placeholder="Search people, brands, or events">
-                <button class="search-btn" onclick="doSearch()">
+    <!-- ── Hero Section with Headline ── -->
+    <section class="hero-section">
+        <h1 class="hero-headline">Corporate Event Photography</h1>
+        <div class="search-info-wrapper">
+            <div class="search-side">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Search people, brands, or events">
+                    <button class="search-btn" onclick="doSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div class="divider-line"></div>
+            <div class="info-side">
+                <div class="info-block">
+                    <div class="info-line">
+                        <span class="info-label">About</span>
+                        <span class="info-value">Boutique event photography agency trusted by top brands & agencies</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">Locations</span>
+                        <span class="info-value">San Francisco & Los Angeles with projects worldwide</span>
+                    </div>
+                    <div class="info-line">
+                        <span class="info-label">Services</span>
+                        <span class="info-value">Event photography, videography & distribution</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ── Toolbar ── -->
+    <div class="toolbar">
+        <!-- Sort dropdown (far left) -->
+        <div class="tb-left">
+            <div class="tb-dropdown" id="sortDropdownWrap">
+                <button class="tb-btn" id="sortBtn" onclick="toggleDropdown('sort')">
+                    <span id="sortLabel">Sort</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="tb-panel" id="sortPanel">
+                    <button class="tb-option active" onclick="selectSort('featured','Featured')">Featured</button>
+                    <button class="tb-option" onclick="selectSort('newest','Newest')">Newest</button>
+                    <button class="tb-option" onclick="selectSort('oldest','Oldest')">Oldest</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Center: Category tabs (desktop) / Event Type dropdown (mobile) -->
+        <div class="tb-center">
+            <!-- Desktop: Category tabs -->
+            <div class="tb-tabs-wrapper tb-desktop-only">
+                <div class="tb-tabs">
+                    <button class="tb-tab active" onclick="selectCategory('all', this)">All</button>
+                    <button class="tb-tab" onclick="selectCategory('activation', this)">Activations</button>
+                    <button class="tb-tab" onclick="selectCategory('conference', this)">Conferences</button>
+                    <button class="tb-tab" onclick="selectCategory('video', this)">Video</button>
+                </div>
+            </div>
+            
+            <!-- Desktop: More dropdown -->
+            <div class="tb-dropdown tb-desktop-only" id="moreDropdownWrap">
+                <button class="tb-btn" id="moreBtn" onclick="toggleDropdown('more')">
+                    <span>More</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="tb-panel" id="morePanel">
+                    <button class="tb-option" onclick="selectCategoryFromMore('activation', 'Activations')">Activations</button>
+                    <button class="tb-option" onclick="selectCategoryFromMore('conference', 'Conferences')">Conferences</button>
+                    <button class="tb-option" onclick="selectCategoryFromMore('video', 'Video')">Video</button>
+                    <button class="tb-option" onclick="selectCategoryFromMore('corporate', 'Corporate')">Corporate</button>
+                    <button class="tb-option" onclick="selectCategoryFromMore('portraits', 'Portraits')">Portraits</button>
+                    <button class="tb-option" onclick="selectCategoryFromMore('party', 'Party')">Party</button>
+                </div>
+            </div>
+            
+            <!-- Mobile: Event Type dropdown -->
+            <div class="tb-dropdown tb-mobile-only" id="eventTypeDropdownWrap">
+                <button class="tb-btn" id="eventTypeBtn" onclick="toggleDropdown('eventType')">
+                    <span id="eventTypeLabel">Event Type</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </button>
+                <div class="tb-panel" id="eventTypePanel">
+                    <button class="tb-option active" onclick="selectEventType('all', 'All')">All</button>
+                    <button class="tb-option" onclick="selectEventType('activation', 'Activations')">Activations</button>
+                    <button class="tb-option" onclick="selectEventType('conference', 'Conferences')">Conferences</button>
+                    <button class="tb-option" onclick="selectEventType('video', 'Video')">Video</button>
+                    <button class="tb-option" onclick="selectEventType('corporate', 'Corporate')">Corporate</button>
+                    <button class="tb-option" onclick="selectEventType('portraits', 'Portraits')">Portraits</button>
+                    <button class="tb-option" onclick="selectEventType('party', 'Party')">Party</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toolbar Search (visible only in press feed mode) -->
+        <div class="tb-search">
+            <div class="tb-search-container">
+                <input type="text" class="tb-search-input" id="tbSearchInput" placeholder="Search people, brands, or events">
+                <button class="tb-search-btn" onclick="doToolbarSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
                 </button>
             </div>
-            <p class="hero-tagline">Polished, professional photography for the corporate world</p>
+        </div>
+
+        <!-- Press Feed toggle -->
+        <div class="tb-press-feed">
+            <button class="press-feed-btn" id="pressFeedBtn" onclick="togglePressFeed()">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="14" height="14">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/>
+                </svg>
+                Press Feed
+            </button>
+        </div>
+
+        <!-- Stats counter (far right) -->
+        <div class="tb-stats">
+            <div class="tb-stats-item">
+                <span class="tb-stats-value" id="totalPhotosCount">—</span>
+                <span class="tb-stats-label">Photos</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ── Gallery Grid ── -->
+    <section class="gallery-section">
+        <div class="unified-grid" id="unifiedGrid">
+            <div class="loading"><div class="spinner"></div></div>
         </div>
     </section>
 
-    <!-- Selling Points -->
-    <section class="selling-points">
-        <div class="selling-points-inner">
-            <div class="selling-point">
-                <h3>Executive Portraits</h3>
-                <p>On-location headshots and environmental portraits for leadership teams, boards, and C-suite executives.</p>
-            </div>
-            <div class="selling-point">
-                <h3>Annual Conferences</h3>
-                <p>Comprehensive multi-day coverage including keynotes, panels, breakout sessions, and attendee networking.</p>
-            </div>
-            <div class="selling-point">
-                <h3>Team Events</h3>
-                <p>Authentic, candid imagery of team off-sites, retreats, and company celebrations that capture culture.</p>
-            </div>
-            <div class="selling-point">
-                <h3>Investor Days</h3>
-                <p>Discreet, professional documentation of shareholder meetings, earnings events, and institutional presentations.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Clients -->
-    <section class="clients">
-        <div class="clients-inner">
-            <p class="clients-label">Trusted By</p>
-            <div class="clients-grid">
-                <span class="client-name">Goldman Sachs</span>
-                <span class="client-name">J.P. Morgan</span>
-                <span class="client-name">Deloitte</span>
-                <span class="client-name">McKinsey & Company</span>
-                <span class="client-name">PwC</span>
-                <span class="client-name">KPMG</span>
-                <span class="client-name">Ernst & Young</span>
-                <span class="client-name">Bank of America</span>
-                <span class="client-name">Morgan Stanley</span>
-                <span class="client-name">Wells Fargo</span>
-                <span class="client-name">IBM</span>
-                <span class="client-name">Oracle</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="cta">
-        <div class="cta-inner">
-            <h2>Ready to Book?</h2>
-            <p>Get in touch to discuss coverage for your next corporate event. We typically respond within a few hours.</p>
-            <div class="cta-links">
-                <a href="mailto:bookings@sfeventphoto.com">bookings@sfeventphoto.com</a>
-                <a href="tel:+14155551234">+1 (415) 555-1234</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
+    <!-- ── Footer ── -->
     <footer class="footer">
         <div class="footer-inner">
             <div class="footer-left">
-                <span>&copy; 2026 SF Event Photo</span>
-                <a href="mailto:bookings@sfeventphoto.com">Email</a>
+                <span>© 2026 SF Event Photo</span>
+                <a href="/privacy.html">Privacy Policy</a>
             </div>
             <div class="footer-right">
+                <a href="mailto:bookings@sfeventphoto.com">Email</a>
                 <a href="https://instagram.com/sfeventphoto" target="_blank">Instagram</a>
                 <a href="https://linkedin.com/company/sfeventphoto" target="_blank">LinkedIn</a>
             </div>
         </div>
     </footer>
 
-    <!-- Cart Sidebar -->
+    <!-- ── Cart Sidebar ── -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
     <div class="cart-sidebar" id="cartSidebar">
         <div class="cart-header">
@@ -792,7 +1508,36 @@
 
     <script>
         const API_URL = 'https://sf-event-photo-backend.vercel.app';
+        let projects = [];
+        let currentFilter = 'all';
+        let currentSort = 'featured';
         let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+        const reviews = [
+            { quote: "I manage corporate events across 7 states and this is by far my favorite photography team. They are quick to respond, adaptable, and deliver on timelines.", name: "Michelle H", company: "Lockton" },
+            { quote: "The experience was amazing from the first time we spoke. Every moment and detail was perfectly captured with great quality.", name: "Lucia M", company: "MarketLogic" },
+            { quote: "A top professional from start to finish. Full of positive energy during the event and the final photos were stunning.", name: "Maude P", company: "BlockChain Game Alliance" },
+            { quote: "We hired SF Event Photo for our corporate event and couldn't be happier. The photos are absolutely stunning.", name: "Yajaira C", company: "StarSpace Global" },
+            { quote: "The attention to detail and creativity truly set them apart. We highly recommend SF Event Photo.", name: "Lauren R", company: "Transforming Age" },
+            { quote: "I hired SF Event Photo for my company's biggest events and they did a fantastic job! Completely professional.", name: "Garnette R", company: "BXP" }
+        ];
+
+        const starSVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+
+        /* ── Nav Dropdowns ── */
+        function toggleNavDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const isOpen = dropdown.classList.contains('open');
+            // Close all nav dropdowns
+            document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+            if (!isOpen) dropdown.classList.add('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-dropdown')) {
+                document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+            }
+        });
 
         /* ── Mobile Menu ── */
         function openMobileMenu() {
@@ -804,7 +1549,7 @@
             document.getElementById('mobileMenu').classList.remove('open');
             document.body.style.overflow = '';
         }
-
+        
         /* ── Auth ── */
         function checkAuth() {
             const u = localStorage.getItem('user');
@@ -852,33 +1597,340 @@
 
         function removeFromCart(i) { cart.splice(i,1); localStorage.setItem('cart',JSON.stringify(cart)); updateCartUI(); }
 
-        async function checkout() {
-            const token = localStorage.getItem('token');
-            if (!token) { location.href = '/signin.html'; return; }
-            try {
-                const res = await fetch(`${API_URL}/api/checkout`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ items: cart })
-                });
-                const data = await res.json();
-                if (data.url) window.location.href = data.url;
-            } catch (err) { console.error('Checkout error:', err); }
-        }
-
         /* ── Search ── */
         function doSearch() {
             const q = document.getElementById('searchInput').value.trim();
             if (q) location.href = `/search.html?q=${encodeURIComponent(q)}`;
         }
 
-        /* ── Init ── */
-        document.addEventListener('DOMContentLoaded', () => {
-            checkAuth();
-            updateCartUI();
-            document.getElementById('searchInput').addEventListener('keydown', e => {
-                if (e.key === 'Enter') doSearch();
+        function doToolbarSearch() {
+            const q = document.getElementById('tbSearchInput').value.trim();
+            if (q) location.href = `/search.html?q=${encodeURIComponent(q)}`;
+        }
+
+        /* ── Toolbar Dropdowns ── */
+        function toggleDropdown(which) {
+            const panels = {
+                sort: { panel: 'sortPanel', btn: 'sortBtn' },
+                more: { panel: 'morePanel', btn: 'moreBtn' },
+                eventType: { panel: 'eventTypePanel', btn: 'eventTypeBtn' }
+            };
+            
+            // Close all other dropdowns first
+            Object.keys(panels).forEach(key => {
+                if (key !== which) {
+                    document.getElementById(panels[key].panel)?.classList.remove('show');
+                    document.getElementById(panels[key].btn)?.classList.remove('open');
+                }
             });
+            
+            // Toggle the requested dropdown
+            const panel = document.getElementById(panels[which].panel);
+            const btn = document.getElementById(panels[which].btn);
+            panel?.classList.toggle('show');
+            btn?.classList.toggle('open');
+        }
+
+        document.addEventListener('click', e => {
+            if (!e.target.closest('.tb-dropdown')) {
+                document.querySelectorAll('.tb-panel').forEach(p => p.classList.remove('show'));
+                document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('open'));
+            }
+        });
+
+        function selectCategory(val, btn) {
+            currentFilter = val;
+            // Update active tab
+            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
+            btn.classList.add('active');
+            // Clear active state from More dropdown options
+            document.querySelectorAll('#morePanel .tb-option').forEach(o => o.classList.remove('active'));
+            // Sync mobile Event Type dropdown
+            syncEventTypeDropdown(val);
+            renderGallery();
+        }
+        
+        function selectCategoryFromMore(val, label) {
+            currentFilter = val;
+            // Remove active from tabs
+            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
+            // Update active state in More dropdown
+            document.querySelectorAll('#morePanel .tb-option').forEach(o => {
+                o.classList.toggle('active', o.textContent.trim() === label);
+            });
+            // Close dropdown
+            document.getElementById('morePanel').classList.remove('show');
+            document.getElementById('moreBtn').classList.remove('open');
+            // Sync mobile Event Type dropdown
+            syncEventTypeDropdown(val);
+            renderGallery();
+        }
+        
+        function selectEventType(val, label) {
+            currentFilter = val;
+            // Update label
+            document.getElementById('eventTypeLabel').textContent = label;
+            // Update active state
+            document.querySelectorAll('#eventTypePanel .tb-option').forEach(o => {
+                o.classList.toggle('active', o.textContent.trim() === label);
+            });
+            // Close dropdown
+            document.getElementById('eventTypePanel').classList.remove('show');
+            document.getElementById('eventTypeBtn').classList.remove('open');
+            // Sync desktop tabs
+            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('#morePanel .tb-option').forEach(o => o.classList.remove('active'));
+            // If it's one of the main tabs, activate it
+            document.querySelectorAll('.tb-tab').forEach(tab => {
+                if (tab.textContent.trim().toLowerCase() === label.toLowerCase() || 
+                    (val === 'all' && tab.textContent.trim() === 'All')) {
+                    tab.classList.add('active');
+                }
+            });
+            renderGallery();
+        }
+        
+        function syncEventTypeDropdown(val) {
+            // Find the matching option and update label
+            const options = document.querySelectorAll('#eventTypePanel .tb-option');
+            options.forEach(o => {
+                const isActive = o.textContent.trim().toLowerCase().includes(val) || 
+                                 (val === 'all' && o.textContent.trim() === 'All');
+                o.classList.toggle('active', isActive);
+                if (isActive) {
+                    document.getElementById('eventTypeLabel').textContent = o.textContent.trim();
+                }
+            });
+        }
+
+        function selectSort(val, label) {
+            currentSort = val;
+            document.getElementById('sortLabel').textContent = label;
+            document.querySelectorAll('#sortPanel .tb-option').forEach(o => {
+                o.classList.toggle('active', o.textContent.trim().toLowerCase() === val);
+            });
+            document.getElementById('sortPanel').classList.remove('show');
+            document.getElementById('sortBtn').classList.remove('open');
+            deactivatePressFeed();
+            renderGallery();
+        }
+
+        /* ── Press Feed ── */
+        let pressFeedActive = false;
+
+        function activatePressFeed() {
+            pressFeedActive = true;
+            document.body.classList.add('press-feed-active');
+            document.getElementById('pressFeedBtn')?.classList.add('active');
+            currentSort = 'newest';
+            currentFilter = 'all';
+            document.getElementById('sortLabel').textContent = 'Newest';
+            document.querySelectorAll('#sortPanel .tb-option').forEach(o => {
+                o.classList.toggle('active', o.textContent.trim() === 'Newest');
+            });
+            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tb-tab').forEach(tab => {
+                if (tab.textContent.trim() === 'All') tab.classList.add('active');
+            });
+            syncEventTypeDropdown('all');
+            renderGallery();
+            document.getElementById('tbSearchInput')?.focus();
+        }
+
+        function deactivatePressFeed() {
+            pressFeedActive = false;
+            document.body.classList.remove('press-feed-active');
+            document.getElementById('pressFeedBtn')?.classList.remove('active');
+            document.getElementById('tbSearchInput').value = '';
+        }
+
+        function togglePressFeed() {
+            if (pressFeedActive) {
+                deactivatePressFeed();
+                selectSort('featured', 'Featured');
+            } else {
+                activatePressFeed();
+            }
+        }
+
+        /* ── Helpers ── */
+        function formatDateRange(s, e) {
+            if (!s) return '';
+            const d = new Date(s), sm = d.toLocaleDateString('en-US',{month:'short'}), sd = d.getDate(), sy = d.getFullYear();
+            if (!e) return `${sm} ${sd}, ${sy}`;
+            const d2 = new Date(e), em = d2.toLocaleDateString('en-US',{month:'short'}), ed = d2.getDate(), ey = d2.getFullYear();
+            if (sm===em && sy===ey) return `${sm} ${sd}-${ed}, ${sy}`;
+            if (sy===ey) return `${sm} ${sd} - ${em} ${ed}, ${sy}`;
+            return `${sm} ${sd}, ${sy} - ${em} ${ed}, ${ey}`;
+        }
+
+        function viewProject(slug) { location.href = `/project.html?slug=${slug}`; }
+
+        /* ── Tiles ── */
+        const lockIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/></svg>`;
+        const photoIcon = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>`;
+        
+        function tile(p) {
+            const tag = Array.isArray(p.tags) && p.tags.length ? p.tags[0] : (p.event_type || '');
+            const tagDisplay = Array.isArray(p.tags) && p.tags.length ? p.tags.join(' · ') : (p.event_type || '');
+            const topLine = currentSort === 'featured'
+                ? tagDisplay
+                : formatDateRange(p.event_date, p.event_end_date);
+            const dateStr = formatDateRange(p.event_date, p.event_end_date);
+            const isPrivate = p.is_private === true;
+            return `<div class="g-project ${isPrivate ? 'g-project-private' : ''}" onclick="viewProject('${p.slug}')">
+                <img src="${p.cover_image_url||'https://via.placeholder.com/600x450'}" alt="${p.title}" loading="lazy">
+                ${isPrivate ? `<div class="g-private-overlay"><div class="g-lock-icon">${lockIcon}</div></div>` : ''}
+                <div class="g-overlay">
+                    ${topLine ? `<div class="g-date">${topLine}</div>` : ''}
+                    <div class="g-title">${p.title}</div>
+                    ${p.venue?`<div class="g-venue">${p.venue}</div>`:''}
+                    <div class="g-count">${photoIcon} ${p.photo_count||0}</div>
+                </div>
+            </div>`;
+        }
+
+        function reviewSlideshowTile() {
+            const slides = reviews.map((r,i) =>
+                `<div class="g-review-slide ${i===0?'active':''}" data-slide="${i}">
+                    <div class="quote-stars">${starSVG.repeat(5)}</div>
+                    <p class="quote-text">${r.quote}</p>
+                    <div class="quote-attr"><span>${r.name}</span> — ${r.company}</div>
+                </div>`
+            ).join('');
+            const dots = reviews.map((_,i) =>
+                `<div class="g-review-dot ${i===0?'active':''}" onclick="goToReview(${i})"></div>`
+            ).join('');
+            return `<div class="g-review-slideshow" id="reviewSlideshow">${slides}<div class="g-review-dots">${dots}</div></div>`;
+        }
+
+        /* ── Review Slideshow ── */
+        let currentReview = 0, reviewInterval;
+
+        function goToReview(idx) {
+            const c = document.getElementById('reviewSlideshow');
+            if (!c) return;
+            const slides = c.querySelectorAll('.g-review-slide');
+            const dots = c.querySelectorAll('.g-review-dot');
+            slides[currentReview].classList.remove('active');
+            dots[currentReview].classList.remove('active');
+            currentReview = idx;
+            slides[currentReview].classList.add('active');
+            dots[currentReview].classList.add('active');
+            clearInterval(reviewInterval);
+            reviewInterval = setInterval(() => goToReview((currentReview+1)%reviews.length), 5000);
+        }
+
+        function startReviewSlideshow() {
+            currentReview = 0;
+            clearInterval(reviewInterval);
+            reviewInterval = setInterval(() => goToReview((currentReview+1)%reviews.length), 5000);
+        }
+
+        /* ── Sort helpers ── */
+        function sortProjects(list) {
+            if (currentSort === 'newest') {
+                return [...list].sort((a,b) => {
+                    const da = a.event_date ? new Date(a.event_date) : new Date(0);
+                    const db = b.event_date ? new Date(b.event_date) : new Date(0);
+                    return db - da;
+                });
+            }
+            if (currentSort === 'oldest') {
+                return [...list].sort((a,b) => {
+                    const da = a.event_date ? new Date(a.event_date) : new Date(0);
+                    const db = b.event_date ? new Date(b.event_date) : new Date(0);
+                    return da - db;
+                });
+            }
+            // featured = featured projects first (by featured_order), then non-featured by date (newest first)
+            return [...list].sort((a,b) => {
+                // Featured projects come first
+                if (a.featured && !b.featured) return -1;
+                if (!a.featured && b.featured) return 1;
+                // Among featured, sort by featured_order
+                if (a.featured && b.featured) {
+                    return (a.featured_order || 0) - (b.featured_order || 0);
+                }
+                // Among non-featured, sort by date (newest first)
+                const da = a.event_date ? new Date(a.event_date) : new Date(0);
+                const db = b.event_date ? new Date(b.event_date) : new Date(0);
+                return db - da;
+            });
+        }
+
+        /* ── Gallery Render ── */
+        function renderGallery() {
+            const grid = document.getElementById('unifiedGrid');
+            let filtered = projects;
+            
+            if (currentFilter !== 'all') {
+                filtered = projects.filter(p => {
+                    const tags = (Array.isArray(p.tags) ? p.tags : []).map(t => t.toLowerCase());
+                    const et = (p.event_type || '').toLowerCase();
+                    return tags.includes(currentFilter) || et === currentFilter;
+                });
+            }
+            filtered = sortProjects(filtered);
+
+            if (!filtered.length) {
+                grid.innerHTML = '<div class="empty-state"><p>No projects found.</p></div>';
+                return;
+            }
+
+            let html = '', pi = 0;
+            const wall = Math.min(10, filtered.length);
+            for (let i = 0; i < wall; i++) html += tile(filtered[pi++]);
+
+            if (filtered.length > 6) {
+                html += reviewSlideshowTile();
+                for (let i = 0; i < 6 && pi < filtered.length; i++) html += tile(filtered[pi++]);
+            }
+
+            while (pi < filtered.length) html += tile(filtered[pi++]);
+            grid.innerHTML = html;
+            startReviewSlideshow();
+        }
+        
+        /* ── Load ── */
+        async function loadProjects() {
+            try {
+                const res = await fetch(`${API_URL}/api/projects`);
+                const data = await res.json();
+                if (data.error) throw new Error(data.error);
+                projects = (data.projects||[]).sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+                
+                // Calculate total photos for stats display
+                const totalPhotos = projects.reduce((sum, p) => sum + (p.photo_count || 0), 0);
+                
+                // Format: 1.2k for thousands, otherwise show full number
+                const formatCount = (n) => {
+                    if (n >= 1000) {
+                        return (n / 1000).toFixed(1).replace(/\.0$/, '') + 'k';
+                    }
+                    return n.toString();
+                };
+                
+                document.getElementById('totalPhotosCount').textContent = formatCount(totalPhotos);
+                
+                renderGallery();
+            } catch(e) {
+                document.getElementById('unifiedGrid').innerHTML = `<div class="empty-state"><h3>Error</h3><p>${e.message}</p></div>`;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth(); updateCartUI(); loadProjects();
+            document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key==='Enter') doSearch(); });
+            document.getElementById('tbSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doToolbarSearch(); });
+
+            // Measure header height for sticky toolbar offset
+            const header = document.querySelector('.header');
+            function setHeaderHeight() {
+                document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+            }
+            setHeaderHeight();
+            window.addEventListener('resize', setHeaderHeight);
         });
     </script>
 </body>
