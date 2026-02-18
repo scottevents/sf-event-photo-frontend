@@ -1040,6 +1040,357 @@
             .view-cinematic .g-review-slideshow { grid-column: span 1; }
         }
 
+        /* ── MAGAZINE VIEW - Hero first project + 3-col grid ── */
+        .view-magazine .unified-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--gap);
+        }
+
+        .view-magazine .g-project:first-child {
+            grid-column: 1 / -1;
+        }
+
+        .view-magazine .g-project:first-child img {
+            aspect-ratio: 16 / 9;
+        }
+
+        .view-magazine .g-project:first-child .g-overlay {
+            padding: 6rem 2rem 2rem;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.4) 40%, transparent 100%);
+        }
+
+        .view-magazine .g-project:first-child .g-title {
+            font-size: 1.4rem;
+            letter-spacing: 0.1em;
+        }
+
+        .view-magazine .g-project:first-child .g-venue {
+            font-size: 1rem;
+        }
+
+        .view-magazine .g-project:first-child .g-date {
+            font-size: 0.85rem;
+        }
+
+        .view-magazine .g-review-slideshow {
+            grid-column: span 1;
+        }
+
+        @media (max-width: 1100px) {
+            .view-magazine .unified-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 600px) {
+            .view-magazine .unified-grid { grid-template-columns: 1fr; }
+            .view-magazine .g-project:first-child .g-title { font-size: 1.1rem; }
+            .view-magazine .g-project:first-child .g-overlay { padding: 4rem 1.25rem 1.25rem; }
+        }
+
+        /* ── LIST VIEW - Horizontal rows with thumbnail + details ── */
+        .view-list .unified-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .view-list .g-project {
+            display: flex;
+            flex-direction: row;
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-mid);
+            height: auto;
+        }
+
+        .view-list .g-project img {
+            width: 200px;
+            min-width: 200px;
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+        }
+
+        .view-list .g-project .g-overlay {
+            display: none;
+        }
+
+        .view-list .g-project .g-info-below {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 1rem 1.5rem;
+            flex: 1;
+        }
+
+        .view-list .g-project .g-info-below .g-title {
+            font-size: 0.95rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .view-list .g-project .g-info-below .g-venue {
+            margin-bottom: 0.2rem;
+        }
+
+        .view-list .g-project:hover {
+            background: var(--gray-light);
+        }
+
+        .view-list .g-project:hover img {
+            transform: none;
+        }
+
+        .view-list .g-private-overlay {
+            width: 200px;
+            min-width: 200px;
+            right: auto;
+        }
+
+        .view-list .g-review-slideshow {
+            min-height: 120px;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+
+        @media (max-width: 768px) {
+            .view-list .g-project img {
+                width: 140px;
+                min-width: 140px;
+            }
+            .view-list .g-project .g-info-below {
+                padding: 0.75rem 1rem;
+            }
+            .view-list .g-project .g-info-below .g-title {
+                font-size: 0.85rem;
+            }
+            .view-list .g-private-overlay {
+                width: 140px;
+                min-width: 140px;
+            }
+        }
+        @media (max-width: 480px) {
+            .view-list .g-project img {
+                width: 110px;
+                min-width: 110px;
+            }
+            .view-list .g-project .g-info-below {
+                padding: 0.5rem 0.75rem;
+            }
+            .view-list .g-project .g-info-below .g-title {
+                font-size: 0.8rem;
+            }
+            .view-list .g-project .g-info-below .g-venue,
+            .view-list .g-project .g-info-below .g-count {
+                font-size: 0.65rem;
+            }
+        }
+
+        /* ── TIMELINE VIEW - Vertical timeline with alternating cards ── */
+        .view-timeline .gallery-section {
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .view-timeline .unified-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+
+        .view-timeline .unified-grid::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--gray-mid);
+            transform: translateX(-50%);
+        }
+
+        .view-timeline .g-project {
+            width: 45%;
+            background: var(--white);
+            border: 1px solid var(--gray-mid);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .view-timeline .g-project:nth-child(odd) {
+            align-self: flex-start;
+            margin-left: 2%;
+        }
+
+        .view-timeline .g-project:nth-child(even) {
+            align-self: flex-end;
+            margin-right: 2%;
+        }
+
+        /* Timeline dot */
+        .view-timeline .g-project::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--black);
+            border: 2px solid var(--white);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .view-timeline .g-project:nth-child(odd)::after {
+            right: -8.5%;
+        }
+
+        .view-timeline .g-project:nth-child(even)::after {
+            left: -8.5%;
+        }
+
+        .view-timeline .g-project img {
+            aspect-ratio: 16 / 9;
+        }
+
+        .view-timeline .g-project .g-overlay {
+            display: none;
+        }
+
+        .view-timeline .g-project .g-info-below {
+            display: block;
+            padding: 0.75rem 1rem;
+        }
+
+        .view-timeline .g-project:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+        }
+
+        .view-timeline .g-project:hover img {
+            transform: none;
+        }
+
+        .view-timeline .g-review-slideshow {
+            width: 45%;
+            align-self: flex-start;
+            margin-left: 2%;
+            margin-bottom: 2rem;
+            min-height: 200px;
+            border: 1px solid var(--gray-mid);
+        }
+
+        @media (max-width: 768px) {
+            .view-timeline .unified-grid::before {
+                left: 20px;
+            }
+            .view-timeline .g-project {
+                width: calc(100% - 50px);
+                align-self: flex-end !important;
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+                margin-left: 50px !important;
+            }
+            .view-timeline .g-project::after {
+                left: -38px !important;
+                right: auto !important;
+            }
+            .view-timeline .g-review-slideshow {
+                width: calc(100% - 50px);
+                margin-left: 50px;
+            }
+        }
+
+        /* ── SPOTLIGHT VIEW - Asymmetric large + small cards ── */
+        .view-spotlight .unified-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            grid-auto-rows: auto;
+            gap: var(--gap);
+        }
+
+        /* Odd groups: large card left, small cards right */
+        .view-spotlight .g-project {
+            min-height: 0;
+        }
+
+        .view-spotlight .g-project img {
+            aspect-ratio: 4 / 3;
+        }
+
+        /* Every 3rd item (1st, 4th, 7th...) spans the large column */
+        .view-spotlight .g-project:nth-child(3n + 1) {
+            grid-column: 1;
+            grid-row: span 2;
+        }
+
+        .view-spotlight .g-project:nth-child(3n + 1) img {
+            aspect-ratio: 3 / 4;
+            height: 100%;
+        }
+
+        .view-spotlight .g-project:nth-child(3n + 2),
+        .view-spotlight .g-project:nth-child(3n + 3) {
+            grid-column: 2;
+        }
+
+        /* Alternate pattern: every other group flips (large right, small left) */
+        .view-spotlight .g-project:nth-child(6n + 4) {
+            grid-column: 2;
+            grid-row: span 2;
+        }
+
+        .view-spotlight .g-project:nth-child(6n + 4) img {
+            aspect-ratio: 3 / 4;
+            height: 100%;
+        }
+
+        .view-spotlight .g-project:nth-child(6n + 5),
+        .view-spotlight .g-project:nth-child(6n + 6) {
+            grid-column: 1;
+        }
+
+        .view-spotlight .g-overlay {
+            padding: 3rem 1rem 1rem;
+        }
+
+        .view-spotlight .g-project:nth-child(3n + 1) .g-title,
+        .view-spotlight .g-project:nth-child(6n + 4) .g-title {
+            font-size: 1.1rem;
+        }
+
+        .view-spotlight .g-review-slideshow {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 900px) {
+            .view-spotlight .unified-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .view-spotlight .g-project:nth-child(3n + 1),
+            .view-spotlight .g-project:nth-child(6n + 4) {
+                grid-column: 1 / -1;
+                grid-row: span 1;
+            }
+            .view-spotlight .g-project:nth-child(3n + 1) img,
+            .view-spotlight .g-project:nth-child(6n + 4) img {
+                aspect-ratio: 16 / 9;
+                height: auto;
+            }
+            .view-spotlight .g-project:nth-child(3n + 2),
+            .view-spotlight .g-project:nth-child(3n + 3),
+            .view-spotlight .g-project:nth-child(6n + 5),
+            .view-spotlight .g-project:nth-child(6n + 6) {
+                grid-column: auto;
+            }
+        }
+        @media (max-width: 600px) {
+            .view-spotlight .unified-grid { grid-template-columns: 1fr; }
+            .view-spotlight .g-project:nth-child(3n + 2),
+            .view-spotlight .g-project:nth-child(3n + 3),
+            .view-spotlight .g-project:nth-child(6n + 5),
+            .view-spotlight .g-project:nth-child(6n + 6) {
+                grid-column: 1;
+            }
+        }
+
         /* ── Mobile Menu View Options ── */
         .mobile-menu-divider {
             height: 1px;
@@ -1363,6 +1714,22 @@
                                 <span>Cinematic</span>
                                 <span class="view-check" id="desktopViewCinematic"></span>
                             </button>
+                            <button class="view-dropdown-option" onclick="setGridView('magazine'); toggleViewDropdown();">
+                                <span>Magazine</span>
+                                <span class="view-check" id="desktopViewMagazine"></span>
+                            </button>
+                            <button class="view-dropdown-option" onclick="setGridView('list'); toggleViewDropdown();">
+                                <span>List</span>
+                                <span class="view-check" id="desktopViewList"></span>
+                            </button>
+                            <button class="view-dropdown-option" onclick="setGridView('timeline'); toggleViewDropdown();">
+                                <span>Timeline</span>
+                                <span class="view-check" id="desktopViewTimeline"></span>
+                            </button>
+                            <button class="view-dropdown-option" onclick="setGridView('spotlight'); toggleViewDropdown();">
+                                <span>Spotlight</span>
+                                <span class="view-check" id="desktopViewSpotlight"></span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -1436,6 +1803,22 @@
                 <button class="mobile-view-option" onclick="setGridView('cinematic'); closeMobileMenu();">
                     <span>Cinematic</span>
                     <span class="view-check" id="mobileViewCinematic"></span>
+                </button>
+                <button class="mobile-view-option" onclick="setGridView('magazine'); closeMobileMenu();">
+                    <span>Magazine</span>
+                    <span class="view-check" id="mobileViewMagazine"></span>
+                </button>
+                <button class="mobile-view-option" onclick="setGridView('list'); closeMobileMenu();">
+                    <span>List</span>
+                    <span class="view-check" id="mobileViewList"></span>
+                </button>
+                <button class="mobile-view-option" onclick="setGridView('timeline'); closeMobileMenu();">
+                    <span>Timeline</span>
+                    <span class="view-check" id="mobileViewTimeline"></span>
+                </button>
+                <button class="mobile-view-option" onclick="setGridView('spotlight'); closeMobileMenu();">
+                    <span>Spotlight</span>
+                    <span class="view-check" id="mobileViewSpotlight"></span>
                 </button>
             </div>
         </nav>
@@ -1999,7 +2382,7 @@
         
         /* ── Grid View Modes ── */
         let currentView = localStorage.getItem('gridView') || 'classic';
-        const viewModes = ['classic', 'editorial', 'detailed', 'masonry', 'dense', 'cinematic'];
+        const viewModes = ['classic', 'editorial', 'detailed', 'masonry', 'dense', 'cinematic', 'magazine', 'list', 'timeline', 'spotlight'];
         
         function setGridView(view) {
             currentView = view;
