@@ -1086,7 +1086,7 @@
             .view-magazine .g-project:first-child .g-overlay { padding: 4rem 1.25rem 1.25rem; }
         }
 
-        /* ── LIST VIEW - Horizontal rows with thumbnail + details ── */
+        /* ── LIST VIEW - Editorial project list (Matte-inspired) ── */
         .view-list .unified-grid {
             display: flex;
             flex-direction: column;
@@ -1099,13 +1099,18 @@
             background: var(--white);
             border-bottom: 1px solid var(--gray-mid);
             height: auto;
+            padding: 2rem 2.5rem;
+            align-items: center;
+            gap: 2.5rem;
+            transition: background 0.3s ease;
         }
 
         .view-list .g-project img {
-            width: 200px;
-            min-width: 200px;
+            width: 320px;
+            min-width: 320px;
             aspect-ratio: 3 / 2;
             object-fit: cover;
+            transition: transform 0.5s ease;
         }
 
         .view-list .g-project .g-overlay {
@@ -1116,68 +1121,124 @@
             display: flex;
             flex-direction: column;
             justify-content: center;
-            padding: 1rem 1.5rem;
+            padding: 0;
             flex: 1;
+            background: transparent;
+        }
+
+        /* Editorial typography */
+        .view-list .g-project .g-info-below .g-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            background: none;
+            color: var(--gray-dark);
+            padding: 0;
+            margin-bottom: 0.75rem;
+            font-weight: 400;
         }
 
         .view-list .g-project .g-info-below .g-title {
-            font-size: 0.95rem;
-            margin-bottom: 0.3rem;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            text-transform: none;
+            line-height: 1.3;
+            margin-bottom: 0.5rem;
+            color: var(--black);
         }
 
         .view-list .g-project .g-info-below .g-venue {
-            margin-bottom: 0.2rem;
+            font-size: 0.9rem;
+            font-weight: 300;
+            color: var(--gray-dark);
+            margin-bottom: 0.4rem;
         }
 
+        .view-list .g-project .g-info-below .g-date {
+            font-size: 0.8rem;
+            color: var(--gray-dark);
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+        }
+
+        .view-list .g-project .g-info-below .g-count {
+            font-size: 0.75rem;
+            color: var(--gray-dark);
+        }
+
+        /* Hover */
         .view-list .g-project:hover {
             background: var(--gray-light);
         }
 
         .view-list .g-project:hover img {
-            transform: none;
+            transform: scale(1.02);
         }
 
         .view-list .g-private-overlay {
-            width: 200px;
-            min-width: 200px;
+            width: 320px;
+            min-width: 320px;
             right: auto;
         }
 
         .view-list .g-review-slideshow {
-            min-height: 120px;
+            min-height: 140px;
             border-bottom: 1px solid var(--gray-mid);
         }
 
-        @media (max-width: 768px) {
+        @media (max-width: 1100px) {
             .view-list .g-project img {
-                width: 140px;
-                min-width: 140px;
-            }
-            .view-list .g-project .g-info-below {
-                padding: 0.75rem 1rem;
+                width: 260px;
+                min-width: 260px;
             }
             .view-list .g-project .g-info-below .g-title {
-                font-size: 0.85rem;
+                font-size: 1.25rem;
             }
             .view-list .g-private-overlay {
-                width: 140px;
-                min-width: 140px;
+                width: 260px;
+                min-width: 260px;
+            }
+        }
+        @media (max-width: 768px) {
+            .view-list .g-project {
+                padding: 1.25rem 1rem;
+                gap: 1.5rem;
+            }
+            .view-list .g-project img {
+                width: 180px;
+                min-width: 180px;
+            }
+            .view-list .g-project .g-info-below .g-title {
+                font-size: 1.1rem;
+            }
+            .view-list .g-private-overlay {
+                width: 180px;
+                min-width: 180px;
             }
         }
         @media (max-width: 480px) {
+            .view-list .g-project {
+                flex-direction: column;
+                padding: 0;
+                gap: 0;
+            }
             .view-list .g-project img {
-                width: 110px;
-                min-width: 110px;
+                width: 100%;
+                min-width: 100%;
+                aspect-ratio: 16 / 9;
             }
             .view-list .g-project .g-info-below {
-                padding: 0.5rem 0.75rem;
+                padding: 1rem 1.25rem 1.25rem;
             }
             .view-list .g-project .g-info-below .g-title {
-                font-size: 0.8rem;
+                font-size: 1.15rem;
             }
-            .view-list .g-project .g-info-below .g-venue,
-            .view-list .g-project .g-info-below .g-count {
-                font-size: 0.65rem;
+            .view-list .g-private-overlay {
+                width: 100%;
+                min-width: 100%;
+                height: auto;
+                aspect-ratio: 16 / 9;
             }
         }
 
@@ -1301,7 +1362,7 @@
         /* ── SPOTLIGHT VIEW - Asymmetric large + small cards ── */
         .view-spotlight .unified-grid {
             display: grid;
-            grid-template-columns: 2fr 1fr;
+            grid-template-columns: 5fr 2fr;
             grid-auto-rows: auto;
             gap: var(--gap);
         }
@@ -1309,10 +1370,12 @@
         /* Odd groups: large card left, small cards right */
         .view-spotlight .g-project {
             min-height: 0;
+            overflow: hidden;
         }
 
         .view-spotlight .g-project img {
             aspect-ratio: 4 / 3;
+            object-fit: cover;
         }
 
         /* Every 3rd item (1st, 4th, 7th...) spans the large column */
@@ -1322,8 +1385,10 @@
         }
 
         .view-spotlight .g-project:nth-child(3n + 1) img {
-            aspect-ratio: 3 / 4;
+            aspect-ratio: unset;
+            width: 100%;
             height: 100%;
+            object-fit: cover;
         }
 
         .view-spotlight .g-project:nth-child(3n + 2),
@@ -1338,8 +1403,10 @@
         }
 
         .view-spotlight .g-project:nth-child(6n + 4) img {
-            aspect-ratio: 3 / 4;
+            aspect-ratio: unset;
+            width: 100%;
             height: 100%;
+            object-fit: cover;
         }
 
         .view-spotlight .g-project:nth-child(6n + 5),
@@ -1570,6 +1637,542 @@
         .checkout-btn:disabled { background: var(--gray-mid); color: var(--gray-dark); cursor: not-allowed; }
 
         /* ═══════════════════════════════════════
+           HOME DROPDOWN
+           ═══════════════════════════════════════ */
+        .home-dropdown {
+            position: relative;
+        }
+
+        /* ═══════════════════════════════════════
+           HOME STYLE: AGENCY
+           Dark, editorial, Matte Projects-inspired
+           ═══════════════════════════════════════ */
+        body.home-agency {
+            background: #0a0a0a;
+            color: #e0e0e0;
+        }
+
+        body.home-agency .header {
+            background: #0a0a0a;
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+
+        body.home-agency .logo,
+        body.home-agency .nav a,
+        body.home-agency .view-dropdown-btn,
+        body.home-agency .home-dropdown .view-dropdown-btn,
+        body.home-agency .auth-link {
+            color: #e0e0e0;
+        }
+
+        body.home-agency .hamburger svg {
+            stroke: #e0e0e0;
+        }
+
+        body.home-agency .user-menu-btn {
+            color: #e0e0e0;
+        }
+
+        body.home-agency .view-dropdown-panel,
+        body.home-agency #homeDropdownPanel {
+            background: #1a1a1a;
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        body.home-agency .view-dropdown-option {
+            color: #ccc;
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+
+        body.home-agency .view-dropdown-option:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        /* Hero */
+        body.home-agency .hero-section {
+            background: #0a0a0a;
+            padding: 4rem 2.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        body.home-agency .hero-headline {
+            color: #e0e0e0;
+        }
+
+        body.home-agency .search-container {
+            border-color: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.05);
+        }
+
+        body.home-agency .search-input {
+            background: transparent;
+            color: #e0e0e0;
+        }
+
+        body.home-agency .search-input::placeholder {
+            color: rgba(255,255,255,0.35);
+        }
+
+        body.home-agency .search-btn {
+            background: #fff;
+            color: #0a0a0a;
+        }
+
+        body.home-agency .divider-line {
+            background: rgba(255,255,255,0.15);
+        }
+
+        body.home-agency .info-label {
+            color: rgba(255,255,255,0.4);
+        }
+
+        body.home-agency .info-value {
+            color: rgba(255,255,255,0.8);
+        }
+
+        /* Toolbar */
+        body.home-agency .toolbar {
+            background: #0a0a0a;
+            border-bottom-color: rgba(255,255,255,0.08);
+        }
+
+        body.home-agency .tb-btn,
+        body.home-agency .tb-tab {
+            color: rgba(255,255,255,0.4);
+        }
+
+        body.home-agency .tb-btn:hover,
+        body.home-agency .tb-tab:hover {
+            color: rgba(255,255,255,0.8);
+        }
+
+        body.home-agency .tb-tab.active {
+            color: #fff;
+            border-bottom-color: #fff;
+        }
+
+        body.home-agency .tb-panel {
+            background: #1a1a1a;
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        body.home-agency .tb-option {
+            color: rgba(255,255,255,0.5);
+        }
+
+        body.home-agency .tb-option:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        body.home-agency .tb-option.active {
+            color: #fff;
+        }
+
+        body.home-agency .tb-stats-label,
+        body.home-agency .tb-stats-value {
+            color: rgba(255,255,255,0.5);
+        }
+
+        body.home-agency .tb-stats-item:not(:last-child) {
+            border-right-color: rgba(255,255,255,0.1);
+        }
+
+        /* Gallery */
+        body.home-agency .gallery-section {
+            background: #0a0a0a;
+            padding: var(--gap) 3rem 5rem;
+        }
+
+        body.home-agency .g-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+        }
+
+        /* Info below - dark */
+        body.home-agency .g-info-below {
+            background: #111;
+        }
+
+        body.home-agency .g-info-below .g-title { color: #e0e0e0; }
+        body.home-agency .g-info-below .g-date { color: rgba(255,255,255,0.5); }
+        body.home-agency .g-info-below .g-venue { color: rgba(255,255,255,0.5); }
+        body.home-agency .g-info-below .g-count { color: rgba(255,255,255,0.4); }
+        body.home-agency .g-info-below .g-count svg { stroke: rgba(255,255,255,0.4); }
+        body.home-agency .g-info-below .g-tag {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Review slideshow - dark */
+        body.home-agency .g-review-slideshow {
+            background: #111;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        body.home-agency .g-review-slide .quote-text { color: #e0e0e0; }
+        body.home-agency .g-review-slide .quote-attr { color: rgba(255,255,255,0.5); }
+        body.home-agency .g-review-slide .quote-attr span { color: #e0e0e0; }
+        body.home-agency .g-review-slide .quote-stars svg { fill: #e0e0e0; }
+        body.home-agency .g-review-dot { background: rgba(255,255,255,0.2); }
+        body.home-agency .g-review-dot.active { background: #e0e0e0; }
+
+        /* List view - dark */
+        body.home-agency .view-list .g-project {
+            background: #0a0a0a;
+            border-bottom-color: rgba(255,255,255,0.08);
+        }
+
+        body.home-agency .view-list .g-project:hover {
+            background: #111;
+        }
+
+        body.home-agency .view-list .g-project .g-info-below .g-title { color: #e0e0e0; }
+        body.home-agency .view-list .g-project .g-info-below .g-tag { color: rgba(255,255,255,0.4); }
+
+        /* Timeline - dark */
+        body.home-agency .view-timeline .g-project {
+            background: #111;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        body.home-agency .view-timeline .unified-grid::before {
+            background: rgba(255,255,255,0.15);
+        }
+
+        body.home-agency .view-timeline .g-project::after {
+            background: #e0e0e0;
+            border-color: #0a0a0a;
+        }
+
+        /* Detailed - dark */
+        body.home-agency .view-detailed .g-project {
+            background: #111;
+        }
+
+        body.home-agency .view-detailed .g-project:hover {
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Footer */
+        body.home-agency .footer {
+            background: #0a0a0a;
+            border-top-color: rgba(255,255,255,0.08);
+        }
+
+        /* ═══════════════════════════════════════
+           HOME STYLE: MINIMAL
+           Ultra-clean, stripped back, lots of white space
+           ═══════════════════════════════════════ */
+        body.home-minimal .header {
+            border-bottom: none;
+        }
+
+        body.home-minimal .hero-section {
+            padding: 1rem 1.5rem;
+            background: var(--white);
+            border-bottom: none;
+        }
+
+        /* Hide info block and divider */
+        body.home-minimal .divider-line,
+        body.home-minimal .info-side {
+            display: none;
+        }
+
+        body.home-minimal .search-info-wrapper {
+            justify-content: center;
+        }
+
+        body.home-minimal .search-side {
+            padding-right: 0;
+        }
+
+        /* Minimal toolbar */
+        body.home-minimal .toolbar {
+            border-bottom: none;
+            padding: 0 2rem;
+        }
+
+        body.home-minimal .tb-tab {
+            font-size: 0.8rem;
+            letter-spacing: 0.08em;
+            padding: 0.75rem 1.25rem;
+            color: #bbb;
+        }
+
+        body.home-minimal .tb-tab.active {
+            color: var(--black);
+            border-bottom-color: var(--black);
+        }
+
+        body.home-minimal .tb-btn {
+            font-size: 0.8rem;
+            color: #bbb;
+        }
+
+        /* Gallery - more whitespace */
+        body.home-minimal .gallery-section {
+            padding: 1.5rem 3rem 5rem;
+        }
+
+        body.home-minimal .unified-grid {
+            gap: 12px;
+        }
+
+        /* Subtle overlays - title only */
+        body.home-minimal .g-overlay {
+            background: linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.2) 40%, transparent 100%);
+            padding: 3rem 1rem 0.75rem;
+        }
+
+        body.home-minimal .g-title {
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.06em;
+        }
+
+        body.home-minimal .g-overlay .g-date,
+        body.home-minimal .g-overlay .g-venue,
+        body.home-minimal .g-overlay .g-count {
+            display: none;
+        }
+
+        /* Stats bar - hide */
+        body.home-minimal .tb-stats {
+            display: none;
+        }
+
+        /* ═══════════════════════════════════════
+           HOME STYLE: BOLD
+           Large typography, dramatic, high contrast
+           ═══════════════════════════════════════ */
+        body.home-bold {
+            background: var(--black);
+        }
+
+        body.home-bold .header {
+            background: var(--black);
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+
+        body.home-bold .logo,
+        body.home-bold .nav a,
+        body.home-bold .view-dropdown-btn,
+        body.home-bold .home-dropdown .view-dropdown-btn,
+        body.home-bold .auth-link {
+            color: var(--white);
+        }
+
+        body.home-bold .hamburger svg {
+            stroke: var(--white);
+        }
+
+        body.home-bold .user-menu-btn {
+            color: var(--white);
+        }
+
+        body.home-bold .view-dropdown-panel,
+        body.home-bold #homeDropdownPanel {
+            background: #111;
+            border-color: rgba(255,255,255,0.15);
+        }
+
+        body.home-bold .view-dropdown-option {
+            color: #ccc;
+            border-bottom-color: rgba(255,255,255,0.1);
+        }
+
+        body.home-bold .view-dropdown-option:hover {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        /* Hero - big headline */
+        body.home-bold .hero-section {
+            background: var(--black);
+            padding: 5rem 3rem;
+            text-align: center;
+        }
+
+        body.home-bold .hero-headline {
+            display: block !important;
+            font-size: 4rem;
+            font-weight: 500;
+            color: var(--white);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 2.5rem;
+        }
+
+        body.home-bold .search-container {
+            border-color: rgba(255,255,255,0.3);
+            background: rgba(255,255,255,0.05);
+        }
+
+        body.home-bold .search-input {
+            background: transparent;
+            color: var(--white);
+        }
+
+        body.home-bold .search-input::placeholder {
+            color: rgba(255,255,255,0.4);
+        }
+
+        body.home-bold .search-btn {
+            background: var(--white);
+            color: var(--black);
+        }
+
+        body.home-bold .divider-line,
+        body.home-bold .info-side {
+            display: none;
+        }
+
+        body.home-bold .search-info-wrapper {
+            justify-content: center;
+        }
+
+        body.home-bold .search-side {
+            padding-right: 0;
+        }
+
+        /* Toolbar */
+        body.home-bold .toolbar {
+            background: var(--black);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        body.home-bold .tb-btn,
+        body.home-bold .tb-tab {
+            color: rgba(255,255,255,0.5);
+        }
+
+        body.home-bold .tb-btn:hover,
+        body.home-bold .tb-tab:hover {
+            color: var(--white);
+        }
+
+        body.home-bold .tb-tab.active {
+            color: var(--white);
+            border-bottom-color: var(--white);
+        }
+
+        body.home-bold .tb-panel {
+            background: var(--black);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        body.home-bold .tb-option {
+            color: rgba(255,255,255,0.6);
+        }
+
+        body.home-bold .tb-option:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--white);
+        }
+
+        body.home-bold .tb-option.active {
+            color: var(--white);
+        }
+
+        body.home-bold .tb-stats-label,
+        body.home-bold .tb-stats-value {
+            color: rgba(255,255,255,0.5);
+        }
+
+        body.home-bold .tb-stats-item:not(:last-child) {
+            border-right-color: rgba(255,255,255,0.1);
+        }
+
+        /* Gallery - edge to edge */
+        body.home-bold .gallery-section {
+            padding: 0 0 4rem;
+            background: var(--black);
+        }
+
+        body.home-bold .unified-grid {
+            gap: 2px;
+        }
+
+        /* Info below - dark */
+        body.home-bold .g-info-below {
+            background: #111;
+        }
+
+        body.home-bold .g-info-below .g-title { color: #e0e0e0; }
+        body.home-bold .g-info-below .g-date,
+        body.home-bold .g-info-below .g-venue,
+        body.home-bold .g-info-below .g-count { color: rgba(255,255,255,0.5); }
+        body.home-bold .g-info-below .g-count svg { stroke: rgba(255,255,255,0.5); }
+        body.home-bold .g-info-below .g-tag {
+            background: rgba(255,255,255,0.1);
+            color: rgba(255,255,255,0.6);
+        }
+
+        /* Review slideshow */
+        body.home-bold .g-review-slideshow { background: #111; }
+        body.home-bold .g-review-slide .quote-text { color: #e0e0e0; }
+        body.home-bold .g-review-slide .quote-attr { color: rgba(255,255,255,0.5); }
+        body.home-bold .g-review-slide .quote-attr span { color: #e0e0e0; }
+        body.home-bold .g-review-slide .quote-stars svg { fill: #e0e0e0; }
+        body.home-bold .g-review-dot { background: rgba(255,255,255,0.2); }
+        body.home-bold .g-review-dot.active { background: #e0e0e0; }
+
+        /* List view - dark */
+        body.home-bold .view-list .g-project {
+            background: var(--black);
+            border-bottom-color: rgba(255,255,255,0.08);
+        }
+
+        body.home-bold .view-list .g-project:hover {
+            background: #111;
+        }
+
+        body.home-bold .view-list .g-project .g-info-below .g-title { color: #e0e0e0; }
+        body.home-bold .view-list .g-project .g-info-below .g-tag { color: rgba(255,255,255,0.4); }
+
+        /* Timeline - dark */
+        body.home-bold .view-timeline .g-project {
+            background: #111;
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        body.home-bold .view-timeline .unified-grid::before {
+            background: rgba(255,255,255,0.15);
+        }
+
+        body.home-bold .view-timeline .g-project::after {
+            background: var(--white);
+            border-color: var(--black);
+        }
+
+        /* Detailed - dark */
+        body.home-bold .view-detailed .g-project {
+            background: #111;
+        }
+
+        /* Footer */
+        body.home-bold .footer {
+            background: var(--black);
+            border-top-color: rgba(255,255,255,0.08);
+        }
+
+        @media (max-width: 768px) {
+            body.home-bold .hero-headline {
+                font-size: 2.5rem;
+            }
+            body.home-bold .hero-section {
+                padding: 3rem 1.5rem;
+            }
+        }
+        @media (max-width: 480px) {
+            body.home-bold .hero-headline {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* ═══════════════════════════════════════
            FOOTER
            ═══════════════════════════════════════ */
         .footer {
@@ -1682,6 +2285,32 @@
                     <a href="/about.html">About</a>
                     <a href="/services.html">Services</a>
                     <a href="/contact.html">Contact</a>
+                    <div class="home-dropdown">
+                        <button class="view-dropdown-btn" onclick="toggleHomeDropdown()">
+                            Home
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </button>
+                        <div class="view-dropdown-panel" id="homeDropdownPanel">
+                            <button class="view-dropdown-option" onclick="setHomeStyle('default'); toggleHomeDropdown();">
+                                <span>Default</span>
+                                <span class="view-check" id="desktopHomeDefault">✓</span>
+                            </button>
+                            <button class="view-dropdown-option" onclick="setHomeStyle('agency'); toggleHomeDropdown();">
+                                <span>Agency</span>
+                                <span class="view-check" id="desktopHomeAgency"></span>
+                            </button>
+                            <button class="view-dropdown-option" onclick="setHomeStyle('minimal'); toggleHomeDropdown();">
+                                <span>Minimal</span>
+                                <span class="view-check" id="desktopHomeMinimal"></span>
+                            </button>
+                            <button class="view-dropdown-option" onclick="setHomeStyle('bold'); toggleHomeDropdown();">
+                                <span>Bold</span>
+                                <span class="view-check" id="desktopHomeBold"></span>
+                            </button>
+                        </div>
+                    </div>
                     <div class="view-dropdown">
                         <button class="view-dropdown-btn" onclick="toggleViewDropdown()">
                             View
@@ -1819,6 +2448,26 @@
                 <button class="mobile-view-option" onclick="setGridView('spotlight'); closeMobileMenu();">
                     <span>Spotlight</span>
                     <span class="view-check" id="mobileViewSpotlight"></span>
+                </button>
+            </div>
+            <div class="mobile-menu-divider"></div>
+            <div class="mobile-menu-section">
+                <span class="mobile-menu-label">Home Style</span>
+                <button class="mobile-view-option" onclick="setHomeStyle('default'); closeMobileMenu();">
+                    <span>Default</span>
+                    <span class="view-check" id="mobileHomeDefault">✓</span>
+                </button>
+                <button class="mobile-view-option" onclick="setHomeStyle('agency'); closeMobileMenu();">
+                    <span>Agency</span>
+                    <span class="view-check" id="mobileHomeAgency"></span>
+                </button>
+                <button class="mobile-view-option" onclick="setHomeStyle('minimal'); closeMobileMenu();">
+                    <span>Minimal</span>
+                    <span class="view-check" id="mobileHomeMinimal"></span>
+                </button>
+                <button class="mobile-view-option" onclick="setHomeStyle('bold'); closeMobileMenu();">
+                    <span>Bold</span>
+                    <span class="view-check" id="mobileHomeBold"></span>
                 </button>
             </div>
         </nav>
@@ -2011,6 +2660,9 @@
         document.addEventListener('click', e => {
             if (!e.target.closest('.view-dropdown')) {
                 document.getElementById('viewDropdownPanel')?.classList.remove('show');
+            }
+            if (!e.target.closest('.home-dropdown')) {
+                document.getElementById('homeDropdownPanel')?.classList.remove('show');
             }
         });
 
@@ -2383,6 +3035,31 @@
         /* ── Grid View Modes ── */
         let currentView = localStorage.getItem('gridView') || 'classic';
         const viewModes = ['classic', 'editorial', 'detailed', 'masonry', 'dense', 'cinematic', 'magazine', 'list', 'timeline', 'spotlight'];
+
+        /* ── Home Styles ── */
+        let currentHome = localStorage.getItem('homeStyle') || 'default';
+        const homeStyles = ['default', 'agency', 'minimal', 'bold'];
+
+        function setHomeStyle(style) {
+            currentHome = style;
+            localStorage.setItem('homeStyle', style);
+
+            homeStyles.forEach(s => document.body.classList.remove(`home-${s}`));
+            if (style !== 'default') {
+                document.body.classList.add(`home-${style}`);
+            }
+
+            homeStyles.forEach(s => {
+                const desktop = document.getElementById(`desktopHome${s.charAt(0).toUpperCase() + s.slice(1)}`);
+                if (desktop) desktop.textContent = s === style ? '✓' : '';
+                const mobile = document.getElementById(`mobileHome${s.charAt(0).toUpperCase() + s.slice(1)}`);
+                if (mobile) mobile.textContent = s === style ? '✓' : '';
+            });
+        }
+
+        function toggleHomeDropdown() {
+            document.getElementById('homeDropdownPanel').classList.toggle('show');
+        }
         
         function setGridView(view) {
             currentView = view;
@@ -2418,6 +3095,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth(); updateCartUI(); loadProjects();
             initGridView();
+            setHomeStyle(currentHome);
             document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key==='Enter') doSearch(); });
 
             // Measure header height for sticky toolbar offset
