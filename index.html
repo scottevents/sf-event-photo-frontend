@@ -206,6 +206,80 @@
 
         .nav a:hover { opacity: 0.5; }
 
+        /* Nav Dropdowns */
+        .nav-dropdown {
+            position: relative;
+        }
+
+        .nav-dropdown-trigger {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            text-decoration: none;
+            color: #e0e0e0;
+            font-size: 0.85rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+            padding: 0;
+        }
+
+        .nav-dropdown-trigger:hover { opacity: 0.5; }
+
+        .nav-dropdown-trigger svg {
+            width: 8px;
+            height: 8px;
+            stroke: #e0e0e0;
+            stroke-width: 2.5;
+            transition: transform 0.2s;
+        }
+
+        .nav-dropdown.open .nav-dropdown-trigger svg {
+            transform: rotate(180deg);
+        }
+
+        .nav-dropdown-panel {
+            display: none;
+            position: absolute;
+            top: calc(100% + 12px);
+            left: 0;
+            min-width: 180px;
+            background: #1a1a1a;
+            border: 1px solid rgba(255,255,255,0.12);
+            z-index: 100;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .nav-dropdown.open .nav-dropdown-panel {
+            display: block;
+        }
+
+        .nav-dropdown-panel a {
+            display: block;
+            padding: 0.7rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            text-transform: none;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            transition: all 0.15s;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .nav-dropdown-panel a:last-child { border-bottom: none; }
+
+        .nav-dropdown-panel a:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.05);
+            opacity: 1;
+        }
+
         .nav-actions {
             display: flex;
             gap: 2rem;
@@ -1165,8 +1239,30 @@
             </div>
             <nav class="nav">
                 <div class="nav-links">
-                    <a href="/about.html">About</a>
-                    <a href="/services.html">Services</a>
+                    <div class="nav-dropdown" id="aboutDropdown">
+                        <button class="nav-dropdown-trigger" onclick="toggleNavDropdown('aboutDropdown')">
+                            About
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="nav-dropdown-panel">
+                            <a href="/about.html">Current</a>
+                            <a href="/about-v1.html">V1 — Editorial</a>
+                            <a href="/about-v2.html">V2 — Info Grid</a>
+                            <a href="/about-v3.html">V3 — Cinematic</a>
+                        </div>
+                    </div>
+                    <div class="nav-dropdown" id="servicesDropdown">
+                        <button class="nav-dropdown-trigger" onclick="toggleNavDropdown('servicesDropdown')">
+                            Services
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                        </button>
+                        <div class="nav-dropdown-panel">
+                            <a href="/services.html">Current</a>
+                            <a href="/services-v1.html">V1 — Accordion</a>
+                            <a href="/services-v2.html">V2 — Grid</a>
+                            <a href="/services-v3.html">V3 — Full-Width</a>
+                        </div>
+                    </div>
                     <a href="/contact.html">Contact</a>
                 </div>
                 <div class="nav-actions">
@@ -1404,6 +1500,21 @@
         ];
 
         const starSVG = '<svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+
+        /* ── Nav Dropdowns ── */
+        function toggleNavDropdown(id) {
+            const dropdown = document.getElementById(id);
+            const isOpen = dropdown.classList.contains('open');
+            // Close all nav dropdowns
+            document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+            if (!isOpen) dropdown.classList.add('open');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.nav-dropdown')) {
+                document.querySelectorAll('.nav-dropdown').forEach(d => d.classList.remove('open'));
+            }
+        });
 
         /* ── Mobile Menu ── */
         function openMobileMenu() {
