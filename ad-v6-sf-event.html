@@ -28,8 +28,9 @@
             font-weight: 500; font-style: normal; font-display: swap;
         }
         @font-face {
-            font-family: 'PP Neue Corp';
-            src: url('./fonts/PPNeueCorp-CompressedUltrabold.otf') format('opentype');
+            font-family: 'PP Neue York';
+            src: url('./fonts/PPNeueYork-NormalBlack.woff2') format('woff2'),
+                 url('./fonts/PPNeueYork-NormalBlack.woff') format('woff');
             font-weight: 900; font-style: normal; font-display: swap;
         }
 
@@ -340,13 +341,13 @@
         }
 
         .hero-headline {
-            font-family: 'PP Neue Corp', 'PP Neue York', Georgia, serif;
+            font-family: 'PP Neue York', Georgia, serif;
             font-size: clamp(2.5rem, 5.5vw, 4.5rem);
             font-weight: 900;
             color: #e8e8e8;
             letter-spacing: -0.02em;
-            line-height: 1.05;
-            text-transform: uppercase;
+            line-height: 1.1;
+            text-transform: none;
             margin-bottom: 2.5rem;
         }
 
