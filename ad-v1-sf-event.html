@@ -460,6 +460,10 @@
             text-align: center;
             max-width: 800px;
             padding: 0 2rem;
+        }
+
+        .video-hero-headline,
+        .video-hero-slogan {
             will-change: opacity, transform;
         }
 
@@ -472,17 +476,20 @@
             line-height: 1.05;
             margin-bottom: 0;
             text-shadow: 0 2px 40px rgba(0,0,0,0.5);
-            will-change: opacity, transform;
         }
 
         .video-hero-slogan {
             font-family: 'PP Neue York', Georgia, serif;
-            font-size: clamp(1rem, 2vw, 1.5rem);
+            font-size: clamp(1.1rem, 2.2vw, 1.6rem);
             font-weight: 300;
             color: rgba(255,255,255,0.85);
             letter-spacing: 0.04em;
             line-height: 1.4;
-            margin-top: 1.5rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
             opacity: 0;
             transform: translateY(20px);
             will-change: opacity, transform;
@@ -1913,7 +1920,7 @@
                     }
 
                     slogan.style.opacity = sloganOpacity;
-                    slogan.style.transform = `translateY(${sloganY}px)`;
+                    slogan.style.transform = `translate(-50%, calc(-50% + ${sloganY}px))`;
                 }
 
                 // Scroll indicator: gone by 15%
