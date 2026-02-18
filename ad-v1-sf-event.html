@@ -405,8 +405,7 @@
         }
 
         .hero-spacer {
-            height: 100vh;
-            min-height: 500px;
+            height: 200vh;
             position: relative;
             z-index: 2;
             pointer-events: none;
@@ -488,10 +487,9 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, calc(-50% + 20px));
             width: 100%;
             opacity: 0;
-            transform: translateY(20px);
             will-change: opacity, transform;
             text-shadow: 0 1px 20px rgba(0,0,0,0.4);
         }
@@ -645,8 +643,7 @@
                 min-height: 400px;
             }
             .hero-spacer {
-                height: 70vh;
-                min-height: 400px;
+                height: 140vh;
             }
             .tag-strip-search-icon { margin-left: 0.25rem; }
             .tag-strip-inline-search { max-width: 200px; }
@@ -658,8 +655,7 @@
                 min-height: 350px;
             }
             .hero-spacer {
-                height: 60vh;
-                min-height: 350px;
+                height: 120vh;
             }
             .scroll-indicator {
                 bottom: 1.5rem;
@@ -1884,18 +1880,22 @@
             function updateHeroOnScroll() {
                 const scrollY = window.pageYOffset || window.scrollY;
                 const spacerHeight = heroSpacer.offsetHeight;
+                // All text animation happens in the first half of spacer (≈ 1 viewport)
+                // so the page doesn't visually move during the crossfade
+                const animZone = spacerHeight * 0.5;
 
-                // Phase 1 (0–30% scroll): Headline fades out + drifts up
-                const headlineFade = Math.min(scrollY / (spacerHeight * 0.3), 1);
+                // Phase 1 (0–40% of animZone): Headline fades out + drifts up with subtle scale
+                const headlineEnd = animZone * 0.4;
+                const headlineFade = Math.min(scrollY / headlineEnd, 1);
                 headline.style.opacity = 1 - headlineFade;
-                headline.style.transform = `translateY(${-scrollY * 0.25}px) scale(${1 - headlineFade * 0.05})`;
+                headline.style.transform = `translateY(${-scrollY * 0.15}px) scale(${1 - headlineFade * 0.05})`;
 
-                // Phase 2 (20–55% scroll): Slogan fades in, then fades out (55–80%)
+                // Phase 2: Slogan fades in (25–55% of animZone), holds, fades out (65–90%)
                 if (slogan) {
-                    const sloganInStart = spacerHeight * 0.2;
-                    const sloganInEnd = spacerHeight * 0.45;
-                    const sloganOutStart = spacerHeight * 0.55;
-                    const sloganOutEnd = spacerHeight * 0.8;
+                    const sloganInStart = animZone * 0.25;
+                    const sloganInEnd = animZone * 0.55;
+                    const sloganOutStart = animZone * 0.65;
+                    const sloganOutEnd = animZone * 0.9;
 
                     let sloganOpacity = 0;
                     let sloganY = 20;
@@ -1923,9 +1923,9 @@
                     slogan.style.transform = `translate(-50%, calc(-50% + ${sloganY}px))`;
                 }
 
-                // Scroll indicator: gone by 15%
+                // Scroll indicator: gone by 10% of animZone
                 if (scrollIndicator) {
-                    const indicatorFade = Math.min(scrollY / (spacerHeight * 0.15), 1);
+                    const indicatorFade = Math.min(scrollY / (animZone * 0.1), 1);
                     scrollIndicator.style.opacity = (1 - indicatorFade) * 0.6;
                 }
 
