@@ -770,6 +770,12 @@
                 height: 70vh;
                 min-height: 400px;
             }
+            .video-hero-slogan {
+                white-space: normal;
+                letter-spacing: 0.08em;
+                font-size: clamp(0.75rem, 3.2vw, 1rem);
+                padding: 0 1.5rem;
+            }
             .tag-strip-inline-search { max-width: 200px; }
         }
 
@@ -935,7 +941,13 @@
                 display: none !important;
             }
             .tag-strip-mobile-dropdown {
-                display: flex;
+                display: none !important;
+            }
+            .tag-strip-center {
+                display: none;
+            }
+            .tag-strip-left {
+                flex: 1;
             }
         }
 
@@ -1106,6 +1118,9 @@
             }
             body.press-feed-active .tag-strip-left {
                 flex-shrink: 0;
+            }
+            body.press-feed-active .tag-strip-search {
+                display: none;
             }
             .tag-strip-search {
                 padding: 0.5rem 0.5rem;
@@ -2092,6 +2107,21 @@
             const tagStrip = document.querySelector('.tag-strip');
 
             if (!headline) return;
+
+            // Mobile: skip crossfade, allow immediate scrolling
+            const isMobile = window.matchMedia('(max-width: 768px)').matches;
+            if (isMobile) {
+                if (slogan) slogan.style.opacity = '1';
+                headline.style.opacity = '0';
+                if (scrollIndicator) scrollIndicator.style.opacity = '0';
+                // Still need the scrolled-class listener
+                window.addEventListener('scroll', function() {
+                    const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
+                    const tagStripTop = tagStrip ? tagStrip.getBoundingClientRect().top : 999;
+                    document.body.classList.toggle('scrolled', tagStripTop <= headerH + 2);
+                }, { passive: true });
+                return;
+            }
 
             let targetProgress = 0;      // where we want to be (0–1)
             let displayProgress = 0;     // smoothly animated current value
