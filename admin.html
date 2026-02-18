@@ -2085,6 +2085,9 @@
             }
             currentPhotos=d.photos||d||[];
             if(!Array.isArray(currentPhotos))currentPhotos=[];
+            // Deduplicate by photo id
+            const seenIds=new Set();
+            currentPhotos=currentPhotos.filter(p=>{if(seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
             currentPhotos.sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
             const coverUrl=d.project?.cover_image_url||currentProject.cover_image_url;
             
@@ -2505,69 +2508,71 @@
     function autoGenerateNewSeo() {
         const title = document.getElementById('newTitle').value || '';
         const venue = document.getElementById('newVenue').value || '';
-        const brands = document.getElementById('newBrands').value || '';
+        const brandsStr = document.getElementById('newBrands').value || '';
         const date = document.getElementById('newDate').value;
         const tags = Array.from(document.querySelectorAll('#newTagsSelector .tag-option.selected')).map(t => t.dataset.tag);
-        
-        if (!title) {
-            showToast('Enter a title first', 'error');
-            return;
-        }
-        
-        // Extract city from venue if possible
+
+        if (!title) { showToast('Enter a title first', 'error'); return; }
+
+        // Extract city from venue
         let city = 'San Francisco';
-        const venueLC = venue.toLowerCase();
-        if (venueLC.includes('los angeles') || venueLC.includes('la ') || venueLC.includes(', la')) city = 'Los Angeles';
-        else if (venueLC.includes('new york') || venueLC.includes('nyc')) city = 'New York';
-        else if (venueLC.includes('san francisco') || venueLC.includes('sf')) city = 'San Francisco';
-        else if (venue) city = venue.split(',').pop()?.trim() || city;
-        
-        // Determine event type from tags
-        let eventType = 'event';
-        if (tags.includes('Conference')) eventType = 'conference';
-        else if (tags.includes('Corporate')) eventType = 'corporate event';
-        else if (tags.includes('Party')) eventType = 'party';
-        else if (tags.includes('Activation')) eventType = 'brand activation';
-        else if (tags.includes('Portraits')) eventType = 'portrait';
-        else if (tags.includes('PR')) eventType = 'PR event';
-        else if (tags.includes('Video')) eventType = 'video production';
-        
-        // Generate SEO Title (max 60 chars)
-        let seoTitle = `${title} Photos | ${city}`;
-        if (seoTitle.length < 50) seoTitle += ' | SF Event Photo';
-        if (seoTitle.length > 60) seoTitle = `${title} Photos | SF Event Photo`;
-        if (seoTitle.length > 60) seoTitle = seoTitle.substring(0, 57) + '...';
-        
-        // Generate SEO Description (max 160 chars)
-        let seoDesc = `SF Event Photo captured ${title}`;
-        if (venue && seoDesc.length + venue.length + 5 < 120) seoDesc += ` at ${venue}`;
-        if (date) {
-            const dateStr = new Date(date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-            if (seoDesc.length + dateStr.length + 5 < 130) seoDesc += `, ${dateStr}`;
+        if (venue) {
+            const vLC = venue.toLowerCase();
+            if (vLC.includes('los angeles') || vLC.includes(', la')) city = 'Los Angeles';
+            else if (vLC.includes('new york') || vLC.includes('nyc')) city = 'New York';
+            else if (vLC.includes('san francisco') || vLC.includes(', sf')) city = 'San Francisco';
+            else city = venue.split(',').pop()?.trim() || city;
         }
-        seoDesc += `. Professional ${eventType} photography coverage.`;
+
+        // Determine event type from tags
+        let eventType = 'Event';
+        if (tags.includes('Conference')) eventType = 'Conference';
+        else if (tags.includes('Corporate')) eventType = 'Corporate Event';
+        else if (tags.includes('Party')) eventType = 'Party';
+        else if (tags.includes('Activation')) eventType = 'Brand Activation';
+        else if (tags.includes('Portraits')) eventType = 'Portrait Session';
+        else if (tags.includes('PR')) eventType = 'PR Event';
+        else if (tags.includes('Video')) eventType = 'Video Production';
+
+        // Title: "Event Name | Venue or City | SF Event Photo"
+        let seoTitle = title;
+        if (venue && seoTitle.length + venue.length + 3 < 50) {
+            seoTitle += ' | ' + venue;
+        } else if (city && seoTitle.length + city.length + 3 < 50) {
+            seoTitle += ' | ' + city;
+        }
+        if (seoTitle.length < 45) seoTitle += ' | SF Event Photo';
+        if (seoTitle.length > 60) seoTitle = seoTitle.substring(0, 57) + '...';
+
+        // Description: natural sentence with venue, date, brands
+        let seoDesc = `Photos from ${title}`;
+        if (venue && seoDesc.length + venue.length + 4 < 110) seoDesc += ` at ${venue}`;
+        if (date) {
+            const dateStr = new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            if (seoDesc.length + dateStr.length + 4 < 130) seoDesc += `, ${dateStr}`;
+        }
+        seoDesc += '.';
+        const brands = brandsStr ? brandsStr.split(',').map(b => b.trim()).filter(Boolean) : [];
+        if (brands.length > 0 && seoDesc.length + brands.join(', ').length + 15 < 155) {
+            seoDesc += ` Featuring ${brands.join(', ')}.`;
+        }
+        seoDesc += ` ${eventType} photography by SF Event Photo.`;
         if (seoDesc.length > 160) seoDesc = seoDesc.substring(0, 157) + '...';
-        
-        // Generate Keywords
-        let keywords = [];
-        if (brands) keywords = brands.split(',').map(b => b.trim().toLowerCase());
-        keywords.push(title.toLowerCase());
-        keywords.push(`${eventType} photography`);
-        keywords.push(`${city.toLowerCase()} event photographer`);
-        keywords.push('corporate event photos');
+
+        // Keywords
+        let keywords = [title.toLowerCase()];
         if (venue) keywords.push(venue.toLowerCase());
-        // Dedupe and limit
+        if (city && city !== venue) keywords.push(city.toLowerCase());
+        brands.forEach(b => keywords.push(b.toLowerCase()));
+        keywords.push(eventType.toLowerCase() + ' photography');
+        keywords.push('event photos ' + city.toLowerCase());
         keywords = [...new Set(keywords)].slice(0, 8);
-        
-        // Set values
+
         document.getElementById('newSeoTitle').value = seoTitle;
         document.getElementById('newSeoDesc').value = seoDesc;
         document.getElementById('newSeoKeywords').value = keywords.join(', ');
-        
-        // Update counts
         document.getElementById('newSeoTitleCount').textContent = seoTitle.length;
         document.getElementById('newSeoDescCount').textContent = seoDesc.length;
-        
         updateNewSeoPreview();
     }
     
@@ -2837,28 +2842,46 @@
                 </div>
                 <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
             list.appendChild(row);
-            
-            try {
-                const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
-                const pd = await pr.json();
-                if (pd.error) throw new Error(pd.error);
-                
-                const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
-                if (!ur.ok) throw new Error('Upload failed');
-                
-                await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
-                    projectId: currentProject.id, publicUrl: pd.publicUrl, photoId: pd.photoId, filename: pd.filename, originalFilename: file.name, sortOrder: idx, set_name: setName
-                })});
-                
-                row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
-                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
-                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
-                completed++;
-            } catch(err) {
-                row.querySelector('.upload-popup-item-meta').textContent = 'Failed';
+
+            // Check file size before uploading (Cloudflare limit ~10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(file.size/1024/1024).toFixed(1)}MB, max 10MB)`;
                 document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
                 document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
                 failed++;
+                return;
+            }
+
+            // Upload with 1 retry on failure
+            for (let attempt = 0; attempt < 2; attempt++) {
+                try {
+                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
+                    const pd = await pr.json();
+                    if (pd.error) throw new Error(pd.error);
+
+                    const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
+                    if (!ur.ok) throw new Error('Upload failed');
+
+                    const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
+                        projectId: currentProject.id, publicUrl: pd.publicUrl, photoId: pd.photoId, filename: pd.filename, originalFilename: file.name, sortOrder: idx, set_name: setName
+                    })});
+                    if (!cr.ok) throw new Error('Registration failed');
+
+                    row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
+                    document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
+                    document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
+                    completed++;
+                    break;
+                } catch(err) {
+                    if (attempt === 0) {
+                        row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...';
+                        continue;
+                    }
+                    row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
+                    document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
+                    document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                    failed++;
+                }
             }
             count.textContent = `${completed} of ${total} items`;
         }
@@ -2894,7 +2917,10 @@
             }
             currentPhotos=d.photos||d||[];
             if(!Array.isArray(currentPhotos))currentPhotos=[];
-            
+            // Deduplicate by photo id
+            const seenIds2=new Set();
+            currentPhotos=currentPhotos.filter(p=>{if(seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
+
             manualSets = savedManual;
             selectSet(savedFilter);
         } catch(e) {
@@ -2942,25 +2968,43 @@
                 <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
             list.appendChild(row);
             
-            try {
-                const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
-                const pd = await pr.json();
-                if (pd.error) throw new Error(pd.error);
-                
-                const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
-                if (!ur.ok) throw new Error('Upload failed');
-                
-                await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:idx})});
-                
-                row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
-                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
-                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
-                completed++;
-            } catch(err) {
-                row.querySelector('.upload-popup-item-meta').textContent = 'Failed';
+            // Check file size before uploading (Cloudflare limit ~10MB)
+            if (file.size > 10 * 1024 * 1024) {
+                row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(file.size/1024/1024).toFixed(1)}MB, max 10MB)`;
                 document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
                 document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
                 failed++;
+                return;
+            }
+
+            // Upload with 1 retry on failure
+            for (let attempt = 0; attempt < 2; attempt++) {
+                try {
+                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
+                    const pd = await pr.json();
+                    if (pd.error) throw new Error(pd.error);
+
+                    const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
+                    if (!ur.ok) throw new Error('Upload failed');
+
+                    const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:idx})});
+                    if (!cr.ok) throw new Error('Registration failed');
+
+                    row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
+                    document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
+                    document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
+                    completed++;
+                    break;
+                } catch(err) {
+                    if (attempt === 0) {
+                        row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...';
+                        continue;
+                    }
+                    row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
+                    document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
+                    document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                    failed++;
+                }
             }
             count.textContent = `${completed} of ${total} items`;
         }
@@ -3050,44 +3094,68 @@
     
     function generateSeoSuggestions() {
         if (!currentProject) return;
-        
         const p = currentProject;
-        const brands = (p.brands || []).join(', ');
+        const photoCount = p.photo_count || currentPhotos.length || 0;
+        const brands = (p.brands || []);
+        const tags = (p.tags || []);
         const date = p.event_date ? new Date(p.event_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
-        const venue = p.venue || 'San Francisco';
-        
-        // Generate title (under 60 chars)
-        let title = `${p.title} Photos`;
-        if (title.length < 45 && venue) {
-            title = `${p.title} Photos | ${venue}`;
+        const venue = p.venue || '';
+
+        // Determine event type from tags
+        let eventType = 'Event';
+        if (tags.includes('Conference')) eventType = 'Conference';
+        else if (tags.includes('Corporate')) eventType = 'Corporate Event';
+        else if (tags.includes('Party')) eventType = 'Party';
+        else if (tags.includes('Activation')) eventType = 'Brand Activation';
+        else if (tags.includes('Portraits')) eventType = 'Portrait Session';
+        else if (tags.includes('PR')) eventType = 'PR Event';
+
+        // Extract city from venue
+        let city = '';
+        if (venue) {
+            const vLC = venue.toLowerCase();
+            if (vLC.includes('los angeles') || vLC.includes(', la')) city = 'Los Angeles';
+            else if (vLC.includes('new york') || vLC.includes('nyc')) city = 'New York';
+            else if (vLC.includes('san francisco') || vLC.includes(', sf')) city = 'San Francisco';
+            else city = venue.split(',').pop()?.trim() || '';
         }
+        if (!city) city = 'San Francisco';
+
+        // Title: "Event Name | Venue or City | SF Event Photo"
+        let title = p.title;
+        if (venue && title.length + venue.length + 3 < 50) {
+            title += ' | ' + venue;
+        } else if (city && title.length + city.length + 3 < 50) {
+            title += ' | ' + city;
+        }
+        if (title.length < 45) title += ' | SF Event Photo';
         if (title.length > 60) title = title.substring(0, 57) + '...';
-        
-        // Generate description (under 160 chars)
-        let desc = `SF Event Photo captured ${p.title}`;
-        if (date) desc += ` on ${date}`;
-        if (venue) desc += ` at ${venue}`;
-        desc += '. Professional event photography coverage.';
-        if (brands && desc.length + brands.length + 15 < 160) {
-            desc += ` Featuring ${brands}.`;
+
+        // Description: natural sentence with photo count, venue, date, brands
+        let desc = photoCount > 0 ? `${photoCount} photos from ${p.title}` : `Photos from ${p.title}`;
+        if (venue && desc.length + venue.length + 4 < 110) desc += ` at ${venue}`;
+        if (date && desc.length + date.length + 4 < 130) desc += `, ${date}`;
+        desc += '.';
+        if (brands.length > 0 && desc.length + brands.join(', ').length + 15 < 155) {
+            desc += ` Featuring ${brands.join(', ')}.`;
         }
+        desc += ` ${eventType} photography by SF Event Photo.`;
         if (desc.length > 160) desc = desc.substring(0, 157) + '...';
-        
-        // Generate keywords
+
+        // Keywords
         let keywords = [p.title.toLowerCase()];
         if (venue) keywords.push(venue.toLowerCase());
-        if (brands) keywords = keywords.concat(p.brands.map(b => b.toLowerCase()));
-        keywords.push('event photos', 'professional photography', 'high resolution');
-        
-        // Set values
+        if (city && city !== venue) keywords.push(city.toLowerCase());
+        brands.forEach(b => keywords.push(b.toLowerCase()));
+        keywords.push(eventType.toLowerCase() + ' photography');
+        keywords.push('event photos ' + city.toLowerCase());
+        keywords = [...new Set(keywords)].slice(0, 8);
+
         document.getElementById('seoTitle').value = title;
         document.getElementById('seoDescription').value = desc;
-        document.getElementById('seoKeywords').value = keywords.slice(0, 8).join(', ');
-        
-        // Update counts
+        document.getElementById('seoKeywords').value = keywords.join(', ');
         document.getElementById('seoTitleCount').textContent = title.length;
         document.getElementById('seoDescCount').textContent = desc.length;
-        
         updateSeoPreview();
         showToast('SEO suggestions generated!', 'success');
     }
