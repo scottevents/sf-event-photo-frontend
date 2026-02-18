@@ -763,12 +763,12 @@
 
         @media (max-width: 768px) {
             .video-hero {
-                height: 70vh;
-                min-height: 400px;
+                height: 100vh;
+                min-height: 500px;
             }
             .hero-spacer {
-                height: 70vh;
-                min-height: 400px;
+                height: 100vh;
+                min-height: 500px;
             }
             .video-hero-slogan {
                 white-space: normal;
@@ -783,12 +783,12 @@
 
         @media (max-width: 500px) {
             .hero-spacer {
-                height: 60vh;
-                min-height: 350px;
+                height: 100vh;
+                min-height: 450px;
             }
             .video-hero {
-                height: 60vh;
-                min-height: 350px;
+                height: 100vh;
+                min-height: 450px;
             }
             .scroll-indicator {
                 bottom: 1.5rem;
@@ -1048,6 +1048,26 @@
         .press-feed-btn:hover svg,
         .press-feed-btn.active svg {
             stroke: var(--black);
+        }
+
+        /* Prevent :hover from sticking on touch devices */
+        @media (hover: none) {
+            .press-feed-btn:hover {
+                background: none;
+                color: rgba(255,255,255,0.7);
+                border-color: rgba(255,255,255,0.4);
+            }
+            .press-feed-btn:hover svg {
+                stroke: rgba(255,255,255,0.7);
+            }
+            body.scrolled .press-feed-btn:hover {
+                background: none;
+                color: rgba(0,0,0,0.6);
+                border-color: rgba(0,0,0,0.3);
+            }
+            body.scrolled .press-feed-btn:hover svg {
+                stroke: rgba(0,0,0,0.6);
+            }
         }
 
         /* Toolbar search bar -- visible only in press feed mode */
@@ -1911,6 +1931,14 @@
             document.body.classList.remove('press-feed-active');
             document.getElementById('pressFeedBtn')?.classList.remove('active');
             document.getElementById('tbSearchInput').value = '';
+            // Re-evaluate scrolled state after hero spacer is restored
+            requestAnimationFrame(() => {
+                const headerH = parseFloat(getComputedStyle(document.documentElement)
+                    .getPropertyValue('--header-h')) || 56;
+                const ts = document.querySelector('.tag-strip');
+                const tsTop = ts ? ts.getBoundingClientRect().top : 999;
+                document.body.classList.toggle('scrolled', tsTop <= headerH + 2);
+            });
         }
 
         function togglePressFeed() {
