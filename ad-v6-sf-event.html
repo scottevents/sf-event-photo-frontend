@@ -889,14 +889,18 @@
            RESPONSIVE
            ═══════════════════════════════════════ */
         @media (max-width: 1100px) {
+            .unified-grid { grid-template-columns: repeat(3, 1fr); }
             .g-review-slideshow { grid-column: 1 / -1; grid-row: span 1; min-height: 220px; }
             .g-review-slide { padding: 2rem 2.5rem 2.5rem; }
             .g-review-dots { left: 2.5rem; }
         }
 
+        @media (max-width: 850px) {
+            .unified-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 750px) {
             .header-inner { padding: 1.25rem 0.75rem; }
-            .unified-grid { grid-template-columns: repeat(2, 1fr); }
             .gallery-section { padding: 0 0.75rem 3rem; }
             .g-review-slideshow { min-height: 240px; }
             .g-review-slide { padding: 1.75rem 1.75rem 3rem; }
