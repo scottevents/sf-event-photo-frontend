@@ -705,7 +705,7 @@
 
         .unified-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: var(--gap);
         }
 
@@ -763,31 +763,6 @@
         .g-count { display: flex; align-items: center; gap: 0.4rem; font-size: 0.75rem; font-weight: 300; opacity: 0.8; }
         .g-count svg { width: 14px; height: 14px; }
         
-        /* Info below (for detailed view) - hidden by default */
-        .g-info-below {
-            display: none;
-            padding: 1rem;
-            background: #111;
-        }
-
-        .g-info-below .g-date { color: rgba(255,255,255,0.5); opacity: 1; }
-        .g-info-below .g-title { color: #e0e0e0; font-size: 0.85rem; }
-        .g-info-below .g-venue { color: rgba(255,255,255,0.5); opacity: 1; }
-        .g-info-below .g-count { color: rgba(255,255,255,0.4); opacity: 1; }
-        .g-info-below .g-count svg { stroke: rgba(255,255,255,0.4); }
-        .g-info-below .g-tag {
-            display: inline-block;
-            background: rgba(255,255,255,0.1);
-            color: rgba(255,255,255,0.6);
-            font-size: 0.65rem;
-            font-weight: 500;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            padding: 0.25rem 0.5rem;
-            border-radius: 3px;
-            margin-bottom: 0.5rem;
-        }
-
         /* ── Mobile Menu View Options ── */
         .mobile-menu-divider {
             height: 1px;
@@ -943,62 +918,6 @@
         .checkout-btn:disabled { background: var(--gray-mid); color: var(--gray-dark); cursor: not-allowed; }
 
         /* ═══════════════════════════════════════
-           PRESS FEED - Mockup A: Toolbar pill button
-           ═══════════════════════════════════════ */
-        .tb-press-feed {
-            display: flex;
-            align-items: center;
-            margin-left: auto;
-            margin-right: 1rem;
-        }
-
-        .press-feed-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: none;
-            border: 1.5px solid rgba(255,255,255,0.4);
-            border-radius: 20px;
-            padding: 0.45rem 1rem;
-            font-family: inherit;
-            font-size: 0.7rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: rgba(255,255,255,0.7);
-            cursor: pointer;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-        }
-
-        .press-feed-btn svg {
-            stroke: rgba(255,255,255,0.7);
-        }
-
-        .press-feed-btn:hover,
-        .press-feed-btn.active {
-            background: var(--white);
-            color: var(--black);
-            border-color: var(--white);
-        }
-
-        .press-feed-btn:hover svg,
-        .press-feed-btn.active svg {
-            stroke: var(--black);
-        }
-
-        @media (max-width: 768px) {
-            .tb-press-feed {
-                margin-left: 0.5rem;
-                margin-right: 0;
-            }
-            .press-feed-btn {
-                padding: 0.35rem 0.75rem;
-                font-size: 0.65rem;
-            }
-        }
-
-        /* ═══════════════════════════════════════
            FOOTER
            ═══════════════════════════════════════ */
         .footer {
@@ -1052,12 +971,7 @@
         /* ═══════════════════════════════════════
            RESPONSIVE
            ═══════════════════════════════════════ */
-        @media (min-width: 1600px) {
-            .unified-grid { grid-template-columns: repeat(5, 1fr); }
-        }
-
         @media (max-width: 1100px) {
-            .unified-grid { grid-template-columns: repeat(3, 1fr); }
             .g-review-slideshow { grid-column: 1 / -1; grid-row: span 1; min-height: 220px; }
             .g-review-slide { padding: 2rem 2.5rem 2.5rem; }
             .g-review-dots { left: 2.5rem; }
@@ -1258,16 +1172,6 @@
             </div>
         </div>
         
-        <!-- Mockup A: Press Feed pill in toolbar -->
-        <div class="tb-press-feed">
-            <button class="press-feed-btn" id="pressFeedBtn" onclick="togglePressFeed()">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5" width="14" height="14">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/>
-                </svg>
-                Press Feed
-            </button>
-        </div>
-
         <!-- Stats counter (far right) -->
         <div class="tb-stats">
             <div class="tb-stats-item">
@@ -1503,48 +1407,7 @@
             });
             document.getElementById('sortPanel').classList.remove('show');
             document.getElementById('sortBtn').classList.remove('open');
-            // Deactivate press feed if user manually changes sort
-            deactivatePressFeed();
             renderGallery();
-        }
-
-        /* ── Press Feed ── */
-        let pressFeedActive = false;
-
-        function activatePressFeed() {
-            pressFeedActive = true;
-            // Sort newest, show all categories
-            currentSort = 'newest';
-            currentFilter = 'all';
-            document.getElementById('sortLabel').textContent = 'Newest';
-            document.querySelectorAll('#sortPanel .tb-option').forEach(o => {
-                o.classList.toggle('active', o.textContent.trim() === 'Newest');
-            });
-            document.querySelectorAll('.tb-tab').forEach(tab => tab.classList.remove('active'));
-            document.querySelectorAll('.tb-tab').forEach(tab => {
-                if (tab.textContent.trim() === 'All') tab.classList.add('active');
-            });
-            syncEventTypeDropdown('all');
-            // Highlight the toolbar button (Mockup A)
-            document.getElementById('pressFeedBtn')?.classList.add('active');
-            renderGallery();
-            // Scroll to gallery
-            document.querySelector('.gallery-section')?.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function togglePressFeed() {
-            if (pressFeedActive) {
-                deactivatePressFeed();
-                // Reset to featured
-                selectSort('featured', 'Featured');
-            } else {
-                activatePressFeed();
-            }
-        }
-
-        function deactivatePressFeed() {
-            pressFeedActive = false;
-            document.getElementById('pressFeedBtn')?.classList.remove('active');
         }
 
         /* ── Helpers ── */
@@ -1580,13 +1443,6 @@
                     <div class="g-title">${p.title}</div>
                     ${p.venue?`<div class="g-venue">${p.venue}</div>`:''}
                     <div class="g-count">${photoIcon} ${p.photo_count||0}</div>
-                </div>
-                <div class="g-info-below">
-                    ${tag ? `<div class="g-tag">${tag}</div>` : ''}
-                    <div class="g-title">${p.title}</div>
-                    ${p.venue?`<div class="g-venue">${p.venue}</div>`:''}
-                    <div class="g-date">${dateStr}</div>
-                    <div class="g-count">${photoIcon} ${p.photo_count||0} photos</div>
                 </div>
             </div>`;
         }
