@@ -634,20 +634,27 @@
             text-shadow: 0 2px 40px rgba(0,0,0,0.5);
         }
 
-        /* Inline search in toolbar */
+        /* Inline search in toolbar — absolute overlay so tags stay centered */
         .tag-strip-inline-search {
             display: flex;
             align-items: center;
-            flex: 1;
-            max-width: 400px;
-            margin: 0 0.5rem;
-            border-bottom: 1px solid rgba(255,255,255,0.15);
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 400px;
+            max-width: 50%;
+            padding-left: 1.5rem;
+            z-index: 10;
+            background: inherit;
+            border-bottom: none;
         }
 
         .tag-strip-inline-input {
             flex: 1;
             background: transparent;
             border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
             font-family: 'PP Neue York', Georgia, serif;
             font-size: 0.85rem;
             font-weight: 300;
