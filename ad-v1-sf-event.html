@@ -111,9 +111,9 @@
            ======================================= */
         .header {
             position: sticky; top: 0;
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: #0a0a0a;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
             z-index: 1000;
             border-bottom: 1px solid rgba(255,255,255,0.08);
             transition: background 0.4s, border-color 0.4s;
@@ -121,7 +121,7 @@
 
         /* ── Scrolled state: white header + tag strip ── */
         body.scrolled .header {
-            background: rgba(255, 255, 255, 0.95);
+            background: #ffffff;
             border-bottom-color: rgba(0,0,0,0.08);
         }
         body.scrolled .logo,
@@ -182,6 +182,23 @@
         }
         body.scrolled .auth-link {
             color: #1a1a1a;
+        }
+        body.scrolled .press-feed-btn {
+            color: rgba(0,0,0,0.6);
+            border-color: rgba(0,0,0,0.3);
+        }
+        body.scrolled .press-feed-btn svg {
+            stroke: rgba(0,0,0,0.6);
+        }
+        body.scrolled .press-feed-btn:hover,
+        body.scrolled .press-feed-btn.active {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #1a1a1a;
+        }
+        body.scrolled .press-feed-btn:hover svg,
+        body.scrolled .press-feed-btn.active svg {
+            stroke: #fff;
         }
 
         .header-inner {
@@ -754,6 +771,74 @@
             display: flex;
             align-items: center;
             flex-shrink: 0;
+        }
+
+        /* Question mark help icon */
+        .tag-strip-help {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem 0.75rem 0;
+        }
+
+        .tag-strip-help-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            border: 1px solid rgba(255,255,255,0.25);
+            background: none;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.7rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.45);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tag-strip-help-btn:hover {
+            color: rgba(255,255,255,0.9);
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .tag-strip-help-tooltip {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            background: #1a1a1a;
+            color: rgba(255,255,255,0.8);
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 0.02em;
+            padding: 0.6rem 0.9rem;
+            border-radius: 6px;
+            white-space: nowrap;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            z-index: 100;
+            pointer-events: none;
+        }
+
+        .tag-strip-help:hover .tag-strip-help-tooltip,
+        .tag-strip-help.show-tooltip .tag-strip-help-tooltip {
+            display: block;
+        }
+
+        body.scrolled .tag-strip-help-btn {
+            color: rgba(0,0,0,0.4);
+            border-color: rgba(0,0,0,0.2);
+        }
+        body.scrolled .tag-strip-help-btn:hover {
+            color: rgba(0,0,0,0.8);
+            border-color: rgba(0,0,0,0.4);
+        }
+        body.scrolled .tag-strip-help-tooltip {
+            background: #fff;
+            color: #1a1a1a;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
         }
 
         .tag-strip-center {
@@ -1423,20 +1508,11 @@
 
     <!-- Tag Strip - Sticky below header -->
     <div class="tag-strip">
-        <!-- Sort dropdown (far left) -->
+        <!-- Help icon (far left) -->
         <div class="tag-strip-left">
-            <div class="tb-dropdown" id="sortDropdownWrap">
-                <button class="tb-btn" id="sortBtn" onclick="toggleDropdown('sort')">
-                    <span id="sortLabel">Sort</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                    </svg>
-                </button>
-                <div class="tb-panel" id="sortPanel">
-                    <button class="tb-option active" onclick="selectSort('featured','Featured')">Featured</button>
-                    <button class="tb-option" onclick="selectSort('newest','Newest')">Newest</button>
-                    <button class="tb-option" onclick="selectSort('oldest','Oldest')">Oldest</button>
-                </div>
+            <div class="tag-strip-help" id="tagStripHelp" onclick="this.classList.toggle('show-tooltip')">
+                <button class="tag-strip-help-btn" aria-label="Help">?</button>
+                <div class="tag-strip-help-tooltip">Search people, brands, or events</div>
             </div>
         </div>
 
