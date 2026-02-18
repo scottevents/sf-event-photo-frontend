@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services - SF Event Photo</title>
+    <meta name="description" content="Professional event photography, video, and production services in San Francisco and Los Angeles. Event coverage, brand activations, corporate events, creative direction, and same-day delivery.">
+    <style>
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalThin.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalThin.woff') format('woff');
+            font-weight: 100;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalLight.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalLight.woff') format('woff');
+            font-weight: 300;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalRegular.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalRegular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+        @font-face {
+            font-family: 'PP Neue York';
+            src: url('/fonts/PPNeueYork-NormalMedium.woff2') format('woff2'),
+                 url('/fonts/PPNeueYork-NormalMedium.woff') format('woff');
+            font-weight: 500;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --black: #1a1a1a;
+            --white: #ffffff;
+            --gray-light: #f8f8f8;
+            --gray-mid: #e8e8e8;
+            --gray-dark: #888888;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'PP Neue York', Georgia, serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ═══════════════════════════════════════
+           HEADER
+           ═══════════════════════════════════════ */
+        .header {
+            position: sticky; top: 0;
+            background: #0a0a0a; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header-inner {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 1.25rem 1.5rem;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .hamburger svg {
+            width: 24px;
+            height: 24px;
+            stroke: #e0e0e0;
+            stroke-width: 1.5;
+        }
+
+        .logo {
+            font-size: 0.9rem; font-weight: 400;
+            letter-spacing: 0.08em; text-decoration: none; color: #e0e0e0;
+        }
+
+        .nav { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav a {
+            text-decoration: none; color: #e0e0e0;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        .nav a:hover { opacity: 0.5; }
+
+        .nav-actions {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .cart-link { position: relative; display: flex; align-items: center; text-decoration: none; }
+        .cart-link svg { width: 24px; height: 24px; stroke-width: 1.5; }
+
+        .cart-badge {
+            position: absolute; top: -6px; right: -10px;
+            background: #e53935; color: white;
+            font-size: 0.65rem; font-weight: 500;
+            min-width: 18px; height: 18px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+        }
+
+        .cart-badge.show { display: flex; }
+
+        .auth-link {
+            text-decoration: none; color: #e0e0e0;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s;
+        }
+
+        .auth-link:hover { opacity: 0.5; }
+
+        /* User Menu */
+        .user-menu { position: relative; }
+
+        .user-menu-btn {
+            background: none; border: none; cursor: pointer;
+            display: flex; align-items: center; gap: 0.4rem;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: #e0e0e0; padding: 0; transition: opacity 0.2s;
+        }
+
+        .user-menu-btn:hover { opacity: 0.5; }
+        .user-menu-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
+
+        .user-dropdown {
+            position: absolute; top: calc(100% + 10px); right: 0;
+            background: var(--white); border: 1px solid var(--gray-mid);
+            min-width: 200px; display: none; z-index: 100;
+        }
+
+        .user-dropdown.show { display: block; }
+
+        .user-dropdown a, .user-dropdown button {
+            display: block; width: 100%; padding: 1rem 1.25rem;
+            text-align: left; font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem; font-weight: 400; letter-spacing: 0.05em;
+            text-transform: uppercase; text-decoration: none;
+            color: var(--black); background: none; border: none;
+            border-bottom: 1px solid var(--gray-mid);
+            cursor: pointer; transition: background 0.2s;
+        }
+
+        .user-dropdown a:hover, .user-dropdown button:hover { background: var(--gray-light); }
+        .user-dropdown .signout-btn { background: var(--black); color: var(--white); border: none; }
+        .user-dropdown .signout-btn:hover { opacity: 0.9; background: var(--black); }
+
+        .user-dropdown .user-email {
+            font-size: 0.7rem; color: rgba(255,255,255,0.7);
+            text-transform: none; letter-spacing: 0; margin-top: 0.25rem;
+        }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            z-index: 2000;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .mobile-menu-close {
+            background: none; border: none; cursor: pointer; padding: 0.25rem;
+        }
+
+        .mobile-menu-close svg {
+            width: 28px; height: 28px; stroke: var(--black); stroke-width: 1.5;
+        }
+
+        .mobile-menu-links {
+            display: flex; flex-direction: column; gap: 0;
+        }
+
+        .mobile-menu-links a {
+            display: block; padding: 1.25rem 0; text-decoration: none;
+            color: var(--black); font-size: 1.25rem; font-weight: 400;
+            letter-spacing: 0.05em; border-bottom: 1px solid var(--gray-mid);
+        }
+
+        .mobile-menu-links a:first-child { border-top: 1px solid var(--gray-mid); }
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+            .nav { gap: 1.5rem; }
+            .nav-actions { gap: 1.25rem; }
+            .auth-link { font-size: 0.75rem; }
+        }
+
+        @media (max-width: 500px) {
+            .header-inner { padding: 1rem 0.75rem; }
+        }
+
+        /* ═══════════════════════════════════════
+           PAGE INTRO
+           ═══════════════════════════════════════ */
+        .page-intro {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+        }
+
+        .page-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 2rem;
+        }
+
+        .page-statement {
+            font-size: clamp(1.5rem, 3vw, 2.25rem);
+            font-weight: 300;
+            line-height: 1.55;
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* ═══════════════════════════════════════
+           ACCORDION
+           ═══════════════════════════════════════ */
+        .accordion-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 2rem 6rem;
+        }
+
+        .accordion-item {
+            border-top: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .accordion-item:last-child {
+            border-bottom: 1px solid rgba(255,255,255,0.12);
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.75rem 0;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .accordion-header:hover {
+            opacity: 0.7;
+        }
+
+        .accordion-title {
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            font-weight: 400;
+            color: var(--white);
+            letter-spacing: -0.01em;
+        }
+
+        .accordion-icon {
+            width: 28px;
+            height: 28px;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .accordion-icon::before,
+        .accordion-icon::after {
+            content: '';
+            position: absolute;
+            background: rgba(255,255,255,0.6);
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-icon::before {
+            top: 50%;
+            left: 4px;
+            right: 4px;
+            height: 1px;
+            transform: translateY(-50%);
+        }
+
+        .accordion-icon::after {
+            left: 50%;
+            top: 4px;
+            bottom: 4px;
+            width: 1px;
+            transform: translateX(-50%);
+        }
+
+        .accordion-item.open .accordion-icon::after {
+            transform: translateX(-50%) rotate(90deg);
+            opacity: 0;
+        }
+
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s ease;
+        }
+
+        .accordion-body-inner {
+            padding: 0 0 2rem;
+        }
+
+        .service-list-item {
+            display: block;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            font-size: 1.05rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.6);
+            transition: color 0.2s, padding-left 0.2s;
+        }
+
+        .service-list-item:hover {
+            color: var(--white);
+            padding-left: 0.75rem;
+        }
+
+        .service-list-item:last-child {
+            border-bottom: none;
+        }
+
+        /* ═══════════════════════════════════════
+           PROCESS SECTION
+           ═══════════════════════════════════════ */
+        .process-section {
+            padding: 6rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .process-inner {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .process-label {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 3rem;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .process-step {
+            position: relative;
+        }
+
+        .process-number {
+            font-size: 2.5rem;
+            font-weight: 100;
+            color: rgba(255,255,255,0.15);
+            line-height: 1;
+            margin-bottom: 1rem;
+        }
+
+        .process-name {
+            font-size: 1rem;
+            font-weight: 400;
+            color: rgba(255,255,255,0.8);
+            margin-bottom: 0.5rem;
+        }
+
+        .process-desc {
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: rgba(255,255,255,0.4);
+            line-height: 1.5;
+        }
+
+        .process-connector {
+            display: none;
+        }
+
+        @media (min-width: 601px) {
+            .process-step:not(:last-child)::after {
+                content: '';
+                position: absolute;
+                top: 1.25rem;
+                right: -1rem;
+                width: calc(2rem);
+                height: 1px;
+                background: rgba(255,255,255,0.1);
+            }
+        }
+
+        /* ═══════════════════════════════════════
+           CTA SECTION
+           ═══════════════════════════════════════ */
+        .cta-section {
+            padding: 6rem 2rem;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .cta-inner {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-heading {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 300;
+            color: rgba(255,255,255,0.9);
+            margin-bottom: 1.5rem;
+            line-height: 1.4;
+        }
+
+        .cta-link {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border: 1px solid rgba(255,255,255,0.25);
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 400;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .cta-link:hover {
+            background: var(--white);
+            color: #0a0a0a;
+        }
+
+        /* ═══════════════════════════════════════
+           FOOTER
+           ═══════════════════════════════════════ */
+        .footer {
+            padding: 4rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .footer-inner {
+            max-width: 900px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+
+        .footer-col h4 {
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 300;
+            margin-bottom: 0.5rem;
+            transition: color 0.2s;
+        }
+
+        .footer-col a:hover { color: var(--white); }
+
+        .footer-bottom {
+            max-width: 900px;
+            margin: 3rem auto 0;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.08);
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /* ═══════════════════════════════════════
+           RESPONSIVE
+           ═══════════════════════════════════════ */
+        @media (max-width: 768px) {
+            .process-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2.5rem;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .page-intro { padding: 4rem 1.5rem 3rem; }
+            .accordion-section { padding: 0 1.5rem 4rem; }
+            .process-section { padding: 4rem 1.5rem; }
+            .cta-section { padding: 4rem 1.5rem; }
+            .footer { padding: 3rem 1.5rem; }
+            .footer-inner { flex-direction: column; }
+            .process-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-inner">
+            <div class="header-left">
+                <button class="hamburger" onclick="openMobileMenu()" aria-label="Open menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+                <a href="/" class="logo">SF EVENT PHOTO</a>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="/about.html">About</a>
+                    <a href="/services.html">Services</a>
+                    <a href="/contact.html">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="/signin.html" class="auth-link" id="signInLink">Sign In</a>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-menu-btn" onclick="toggleUserMenu()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <span id="userName">Account</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="/my-photos.html">My Photos</a>
+                            <button class="signout-btn" onclick="signOut()">
+                                Sign Out
+                                <div class="user-email" id="userEmail"></div>
+                            </button>
+                        </div>
+                    </div>
+                    <a href="#" class="cart-link" onclick="toggleCart(); return false;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge" id="cartCount">0</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Close menu">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="mobile-menu-links">
+            <a href="/">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/services.html">Services</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Page Intro -->
+    <section class="page-intro">
+        <div class="page-label">Services</div>
+        <p class="page-statement">We provide end-to-end photography, video, and production services for brands and agencies who need reliable, high-quality visual content delivered on deadline.</p>
+    </section>
+
+    <!-- Accordion -->
+    <section class="accordion-section">
+        <div class="accordion-item open" data-accordion>
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2 class="accordion-title">Photography</h2>
+                <div class="accordion-icon"></div>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <div class="service-list-item">Event Coverage</div>
+                    <div class="service-list-item">Brand Activations</div>
+                    <div class="service-list-item">Corporate Events</div>
+                    <div class="service-list-item">Conferences</div>
+                    <div class="service-list-item">Product Launches</div>
+                    <div class="service-list-item">Executive Portraits</div>
+                    <div class="service-list-item">Lifestyle & Editorial</div>
+                    <div class="service-list-item">Red Carpet</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item" data-accordion>
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2 class="accordion-title">Video</h2>
+                <div class="accordion-icon"></div>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <div class="service-list-item">Event Recap Videos</div>
+                    <div class="service-list-item">Highlight Reels</div>
+                    <div class="service-list-item">Social Content</div>
+                    <div class="service-list-item">Live Streaming</div>
+                    <div class="service-list-item">Interview Capture</div>
+                    <div class="service-list-item">Behind-the-Scenes</div>
+                    <div class="service-list-item">Drone Coverage</div>
+                    <div class="service-list-item">Same-Day Edits</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item" data-accordion>
+            <div class="accordion-header" onclick="toggleAccordion(this)">
+                <h2 class="accordion-title">Production</h2>
+                <div class="accordion-icon"></div>
+            </div>
+            <div class="accordion-body">
+                <div class="accordion-body-inner">
+                    <div class="service-list-item">Creative Direction</div>
+                    <div class="service-list-item">Shot List Planning</div>
+                    <div class="service-list-item">On-Site Editing</div>
+                    <div class="service-list-item">Same-Day Delivery</div>
+                    <div class="service-list-item">Photo Distribution</div>
+                    <div class="service-list-item">Media Management</div>
+                    <div class="service-list-item">Retouching</div>
+                    <div class="service-list-item">Licensing</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Process -->
+    <section class="process-section">
+        <div class="process-inner">
+            <div class="process-label">Process</div>
+            <div class="process-grid">
+                <div class="process-step">
+                    <div class="process-number">01</div>
+                    <div class="process-name">Brief</div>
+                    <div class="process-desc">Share the details of your event, goals, and creative vision.</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">02</div>
+                    <div class="process-name">Plan</div>
+                    <div class="process-desc">We build a shot list, timeline, and staffing plan tailored to your event.</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">03</div>
+                    <div class="process-name">Capture</div>
+                    <div class="process-desc">Our team arrives early, works discreetly, and captures every key moment.</div>
+                </div>
+                <div class="process-step">
+                    <div class="process-number">04</div>
+                    <div class="process-name">Deliver</div>
+                    <div class="process-desc">Edited, retouched photos delivered to your gallery within 24 hours.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="cta-inner">
+            <h2 class="cta-heading">Have an upcoming event? Let's build something together.</h2>
+            <a href="/contact.html" class="cta-link">Start a Project</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-col">
+                <h4>Email</h4>
+                <a href="mailto:hello@sfeventphoto.com">hello@sfeventphoto.com</a>
+            </div>
+            <div class="footer-col">
+                <h4>Follow</h4>
+                <a href="https://instagram.com/sfeventphoto" target="_blank">Instagram</a>
+                <a href="https://linkedin.com/company/sfeventphoto" target="_blank">LinkedIn</a>
+            </div>
+            <div class="footer-col">
+                <h4>Location</h4>
+                <a href="#">San Francisco</a>
+                <a href="#">Los Angeles</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 SF Event Photo. All Rights Reserved.
+        </div>
+    </footer>
+
+    <script>
+        // ── Accordion ──
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            const body = item.querySelector('.accordion-body');
+            const isOpen = item.classList.contains('open');
+
+            // Close all
+            document.querySelectorAll('.accordion-item').forEach(function(el) {
+                el.classList.remove('open');
+                el.querySelector('.accordion-body').style.maxHeight = null;
+            });
+
+            // Open clicked if it was closed
+            if (!isOpen) {
+                item.classList.add('open');
+                body.style.maxHeight = body.scrollHeight + 'px';
+            }
+        }
+
+        // Initialize first accordion open
+        document.addEventListener('DOMContentLoaded', function() {
+            var firstItem = document.querySelector('.accordion-item.open');
+            if (firstItem) {
+                var body = firstItem.querySelector('.accordion-body');
+                body.style.maxHeight = body.scrollHeight + 'px';
+            }
+        });
+
+        // ── Header Nav Functions ──
+        function openMobileMenu() {
+            document.getElementById('mobileMenu').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+            if (user && token) {
+                document.getElementById('signInLink').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('userName').textContent = user.name || 'Account';
+                document.getElementById('userEmail').textContent = user.email || '';
+            }
+        }
+        function toggleUserMenu() {
+            document.getElementById('userDropdown').classList.toggle('show');
+        }
+        function signOut() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+        function toggleCart() {
+            const overlay = document.getElementById('cartOverlay');
+            const sidebar = document.getElementById('cartSidebar');
+            if (overlay && sidebar) { overlay.classList.toggle('open'); sidebar.classList.toggle('open'); }
+            else { window.location.href = '/cart.html'; }
+        }
+        function updateCartUI() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const badge = document.getElementById('cartCount');
+            if (badge) { badge.textContent = cart.length; badge.classList.toggle('show', cart.length > 0); }
+        }
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        });
+        document.addEventListener('DOMContentLoaded', function() { checkAuth(); updateCartUI(); });
+    </script>
+</body>
+</html>
