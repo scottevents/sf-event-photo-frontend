@@ -391,7 +391,9 @@
            VIDEO HERO - Full Viewport
            ======================================= */
         .video-hero {
-            position: relative;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100vh;
             min-height: 500px;
@@ -399,6 +401,33 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            z-index: 1;
+        }
+
+        .hero-spacer {
+            height: 100vh;
+            min-height: 500px;
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .main-content {
+            position: relative;
+            z-index: 10;
+            background: #0a0a0a;
+        }
+
+        .main-content::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to bottom, transparent, #0a0a0a);
+            pointer-events: none;
+            z-index: 1;
         }
 
         .video-hero-bg {
@@ -431,6 +460,7 @@
             text-align: center;
             max-width: 800px;
             padding: 0 2rem;
+            will-change: opacity, transform;
         }
 
         .video-hero-headline {
@@ -529,6 +559,10 @@
                 height: 70vh;
                 min-height: 400px;
             }
+            .hero-spacer {
+                height: 70vh;
+                min-height: 400px;
+            }
             .video-hero-headline {
                 font-size: 2.5rem;
             }
@@ -543,6 +577,10 @@
 
         @media (max-width: 500px) {
             .video-hero {
+                height: 60vh;
+                min-height: 350px;
+            }
+            .hero-spacer {
                 height: 60vh;
                 min-height: 350px;
             }
@@ -789,6 +827,7 @@
 
         /* Press Feed active state */
         body.press-feed-active .video-hero { display: none; }
+        body.press-feed-active .hero-spacer { display: none; }
         body.press-feed-active .tag-strip-center { display: none; }
         body.press-feed-active .tag-strip-search { display: flex; }
 
@@ -1239,6 +1278,12 @@
         </div>
     </section>
 
+    <!-- Spacer: holds scroll height so fixed video stays visible -->
+    <div class="hero-spacer"></div>
+
+    <!-- Main content: scrolls over the fixed video -->
+    <div class="main-content">
+
     <!-- Tag Strip - Sticky below header -->
     <div class="tag-strip">
         <!-- Sort dropdown (far left) -->
@@ -1333,6 +1378,8 @@
             </div>
         </div>
     </footer>
+
+    </div><!-- /.main-content -->
 
     <!-- Cart Sidebar -->
     <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
@@ -1740,8 +1787,49 @@
             }
         }
 
+        /* ── Fixed Hero Scroll Effects ── */
+        function initHeroScroll() {
+            const heroContent = document.querySelector('.video-hero-content');
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            const heroSpacer = document.querySelector('.hero-spacer');
+
+            if (!heroContent || !heroSpacer) return;
+
+            let ticking = false;
+
+            function updateHeroOnScroll() {
+                const scrollY = window.pageYOffset || window.scrollY;
+                const spacerHeight = heroSpacer.offsetHeight;
+
+                // Fade headline: gone by 60% through the spacer
+                const fadeProgress = Math.min(scrollY / (spacerHeight * 0.6), 1);
+                const opacity = 1 - fadeProgress;
+                const translateY = -scrollY * 0.3;
+                heroContent.style.opacity = opacity;
+                heroContent.style.transform = `translateY(${translateY}px)`;
+
+                // Scroll indicator: fades out faster (gone by 20%)
+                if (scrollIndicator) {
+                    const indicatorFade = Math.min(scrollY / (spacerHeight * 0.2), 1);
+                    scrollIndicator.style.opacity = (1 - indicatorFade) * 0.6;
+                }
+
+                ticking = false;
+            }
+
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    requestAnimationFrame(updateHeroOnScroll);
+                    ticking = true;
+                }
+            }, { passive: true });
+
+            // Run once on load in case page is already scrolled
+            updateHeroOnScroll();
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            checkAuth(); updateCartUI(); loadProjects();
+            checkAuth(); updateCartUI(); loadProjects(); initHeroScroll();
             document.getElementById('heroSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doHeroSearch(); });
             document.getElementById('tbSearchInput').addEventListener('keydown', e => { if (e.key==='Enter') doToolbarSearch(); });
 
