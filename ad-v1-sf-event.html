@@ -639,8 +639,8 @@
             display: flex;
             align-items: center;
             flex: 1;
-            max-width: 300px;
-            margin: 0 0.75rem;
+            max-width: 400px;
+            margin: 0 0.5rem;
             border-bottom: 1px solid rgba(255,255,255,0.15);
         }
 
@@ -2243,6 +2243,14 @@
             }
             setHeaderHeight();
             window.addEventListener('resize', setHeaderHeight);
+
+            // Ensure video plays and loops
+            const vid = document.querySelector('.video-hero-bg');
+            if (vid) {
+                vid.loop = true;
+                vid.muted = true;
+                vid.play().catch(() => {});
+            }
         });
     </script>
 </body>
