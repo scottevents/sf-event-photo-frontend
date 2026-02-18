@@ -110,7 +110,17 @@
             position: sticky; top: 0;
             background: #0a0a0a; z-index: 1000;
             border-bottom: 1px solid rgba(255,255,255,0.1);
+            transition: background 0.3s, border-color 0.3s;
         }
+        body.scrolled .header {
+            background: #fff;
+            border-bottom: 1px solid var(--gray-mid);
+        }
+        body.scrolled .logo { color: #1a1a1a; }
+        body.scrolled .nav a { color: #1a1a1a; }
+        body.scrolled .auth-link { color: #1a1a1a; }
+        body.scrolled .cart-link svg { stroke: #1a1a1a; }
+        body.scrolled .hamburger svg { stroke: #1a1a1a; }
 
         .header-inner {
             display: flex; justify-content: space-between;
@@ -515,25 +525,105 @@
             display: flex;
             align-items: center;
             gap: 0.4rem;
-            color: var(--gray-dark);
+            color: rgba(255,255,255,0.5);
             text-decoration: none;
             font-size: 0.85rem;
             padding: 0.75rem 0;
-            margin-bottom: -1px;
             margin-left: auto;
             white-space: nowrap;
             flex-shrink: 0;
             transition: color 0.2s;
         }
-        
+
         .download-gallery-link:hover {
-            color: var(--black);
+            color: #fff;
         }
-        
+
         .download-gallery-link svg {
             flex-shrink: 0;
         }
-        
+
+        body.scrolled .download-gallery-link { color: var(--gray-dark); }
+        body.scrolled .download-gallery-link:hover { color: var(--black); }
+
+        /* Inline Search in Sets Row */
+        .sets-row-left {
+            display: flex;
+            align-items: center;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sets-search-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.75rem 0.75rem 0.75rem 0;
+            opacity: 0.4;
+            transition: opacity 0.2s;
+        }
+        .sets-search-toggle svg { stroke: #fff; width: 18px; height: 18px; }
+        .sets-search-toggle:hover { opacity: 0.8; }
+        body.scrolled .sets-search-toggle svg { stroke: #1a1a1a; }
+
+        .sets-inline-search {
+            display: flex;
+            align-items: center;
+            max-width: 320px;
+            flex: 1;
+        }
+        .sets-inline-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem;
+            font-weight: 300;
+            color: #d4d4d4;
+            padding: 0.6rem 0;
+            min-width: 0;
+        }
+        .sets-inline-input:focus { outline: none; }
+        .sets-inline-input::placeholder { color: rgba(255,255,255,0.25); }
+
+        body.scrolled .sets-inline-input {
+            color: #1a1a1a;
+            border-color: rgba(0,0,0,0.15);
+        }
+        body.scrolled .sets-inline-input::placeholder { color: rgba(0,0,0,0.35); }
+
+        .sets-inline-close {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            opacity: 0.35;
+            transition: opacity 0.2s;
+        }
+        .sets-inline-close svg { stroke: #fff; width: 16px; height: 16px; }
+        .sets-inline-close:hover { opacity: 0.7; }
+        body.scrolled .sets-inline-close svg { stroke: #1a1a1a; }
+
+        .sets-row-right {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        @media (max-width: 768px) {
+            .sets-row { padding: 0 0.75rem; }
+            .sets-inline-search { max-width: 200px; }
+            .sets-inline-input { font-size: 16px; }
+        }
+
         .project-meta {
             color: var(--gray-dark);
             font-size: 0.95rem;
@@ -1599,13 +1689,24 @@
             margin-top: 1.5rem;
         }
         
-        /* Set Tabs */
+        /* Set Tabs / Toolbar */
         .sets-row {
             display: flex;
-            align-items: flex-end;
+            align-items: center;
             justify-content: space-between;
+            background: #0a0a0a;
+            padding: 0 1.5rem;
+            position: sticky;
+            top: var(--header-h, 56px);
+            z-index: 999;
+            margin-bottom: 0;
+            transition: background 0.3s;
+        }
+
+        /* Scrolled state — white bg, dark text */
+        body.scrolled .sets-row {
+            background: #fff;
             border-bottom: 1px solid var(--gray-mid);
-            margin-bottom: 1.5rem;
         }
         
         .set-tabs {
@@ -1624,32 +1725,39 @@
             font-family: 'PP Neue York', Georgia, serif;
             font-size: 0.9rem;
             font-weight: 400;
-            color: var(--gray-dark);
+            color: rgba(255,255,255,0.5);
             cursor: pointer;
             white-space: nowrap;
             border-bottom: 2px solid transparent;
-            margin-bottom: -1px;
+            margin-bottom: 0;
             transition: color 0.2s, border-color 0.2s;
         }
-        
+
         .set-tab:hover {
-            color: var(--black);
+            color: rgba(255,255,255,0.9);
         }
-        
+
         .set-tab.active {
-            color: var(--black);
-            border-bottom-color: var(--black);
+            color: #fff;
+            border-bottom-color: #fff;
         }
-        
+
         .set-tab-count {
             font-size: 0.75rem;
-            color: var(--gray-dark);
+            color: rgba(255,255,255,0.5);
             margin-left: 0.35rem;
         }
-        
+
         .set-tab.active .set-tab-count {
-            color: var(--black);
+            color: #fff;
         }
+
+        /* Scrolled state — dark text */
+        body.scrolled .set-tab { color: rgba(0,0,0,0.5); }
+        body.scrolled .set-tab:hover { color: var(--black); }
+        body.scrolled .set-tab.active { color: var(--black); border-bottom-color: var(--black); }
+        body.scrolled .set-tab-count { color: rgba(0,0,0,0.5); }
+        body.scrolled .set-tab.active .set-tab-count { color: var(--black); }
         
         @media (max-width: 600px) {
             .set-tab {
@@ -2474,8 +2582,56 @@
             await loadSiteSettings();
             loadProject();
             updateCartUI();
+
+            // Set --header-h for sticky positioning
+            const header = document.querySelector('.header');
+            function setHeaderHeight() {
+                document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+            }
+            setHeaderHeight();
+            window.addEventListener('resize', setHeaderHeight);
+
+            // Scroll detection — toggle body.scrolled when sets-row touches header
+            window.addEventListener('scroll', function() {
+                const setsRow = document.getElementById('setsRow');
+                if (!setsRow) return;
+                const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
+                const setsTop = setsRow.getBoundingClientRect().top;
+                document.body.classList.toggle('scrolled', setsTop <= headerH + 2);
+            }, { passive: true });
         });
-        
+
+        // Search toggle in sets row
+        function toggleSetsSearch() {
+            const wrap = document.getElementById('setsSearchWrap');
+            const btn = document.getElementById('setsSearchToggle');
+            const input = document.getElementById('setsSearchInput');
+            const isOpen = wrap.style.display !== 'none';
+            if (isOpen) {
+                wrap.style.display = 'none';
+                btn.style.visibility = 'visible';
+                btn.style.pointerEvents = '';
+            } else {
+                wrap.style.display = 'flex';
+                btn.style.visibility = 'hidden';
+                btn.style.pointerEvents = 'none';
+                input.focus();
+            }
+        }
+
+        function doSetsSearch() {
+            const q = document.getElementById('setsSearchInput').value.trim();
+            if (q) location.href = '/search.html?q=' + encodeURIComponent(q);
+        }
+
+        // Wire Enter key on search input (after DOM ready)
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const si = document.getElementById('setsSearchInput');
+                if (si) si.addEventListener('keydown', e => { if (e.key === 'Enter') doSetsSearch(); });
+            }, 500);
+        });
+
         function getProjectSets(project) {
             if (!project.photos || project.photos.length === 0) return [];
             
@@ -2765,14 +2921,31 @@
                     </div>
                 </div>
                 
-                <div class="sets-row">
-                    ${renderSetTabs()}
-                    <a href="#" class="download-gallery-link" onclick="downloadAllPhotos(); return false;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
-                        </svg>
-                        Download Gallery
-                    </a>
+                <div class="sets-row" id="setsRow">
+                    <div class="sets-row-left">
+                        <button class="sets-search-toggle" id="setsSearchToggle" onclick="toggleSetsSearch()" aria-label="Search">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                        </button>
+                        <div class="sets-inline-search" id="setsSearchWrap" style="display:none;">
+                            <input type="text" class="sets-inline-input" id="setsSearchInput" placeholder="Search photos...">
+                            <button class="sets-inline-close" onclick="toggleSetsSearch()">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                                </svg>
+                            </button>
+                        </div>
+                        ${renderSetTabs()}
+                    </div>
+                    <div class="sets-row-right">
+                        <a href="#" class="download-gallery-link" onclick="downloadAllPhotos(); return false;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                            Download Gallery
+                        </a>
+                    </div>
                 </div>
                 
                 ${project.photos && project.photos.length > 0 ? `
