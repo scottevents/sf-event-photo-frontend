@@ -405,7 +405,7 @@
         }
 
         .hero-spacer {
-            height: 200vh;
+            height: 100vh;
             position: relative;
             z-index: 2;
             pointer-events: none;
@@ -467,7 +467,7 @@
             will-change: opacity, transform;
         }
 
-        /* Slogan: light, uppercase, wide-spaced tagline above headline */
+        /* Slogan: shows first — light, uppercase, Matte-style tagline */
         .video-hero-slogan {
             font-family: 'PP Neue York', Georgia, serif;
             font-size: clamp(1rem, 1.6vw, 1.25rem);
@@ -476,12 +476,11 @@
             text-transform: uppercase;
             letter-spacing: 0.18em;
             line-height: 1.6;
-            margin-bottom: 1.5rem;
             white-space: nowrap;
             text-shadow: 0 1px 20px rgba(0,0,0,0.3);
         }
 
-        /* Headline: big, bold, editorial italic serif */
+        /* Headline: fades in on scroll, stays until content covers it */
         .video-hero-headline {
             font-family: 'PP Neue York', Georgia, serif;
             font-size: clamp(3.5rem, 8vw, 7rem);
@@ -490,6 +489,12 @@
             color: #fff;
             letter-spacing: -0.03em;
             line-height: 1;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            opacity: 0;
             text-shadow: 0 2px 40px rgba(0,0,0,0.5);
         }
 
@@ -642,7 +647,7 @@
                 min-height: 400px;
             }
             .hero-spacer {
-                height: 140vh;
+                height: 70vh;
             }
             .tag-strip-search-icon { margin-left: 0.25rem; }
             .tag-strip-inline-search { max-width: 200px; }
@@ -654,7 +659,7 @@
                 min-height: 350px;
             }
             .hero-spacer {
-                height: 120vh;
+                height: 60vh;
             }
             .scroll-indicator {
                 bottom: 1.5rem;
@@ -1879,43 +1884,44 @@
             function updateHeroOnScroll() {
                 const scrollY = window.pageYOffset || window.scrollY;
                 const spacerHeight = heroSpacer.offsetHeight;
-                // All text animation happens in the first half of spacer (≈ 1 viewport)
-                const animZone = spacerHeight * 0.5;
 
-                // Slogan: fades out over first 40% of animZone, drifts up gently
+                // Crossfade happens over the spacer scroll distance
+                const progress = Math.min(scrollY / spacerHeight, 1);
+
+                // Slogan: fades out 0–50%
                 if (slogan) {
-                    const sloganFade = Math.min(scrollY / (animZone * 0.4), 1);
-                    slogan.style.opacity = 1 - sloganFade;
-                    slogan.style.transform = `translateY(${-scrollY * 0.1}px)`;
+                    const sloganP = Math.min(progress / 0.5, 1);
+                    slogan.style.opacity = 1 - sloganP;
+                    slogan.style.transform = `translateY(${-sloganP * 30}px)`;
                 }
 
-                // Headline: stays full opacity until 50%, then fades out 50–85%
+                // Headline: fades in 30–70%, then stays at full opacity forever
+                // — it disappears naturally as .main-content scrolls over it
                 if (headline) {
-                    const hlOutStart = animZone * 0.50;
-                    const hlOutEnd = animZone * 0.85;
+                    const hlStart = 0.3;
+                    const hlEnd = 0.7;
+                    let hlOpacity = 0;
+                    let hlY = 25;
 
-                    let hlOpacity = 1;
-                    let hlY = 0;
-
-                    if (scrollY < hlOutStart) {
-                        hlOpacity = 1;
-                        hlY = -scrollY * 0.08;
-                    } else if (scrollY < hlOutEnd) {
-                        const p = (scrollY - hlOutStart) / (hlOutEnd - hlOutStart);
-                        hlOpacity = 1 - p;
-                        hlY = -scrollY * 0.08 - (20 * p);
-                    } else {
+                    if (progress < hlStart) {
                         hlOpacity = 0;
-                        hlY = -scrollY * 0.08 - 20;
+                        hlY = 25;
+                    } else if (progress < hlEnd) {
+                        const p = (progress - hlStart) / (hlEnd - hlStart);
+                        hlOpacity = p;
+                        hlY = 25 * (1 - p);
+                    } else {
+                        hlOpacity = 1;
+                        hlY = 0;
                     }
 
                     headline.style.opacity = hlOpacity;
-                    headline.style.transform = `translateY(${hlY}px)`;
+                    headline.style.transform = `translate(-50%, calc(-50% + ${hlY}px))`;
                 }
 
-                // Scroll indicator: gone by 10% of animZone
+                // Scroll indicator: gone quickly
                 if (scrollIndicator) {
-                    const indicatorFade = Math.min(scrollY / (animZone * 0.1), 1);
+                    const indicatorFade = Math.min(progress / 0.15, 1);
                     scrollIndicator.style.opacity = (1 - indicatorFade) * 0.6;
                 }
 
