@@ -995,20 +995,23 @@
         .tb-search-input::placeholder { color: rgba(255,255,255,0.35); }
 
         .tb-search-btn {
-            padding: 0.6rem 1.25rem;
-            background: #fff;
-            color: #0a0a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.6rem 0.75rem;
+            background: none;
             border: none;
-            font-family: 'PP Neue York', Georgia, serif;
-            font-size: 0.75rem;
-            font-weight: 400;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
             cursor: pointer;
-            white-space: nowrap;
         }
 
-        .tb-search-btn:hover { opacity: 0.8; }
+        .tb-search-btn svg {
+            width: 18px;
+            height: 18px;
+            stroke: #fff;
+            stroke-width: 2;
+        }
+
+        .tb-search-btn:hover svg { opacity: 0.6; }
 
         /* Press Feed active state */
         body.press-feed-active .hero-section { display: none; }
@@ -1026,7 +1029,8 @@
             }
             .tb-search-container { max-width: 100%; }
             .tb-search-input { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
-            .tb-search-btn { padding: 0.5rem 0.75rem; font-size: 0.7rem; }
+            .tb-search-btn { padding: 0.5rem 0.6rem; }
+            .tb-search-btn svg { width: 16px; height: 16px; }
         }
 
         /* ═══════════════════════════════════════
@@ -1288,7 +1292,9 @@
         <div class="tb-search">
             <div class="tb-search-container">
                 <input type="text" class="tb-search-input" id="tbSearchInput" placeholder="Search people, brands, or events">
-                <button class="tb-search-btn" onclick="doToolbarSearch()">Search</button>
+                <button class="tb-search-btn" onclick="doToolbarSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="11" cy="11" r="8"/><path stroke-linecap="round" d="m21 21-4.35-4.35"/></svg>
+                </button>
             </div>
         </div>
 
