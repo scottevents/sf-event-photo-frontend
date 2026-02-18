@@ -37,7 +37,7 @@
             --black: #1a1a1a;
             --white: #ffffff;
             --gray-light: #f8f8f8;
-            --gray-mid: #e0e0e0;
+            --gray-mid: #e8e8e8;
             --gray-dark: #888888;
             --error: #e53935;
         }
@@ -57,94 +57,193 @@
             min-height: 100vh;
         }
         
-        /* Header */
+        /* ═══════════════════════════════════════
+           HEADER
+           ═══════════════════════════════════════ */
         .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--white);
-            border-bottom: 1px solid var(--gray-mid);
-            z-index: 1000;
-            padding: 1.25rem 2rem;
+            position: sticky; top: 0;
+            background: #0a0a0a; z-index: 1000;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
-        
-        .header-content {
-            max-width: 1600px;
-            margin: 0 auto;
+
+        .header-inner {
+            display: flex; justify-content: space-between;
+            align-items: center; padding: 1.25rem 1.5rem;
+        }
+
+        .header-left {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 1rem;
         }
-        
+
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem;
+        }
+
+        .hamburger svg {
+            width: 24px;
+            height: 24px;
+            stroke: #e0e0e0;
+            stroke-width: 1.5;
+        }
+
         .logo {
-            font-size: 1.5rem;
-            font-weight: 300;
-            letter-spacing: 0.02em;
-            text-transform: uppercase;
-            text-decoration: none;
-            color: var(--black);
+            font-size: 0.9rem; font-weight: 400;
+            letter-spacing: 0.08em; text-decoration: none; color: #e0e0e0;
         }
-        
-        .nav {
+
+        .nav { display: flex; gap: 2.5rem; align-items: center; }
+
+        .nav-links {
             display: flex;
             gap: 2.5rem;
             align-items: center;
         }
-        
+
         .nav a {
-            text-decoration: none;
-            color: var(--black);
-            font-weight: 400;
-            font-size: 0.85rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
+            text-decoration: none; color: #e0e0e0;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase;
             transition: opacity 0.2s;
         }
-        
-        .nav a:hover {
-            opacity: 0.5;
-        }
-        
-        .cart-btn {
-            position: relative;
+
+        .nav a:hover { opacity: 0.5; }
+
+        .nav-actions {
             display: flex;
+            gap: 2rem;
             align-items: center;
+        }
+
+        .cart-link { position: relative; display: flex; align-items: center; text-decoration: none; }
+        .cart-link svg { width: 24px; height: 24px; stroke-width: 1.5; }
+
+        .cart-badge {
+            position: absolute; top: -6px; right: -10px;
+            background: #e53935; color: white;
+            font-size: 0.65rem; font-weight: 500;
+            min-width: 18px; height: 18px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+        }
+
+        .cart-badge.show { display: flex; }
+
+        .auth-link {
+            text-decoration: none; color: #e0e0e0;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase; transition: opacity 0.2s;
+        }
+
+        .auth-link:hover { opacity: 0.5; }
+
+        /* Mobile menu overlay */
+        .mobile-menu {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--white);
+            z-index: 2000;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .mobile-menu.open { display: flex; }
+
+        .mobile-menu-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .mobile-menu-close {
+            background: none; border: none;
+            cursor: pointer; padding: 0.25rem;
+        }
+
+        .mobile-menu-close svg {
+            width: 28px; height: 28px;
+            stroke: var(--black); stroke-width: 1.5;
+        }
+
+        .mobile-menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+        }
+
+        .mobile-menu-links a {
+            display: block;
+            padding: 1.25rem 0;
             text-decoration: none;
             color: var(--black);
-            background: none;
-            border: none;
+            font-size: 1.25rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid var(--gray-mid);
         }
-        
-        .cart-btn:hover {
-            opacity: 0.5;
+
+        .mobile-menu-links a:first-child {
+            border-top: 1px solid var(--gray-mid);
         }
-        
-        .cart-btn svg {
-            width: 24px;
-            height: 24px;
-            stroke-width: 1.5;
+
+        @media (max-width: 768px) {
+            .hamburger { display: block; }
+            .nav-links { display: none; }
+            .nav { gap: 1.5rem; }
+            .nav-actions { gap: 1.25rem; }
+            .auth-link { font-size: 0.75rem; }
         }
-        
-        .cart-count {
-            position: absolute;
-            top: -6px;
-            right: -10px;
-            background: #e53935;
-            color: white;
-            border-radius: 50%;
-            font-size: 0.65rem;
-            font-weight: 500;
-            min-width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        /* User Menu */
+        .user-menu { position: relative; }
+
+        .user-menu-btn {
+            background: none; border: none; cursor: pointer;
+            display: flex; align-items: center; gap: 0.4rem;
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem; font-weight: 400;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: #e0e0e0; padding: 0; transition: opacity 0.2s;
+        }
+
+        .user-menu-btn:hover { opacity: 0.5; }
+        .user-menu-btn svg { width: 20px; height: 20px; stroke-width: 1.5; }
+
+        .user-dropdown {
+            position: absolute; top: calc(100% + 10px); right: 0;
+            background: var(--white); border: 1px solid var(--gray-mid);
+            min-width: 200px; display: none; z-index: 100;
+        }
+
+        .user-dropdown.show { display: block; }
+
+        .user-dropdown a, .user-dropdown button {
+            display: block; width: 100%; padding: 1rem 1.25rem;
+            text-align: left; font-family: 'PP Neue York', Georgia, serif;
+            font-size: 0.85rem; font-weight: 400; letter-spacing: 0.05em;
+            text-transform: uppercase; text-decoration: none;
+            color: var(--black); background: none; border: none;
+            border-bottom: 1px solid var(--gray-mid);
+            cursor: pointer; transition: background 0.2s;
+        }
+
+        .user-dropdown a:hover, .user-dropdown button:hover { background: var(--gray-light); }
+        .user-dropdown .signout-btn { background: var(--black); color: var(--white); border: none; }
+        .user-dropdown .signout-btn:hover { opacity: 0.9; background: var(--black); }
+
+        .user-dropdown .user-email {
+            font-size: 0.7rem; color: rgba(255,255,255,0.7);
+            text-transform: none; letter-spacing: 0; margin-top: 0.25rem;
         }
         
         /* Main Content */
         .main {
-            margin-top: 75px;
             min-height: calc(100vh - 75px);
             display: flex;
             align-items: center;
@@ -319,11 +418,6 @@
         }
         
         @media (max-width: 600px) {
-            .header { padding: 1rem; }
-            .logo { font-size: 1.2rem; }
-            .nav { gap: 1rem; }
-            .nav a { font-size: 0.75rem; }
-            
             .main { padding: 2rem 1.5rem; }
             .auth-title { font-size: 2rem; margin-bottom: 2rem; }
             .auth-actions { flex-direction: column; align-items: stretch; }
@@ -333,21 +427,69 @@
     </style>
 </head>
 <body>
+    <!-- ── Header ── -->
     <header class="header">
-        <div class="header-content">
-            <a href="/" class="logo">SF EVENT PHOTO</a>
-            <nav class="nav">
-                <a href="/">Projects</a>
-                <a href="/signin.html">Sign In</a>
-                <a href="/cart.html" class="cart-btn">
+        <div class="header-inner">
+            <div class="header-left">
+                <button class="hamburger" onclick="openMobileMenu()" aria-label="Open menu">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
-                    <span class="cart-count" id="cartCount">0</span>
-                </a>
+                </button>
+                <a href="/" class="logo">SF EVENT PHOTO</a>
+            </div>
+            <nav class="nav">
+                <div class="nav-links">
+                    <a href="/about.html">About</a>
+                    <a href="/services.html">Services</a>
+                    <a href="/contact.html">Contact</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="/signin.html" class="auth-link" id="signInLink">Sign In</a>
+                    <div class="user-menu" id="userMenu" style="display: none;">
+                        <button class="user-menu-btn" onclick="toggleUserMenu()">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <span id="userName">Account</span>
+                        </button>
+                        <div class="user-dropdown" id="userDropdown">
+                            <a href="/my-photos.html">My Photos</a>
+                            <button class="signout-btn" onclick="signOut()">
+                                Sign Out
+                                <div class="user-email" id="userEmail"></div>
+                            </button>
+                        </div>
+                    </div>
+                    <a href="#" class="cart-link" onclick="toggleCart(); return false;">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                        </svg>
+                        <span class="cart-badge" id="cartCount">0</span>
+                    </a>
+                </div>
             </nav>
         </div>
     </header>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <a href="/" class="logo">SF EVENT PHOTO</a>
+            <button class="mobile-menu-close" onclick="closeMobileMenu()" aria-label="Close menu">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <nav class="mobile-menu-links">
+            <a href="/">Home</a>
+            <a href="/about.html">About</a>
+            <a href="/services.html">Services</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </div>
 
     <main class="main">
         <div class="auth-container">
@@ -443,20 +585,70 @@
 
     <script>
         const API_URL = 'https://sf-event-photo-backend.vercel.app';
-        
+
+        // ── Header Nav Functions ──
+        function openMobileMenu() {
+            document.getElementById('mobileMenu').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileMenu').classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        function checkAuth() {
+            const user = JSON.parse(localStorage.getItem('user'));
+            const token = localStorage.getItem('token');
+            if (user && token) {
+                document.getElementById('signInLink').style.display = 'none';
+                document.getElementById('userMenu').style.display = 'block';
+                document.getElementById('userName').textContent = user.name || 'Account';
+                document.getElementById('userEmail').textContent = user.email || '';
+            }
+        }
+
+        function toggleUserMenu() {
+            const dropdown = document.getElementById('userDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        function signOut() {
+            localStorage.removeItem('user');
+            localStorage.removeItem('token');
+            window.location.href = '/';
+        }
+
+        function toggleCart() {
+            window.location.href = '/cart.html';
+        }
+
+        function updateCartUI() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const badge = document.getElementById('cartCount');
+            if (badge) {
+                badge.textContent = cart.length;
+                badge.classList.toggle('show', cart.length > 0);
+            }
+        }
+
+        // Close user dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.user-menu')) {
+                const dropdown = document.getElementById('userDropdown');
+                if (dropdown) dropdown.classList.remove('show');
+            }
+        });
+
         // Check if already logged in
         document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            updateCartUI();
             const user = localStorage.getItem('user');
             if (user) {
                 window.location.href = '/';
             }
-            updateCartCount();
         });
-        
-        function updateCartCount() {
-            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-            document.getElementById('cartCount').textContent = cart.length;
-        }
         
         async function handleSignUp(e) {
             e.preventDefault();
