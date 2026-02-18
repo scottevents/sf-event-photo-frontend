@@ -1050,22 +1050,22 @@
             stroke: var(--black);
         }
 
-        /* Prevent :hover from sticking on touch devices */
+        /* Prevent :hover from sticking on touch devices (but keep .active style) */
         @media (hover: none) {
-            .press-feed-btn:hover {
+            .press-feed-btn:hover:not(.active) {
                 background: none;
                 color: rgba(255,255,255,0.7);
                 border-color: rgba(255,255,255,0.4);
             }
-            .press-feed-btn:hover svg {
+            .press-feed-btn:hover:not(.active) svg {
                 stroke: rgba(255,255,255,0.7);
             }
-            body.scrolled .press-feed-btn:hover {
+            body.scrolled .press-feed-btn:hover:not(.active) {
                 background: none;
                 color: rgba(0,0,0,0.6);
                 border-color: rgba(0,0,0,0.3);
             }
-            body.scrolled .press-feed-btn:hover svg {
+            body.scrolled .press-feed-btn:hover:not(.active) svg {
                 stroke: rgba(0,0,0,0.6);
             }
         }
@@ -2144,7 +2144,7 @@
             if (isMobile) {
                 if (slogan) slogan.style.opacity = '1';
                 headline.style.opacity = '0';
-                if (scrollIndicator) scrollIndicator.style.opacity = '0';
+                /* Keep scroll indicator visible on mobile */
                 // Still need the scrolled-class listener
                 window.addEventListener('scroll', function() {
                     const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
