@@ -471,10 +471,12 @@
         }
 
         .hero-spacer {
-            height: 100vh;
-            position: relative;
-            z-index: 2;
-            pointer-events: none;
+            display: none;
+        }
+
+        /* Lock scroll during crossfade */
+        body.hero-locked {
+            overflow: hidden;
         }
 
         .main-content {
@@ -706,9 +708,6 @@
                 height: 70vh;
                 min-height: 400px;
             }
-            .hero-spacer {
-                height: 70vh;
-            }
             .tag-strip-search-icon { margin-left: 0.25rem; }
             .tag-strip-inline-search { max-width: 200px; }
         }
@@ -717,9 +716,6 @@
             .video-hero {
                 height: 60vh;
                 min-height: 350px;
-            }
-            .hero-spacer {
-                height: 60vh;
             }
             .scroll-indicator {
                 bottom: 1.5rem;
@@ -1930,70 +1926,110 @@
             }
         }
 
-        /* ── Fixed Hero Scroll Effects — Two-stage crossfade ── */
+        /* ── Hero Crossfade: wheel-driven, then normal scroll ── */
         function initHeroScroll() {
             const headline = document.getElementById('heroHeadline');
             const slogan = document.getElementById('heroSlogan');
             const scrollIndicator = document.querySelector('.scroll-indicator');
-            const heroSpacer = document.querySelector('.hero-spacer');
 
-            if (!headline || !heroSpacer) return;
+            if (!headline) return;
 
-            let ticking = false;
+            let crossfadeProgress = 0;   // 0 → 1 drives the text swap
+            let crossfadeDone = false;
+            const WHEEL_SENSITIVITY = 0.003; // how fast wheel drives the crossfade
 
-            function updateHeroOnScroll() {
-                const scrollY = window.pageYOffset || window.scrollY;
-                const spacerHeight = heroSpacer.offsetHeight;
+            // Lock page scroll at start
+            document.body.classList.add('hero-locked');
+            window.scrollTo(0, 0);
 
-                // Crossfade happens over the spacer scroll distance
-                const progress = Math.min(scrollY / spacerHeight, 1);
+            function renderCrossfade() {
+                const p = crossfadeProgress;
 
-                // Slogan: fades out 0–50%, drifts up slightly
+                // Slogan: fades out 0–50%
                 if (slogan) {
-                    const sloganP = Math.min(progress / 0.5, 1);
+                    const sloganP = Math.min(p / 0.5, 1);
                     slogan.style.opacity = 1 - sloganP;
                     slogan.style.transform = `translate(-50%, calc(-50% + ${-sloganP * 30}px))`;
                 }
 
-                // Headline: fades in 30–70%, then stays at dead center forever
-                // — disappears naturally as .main-content scrolls over it
-                if (headline) {
-                    const hlStart = 0.3;
-                    const hlEnd = 0.7;
-                    let hlOpacity = 0;
-
-                    if (progress < hlStart) {
-                        hlOpacity = 0;
-                    } else if (progress < hlEnd) {
-                        hlOpacity = (progress - hlStart) / (hlEnd - hlStart);
-                    } else {
-                        hlOpacity = 1;
-                    }
-
-                    headline.style.opacity = hlOpacity;
+                // Headline: fades in 30–80%
+                const hlStart = 0.3;
+                const hlEnd = 0.8;
+                let hlOpacity = 0;
+                if (p < hlStart) {
+                    hlOpacity = 0;
+                } else if (p < hlEnd) {
+                    hlOpacity = (p - hlStart) / (hlEnd - hlStart);
+                } else {
+                    hlOpacity = 1;
                 }
+                headline.style.opacity = hlOpacity;
 
-                // Scroll indicator: gone quickly
+                // Scroll indicator
                 if (scrollIndicator) {
-                    const indicatorFade = Math.min(progress / 0.15, 1);
-                    scrollIndicator.style.opacity = (1 - indicatorFade) * 0.6;
+                    const indicatorP = Math.min(p / 0.2, 1);
+                    scrollIndicator.style.opacity = (1 - indicatorP) * 0.6;
                 }
-
-                // Switch header + tags to white when content reaches the top
-                const scrolledThreshold = spacerHeight * 0.85;
-                document.body.classList.toggle('scrolled', scrollY > scrolledThreshold);
-
-                ticking = false;
             }
 
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    requestAnimationFrame(updateHeroOnScroll);
-                    ticking = true;
+            function onWheel(e) {
+                if (crossfadeDone) return;
+
+                // Only capture forward scrolls (deltaY > 0)
+                if (e.deltaY > 0) {
+                    e.preventDefault();
+                    crossfadeProgress = Math.min(crossfadeProgress + e.deltaY * WHEEL_SENSITIVITY, 1);
+                    renderCrossfade();
+
+                    if (crossfadeProgress >= 1) {
+                        crossfadeDone = true;
+                        document.body.classList.remove('hero-locked');
+                        window.removeEventListener('wheel', onWheel);
+                    }
+                } else if (e.deltaY < 0 && crossfadeProgress > 0) {
+                    // Allow scrolling back up to reverse the crossfade
+                    e.preventDefault();
+                    crossfadeProgress = Math.max(crossfadeProgress + e.deltaY * WHEEL_SENSITIVITY, 0);
+                    renderCrossfade();
                 }
+            }
+
+            window.addEventListener('wheel', onWheel, { passive: false });
+
+            // Touch support for mobile
+            let touchStartY = 0;
+            function onTouchStart(e) {
+                if (crossfadeDone) return;
+                touchStartY = e.touches[0].clientY;
+            }
+            function onTouchMove(e) {
+                if (crossfadeDone) return;
+                const deltaY = touchStartY - e.touches[0].clientY;
+                if (deltaY > 0 || crossfadeProgress > 0) {
+                    e.preventDefault();
+                    crossfadeProgress = Math.min(Math.max(crossfadeProgress + deltaY * 0.005, 0), 1);
+                    touchStartY = e.touches[0].clientY;
+                    renderCrossfade();
+
+                    if (crossfadeProgress >= 1) {
+                        crossfadeDone = true;
+                        document.body.classList.remove('hero-locked');
+                        window.removeEventListener('touchstart', onTouchStart);
+                        window.removeEventListener('touchmove', onTouchMove);
+                    }
+                }
+            }
+            window.addEventListener('touchstart', onTouchStart, { passive: false });
+            window.addEventListener('touchmove', onTouchMove, { passive: false });
+
+            // After crossfade done, toggle scrolled class on normal scroll
+            window.addEventListener('scroll', function() {
+                if (!crossfadeDone) return;
+                const scrollY = window.pageYOffset || window.scrollY;
+                document.body.classList.toggle('scrolled', scrollY > 50);
             }, { passive: true });
 
-            updateHeroOnScroll();
+            renderCrossfade();
         }
 
         /* ── Inline Search Toggle ── */
