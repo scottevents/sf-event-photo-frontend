@@ -1861,6 +1861,86 @@
         }
 
         /* ═══════════════════════════════════════
+           HOME STYLE: AGENCY GRID
+           Dark theme (inherits from home-agency class) + forced uniform grid
+           ═══════════════════════════════════════ */
+
+        /* Force uniform 4-col grid regardless of active View mode */
+        body.home-agency-grid .unified-grid {
+            display: grid !important;
+            grid-template-columns: repeat(4, 1fr) !important;
+            flex-wrap: nowrap !important;
+            flex-direction: unset !important;
+            gap: var(--gap) !important;
+        }
+
+        /* All cards: uniform block, no flex row, no spanning */
+        body.home-agency-grid .g-project {
+            display: block !important;
+            flex-direction: unset !important;
+            grid-column: auto !important;
+            grid-row: auto !important;
+            width: auto !important;
+            min-width: 0 !important;
+            height: auto !important;
+            min-height: 0 !important;
+            flex-basis: unset !important;
+            flex-grow: unset !important;
+            padding: 0 !important;
+            border-bottom: none !important;
+            align-self: auto !important;
+            margin: 0 !important;
+            background: #222 !important;
+            overflow: hidden;
+        }
+
+        /* All images: uniform 4:3 aspect ratio, crop to fill */
+        body.home-agency-grid .g-project img {
+            width: 100% !important;
+            min-width: 0 !important;
+            height: auto !important;
+            aspect-ratio: 4 / 3 !important;
+            object-fit: cover !important;
+        }
+
+        /* Always show overlay, hide info-below */
+        body.home-agency-grid .g-overlay {
+            display: block !important;
+            position: absolute !important;
+            opacity: 1 !important;
+        }
+
+        body.home-agency-grid .g-info-below {
+            display: none !important;
+        }
+
+        /* Review slideshow: match card proportions */
+        body.home-agency-grid .g-review-slideshow {
+            grid-column: auto !important;
+            grid-row: auto !important;
+            aspect-ratio: 4 / 3;
+            min-height: auto !important;
+            height: auto !important;
+        }
+
+        /* Responsive columns */
+        @media (min-width: 1600px) {
+            body.home-agency-grid .unified-grid {
+                grid-template-columns: repeat(5, 1fr) !important;
+            }
+        }
+        @media (max-width: 1100px) {
+            body.home-agency-grid .unified-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+            }
+        }
+        @media (max-width: 750px) {
+            body.home-agency-grid .unified-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+        }
+
+        /* ═══════════════════════════════════════
            HOME STYLE: MINIMAL
            Ultra-clean, stripped back, lots of white space
            ═══════════════════════════════════════ */
@@ -2301,6 +2381,10 @@
                                 <span>Agency</span>
                                 <span class="view-check" id="desktopHomeAgency"></span>
                             </button>
+                            <button class="view-dropdown-option" onclick="setHomeStyle('agency-grid'); toggleHomeDropdown();">
+                                <span>Agency Grid</span>
+                                <span class="view-check" id="desktopHomeAgencyGrid"></span>
+                            </button>
                             <button class="view-dropdown-option" onclick="setHomeStyle('minimal'); toggleHomeDropdown();">
                                 <span>Minimal</span>
                                 <span class="view-check" id="desktopHomeMinimal"></span>
@@ -2460,6 +2544,10 @@
                 <button class="mobile-view-option" onclick="setHomeStyle('agency'); closeMobileMenu();">
                     <span>Agency</span>
                     <span class="view-check" id="mobileHomeAgency"></span>
+                </button>
+                <button class="mobile-view-option" onclick="setHomeStyle('agency-grid'); closeMobileMenu();">
+                    <span>Agency Grid</span>
+                    <span class="view-check" id="mobileHomeAgencyGrid"></span>
                 </button>
                 <button class="mobile-view-option" onclick="setHomeStyle('minimal'); closeMobileMenu();">
                     <span>Minimal</span>
@@ -3038,21 +3126,33 @@
 
         /* ── Home Styles ── */
         let currentHome = localStorage.getItem('homeStyle') || 'default';
-        const homeStyles = ['default', 'agency', 'minimal', 'bold'];
+        const homeStyles = ['default', 'agency', 'agency-grid', 'minimal', 'bold'];
+
+        // Convert style name to ID suffix: 'agency-grid' → 'AgencyGrid'
+        function homeStyleToId(s) {
+            return s.split('-').map(part => part.charAt(0).toUpperCase() + part.slice(1)).join('');
+        }
 
         function setHomeStyle(style) {
             currentHome = style;
             localStorage.setItem('homeStyle', style);
 
+            // Remove all home classes
             homeStyles.forEach(s => document.body.classList.remove(`home-${s}`));
             if (style !== 'default') {
                 document.body.classList.add(`home-${style}`);
+                // Agency Grid also needs the base agency dark theme
+                if (style === 'agency-grid') {
+                    document.body.classList.add('home-agency');
+                }
             }
 
+            // Update checkmarks
             homeStyles.forEach(s => {
-                const desktop = document.getElementById(`desktopHome${s.charAt(0).toUpperCase() + s.slice(1)}`);
+                const idSuffix = homeStyleToId(s);
+                const desktop = document.getElementById(`desktopHome${idSuffix}`);
                 if (desktop) desktop.textContent = s === style ? '✓' : '';
-                const mobile = document.getElementById(`mobileHome${s.charAt(0).toUpperCase() + s.slice(1)}`);
+                const mobile = document.getElementById(`mobileHome${idSuffix}`);
                 if (mobile) mobile.textContent = s === style ? '✓' : '';
             });
         }
