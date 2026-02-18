@@ -777,6 +777,8 @@
                 padding: 0 1.5rem;
             }
             .tag-strip-inline-search { max-width: 200px; }
+            .tag-strip-inline-input { font-size: 16px; }
+            .tag-strip-search-input { font-size: 16px; }
         }
 
         @media (max-width: 500px) {
@@ -1114,10 +1116,10 @@
                 font-size: 0.65rem;
             }
             body.press-feed-active .tag-strip {
-                overflow: hidden;
+                overflow: visible;
             }
             body.press-feed-active .tag-strip-left {
-                flex-shrink: 0;
+                flex: 0 0 auto;
             }
             body.press-feed-active .tag-strip-search {
                 display: none;
@@ -2036,15 +2038,17 @@
             }
             filtered = sortProjects(filtered);
 
-            /* Preserve scroll position & scrolled-mode colors across innerHTML swap */
+            /* Preserve scroll position & scrolled-mode colors across innerHTML swap.
+               minHeight persists until the NEXT renderGallery() call clears it,
+               preventing the grid from collapsing while lazy images load. */
             const wasScrolled = document.body.classList.contains('scrolled');
+            grid.style.minHeight = '';
             const prevHeight = grid.offsetHeight;
             grid.style.minHeight = prevHeight + 'px';
 
             if (!filtered.length) {
                 grid.innerHTML = '<div class="empty-state"><p>No projects found.</p></div>';
                 if (wasScrolled) document.body.classList.add('scrolled');
-                requestAnimationFrame(() => { grid.style.minHeight = ''; });
                 return;
             }
 
@@ -2060,7 +2064,6 @@
             while (pi < filtered.length) html += tile(filtered[pi++]);
             grid.innerHTML = html;
             if (wasScrolled) document.body.classList.add('scrolled');
-            requestAnimationFrame(() => { grid.style.minHeight = ''; });
             startReviewSlideshow();
         }
 
