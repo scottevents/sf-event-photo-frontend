@@ -457,7 +457,7 @@
             position: relative;
             z-index: 2;
             text-align: center;
-            max-width: 800px;
+            max-width: 900px;
             padding: 0 2rem;
         }
 
@@ -466,32 +466,35 @@
             will-change: opacity, transform;
         }
 
-        .video-hero-headline {
-            font-family: 'PP Neue York', Georgia, serif;
-            font-size: clamp(3rem, 7vw, 5.5rem);
-            font-weight: 500;
-            color: #fff;
-            letter-spacing: -0.03em;
-            line-height: 1.05;
-            margin-bottom: 0;
-            text-shadow: 0 2px 40px rgba(0,0,0,0.5);
-        }
-
+        /* Slogan: shows FIRST — light, uppercase, wide-spaced (Matte-style tagline) */
         .video-hero-slogan {
             font-family: 'PP Neue York', Georgia, serif;
-            font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+            font-size: clamp(0.75rem, 1.4vw, 1.05rem);
             font-weight: 300;
-            color: rgba(255,255,255,0.85);
-            letter-spacing: 0.04em;
-            line-height: 1.4;
+            color: rgba(255,255,255,0.8);
+            text-transform: uppercase;
+            letter-spacing: 0.28em;
+            line-height: 1.6;
+            margin-bottom: 0;
+            text-shadow: 0 1px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Headline: shows SECOND — big, bold, editorial serif */
+        .video-hero-headline {
+            font-family: 'PP Neue York', Georgia, serif;
+            font-size: clamp(3.5rem, 8vw, 7rem);
+            font-weight: 500;
+            font-style: italic;
+            color: #fff;
+            letter-spacing: -0.03em;
+            line-height: 1;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, calc(-50% + 20px));
             width: 100%;
             opacity: 0;
-            will-change: opacity, transform;
-            text-shadow: 0 1px 20px rgba(0,0,0,0.4);
+            text-shadow: 0 2px 40px rgba(0,0,0,0.5);
         }
 
         /* Toolbar search icon */
@@ -1881,46 +1884,47 @@
                 const scrollY = window.pageYOffset || window.scrollY;
                 const spacerHeight = heroSpacer.offsetHeight;
                 // All text animation happens in the first half of spacer (≈ 1 viewport)
-                // so the page doesn't visually move during the crossfade
                 const animZone = spacerHeight * 0.5;
 
-                // Phase 1 (0–40% of animZone): Headline fades out + drifts up with subtle scale
-                const headlineEnd = animZone * 0.4;
-                const headlineFade = Math.min(scrollY / headlineEnd, 1);
-                headline.style.opacity = 1 - headlineFade;
-                headline.style.transform = `translateY(${-scrollY * 0.15}px) scale(${1 - headlineFade * 0.05})`;
-
-                // Phase 2: Slogan fades in (25–55% of animZone), holds, fades out (65–90%)
+                // Phase 1 (0–35%): Slogan (visible first) fades out + drifts up
+                const sloganEnd = animZone * 0.35;
+                const sloganFade = Math.min(scrollY / sloganEnd, 1);
                 if (slogan) {
-                    const sloganInStart = animZone * 0.25;
-                    const sloganInEnd = animZone * 0.55;
-                    const sloganOutStart = animZone * 0.65;
-                    const sloganOutEnd = animZone * 0.9;
+                    slogan.style.opacity = 1 - sloganFade;
+                    slogan.style.transform = `translateY(${-scrollY * 0.12}px)`;
+                }
 
-                    let sloganOpacity = 0;
-                    let sloganY = 20;
+                // Phase 2: Headline fades in (25–55%), holds (55–70%), fades out (70–95%)
+                if (headline) {
+                    const hlInStart = animZone * 0.25;
+                    const hlInEnd = animZone * 0.55;
+                    const hlOutStart = animZone * 0.70;
+                    const hlOutEnd = animZone * 0.95;
 
-                    if (scrollY < sloganInStart) {
-                        sloganOpacity = 0;
-                        sloganY = 20;
-                    } else if (scrollY < sloganInEnd) {
-                        const p = (scrollY - sloganInStart) / (sloganInEnd - sloganInStart);
-                        sloganOpacity = p;
-                        sloganY = 20 * (1 - p);
-                    } else if (scrollY < sloganOutStart) {
-                        sloganOpacity = 1;
-                        sloganY = 0;
-                    } else if (scrollY < sloganOutEnd) {
-                        const p = (scrollY - sloganOutStart) / (sloganOutEnd - sloganOutStart);
-                        sloganOpacity = 1 - p;
-                        sloganY = -15 * p;
+                    let hlOpacity = 0;
+                    let hlY = 20;
+
+                    if (scrollY < hlInStart) {
+                        hlOpacity = 0;
+                        hlY = 20;
+                    } else if (scrollY < hlInEnd) {
+                        const p = (scrollY - hlInStart) / (hlInEnd - hlInStart);
+                        hlOpacity = p;
+                        hlY = 20 * (1 - p);
+                    } else if (scrollY < hlOutStart) {
+                        hlOpacity = 1;
+                        hlY = 0;
+                    } else if (scrollY < hlOutEnd) {
+                        const p = (scrollY - hlOutStart) / (hlOutEnd - hlOutStart);
+                        hlOpacity = 1 - p;
+                        hlY = -15 * p;
                     } else {
-                        sloganOpacity = 0;
-                        sloganY = -15;
+                        hlOpacity = 0;
+                        hlY = -15;
                     }
 
-                    slogan.style.opacity = sloganOpacity;
-                    slogan.style.transform = `translate(-50%, calc(-50% + ${sloganY}px))`;
+                    headline.style.opacity = hlOpacity;
+                    headline.style.transform = `translate(-50%, calc(-50% + ${hlY}px))`;
                 }
 
                 // Scroll indicator: gone by 10% of animZone
