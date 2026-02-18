@@ -1036,15 +1036,26 @@
             .tb-press-feed {
                 margin-left: auto;
                 margin-right: 0;
+                flex-shrink: 0;
             }
             .press-feed-btn {
                 padding: 0.35rem 0.75rem;
                 font-size: 0.65rem;
             }
-            .tb-search { padding: 0.5rem 0.5rem; }
-            .tb-search-container { max-width: 100%; }
-            .tb-search-input { padding: 0.5rem 0.75rem; font-size: 0.8rem; }
-            .tb-search-btn { padding: 0.5rem 0.6rem; }
+            body.press-feed-active .toolbar {
+                overflow: hidden;
+            }
+            body.press-feed-active .tb-left {
+                flex-shrink: 0;
+            }
+            .tb-search {
+                padding: 0.5rem 0.5rem;
+                min-width: 0;
+                overflow: hidden;
+            }
+            .tb-search-container { max-width: 100%; min-width: 0; }
+            .tb-search-input { padding: 0.5rem 0.75rem; font-size: 0.8rem; min-width: 0; }
+            .tb-search-btn { padding: 0.5rem 0.6rem; flex-shrink: 0; }
             .tb-search-btn svg { width: 16px; height: 16px; }
         }
 
