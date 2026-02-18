@@ -470,8 +470,13 @@
             z-index: 1;
         }
 
+        /* Spacer pushes .main-content below the viewport so fixed video is visible */
         .hero-spacer {
-            display: none;
+            height: 100vh;
+            min-height: 500px;
+            position: relative;
+            z-index: 2;
+            pointer-events: none;
         }
 
         /* Lock scroll during crossfade */
@@ -708,11 +713,19 @@
                 height: 70vh;
                 min-height: 400px;
             }
+            .hero-spacer {
+                height: 70vh;
+                min-height: 400px;
+            }
             .tag-strip-search-icon { margin-left: 0.25rem; }
             .tag-strip-inline-search { max-width: 200px; }
         }
 
         @media (max-width: 500px) {
+            .hero-spacer {
+                height: 60vh;
+                min-height: 350px;
+            }
             .video-hero {
                 height: 60vh;
                 min-height: 350px;
