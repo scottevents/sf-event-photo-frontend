@@ -781,6 +781,7 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
+            padding: 0 1rem;
         }
 
         .tag-strip-center::-webkit-scrollbar { display: none; }
@@ -819,6 +820,30 @@
             border-color: #fff;
         }
 
+        /* More dropdown — hidden by default */
+        .ts-more-wrap { display: none; }
+        .ts-more-btn { display: flex; align-items: center; }
+        .ts-more-panel { min-width: 130px; }
+
+        /* Progressive collapse breakpoints */
+        @media (max-width: 1100px) {
+            .tag-pill.tag-p1 { display: none; }
+            .ts-more-wrap { display: block; }
+            /* Hide options that are still visible as pills */
+            .ts-more-panel .ts-more-option[data-cat="video"],
+            .ts-more-panel .ts-more-option[data-cat="corporate"] { display: none; }
+        }
+
+        @media (max-width: 950px) {
+            .tag-pill.tag-p2 { display: none; }
+            .ts-more-panel .ts-more-option[data-cat="corporate"] { display: block; }
+        }
+
+        @media (max-width: 850px) {
+            .tag-pill.tag-p3 { display: none; }
+            .ts-more-panel .ts-more-option[data-cat="video"] { display: block; }
+        }
+
         /* Mobile: Event Type dropdown for tag strip */
         .tag-strip-mobile-dropdown {
             display: none;
@@ -828,8 +853,8 @@
             .tag-strip {
                 padding: 0 0.75rem;
             }
-            .tag-pills-desktop {
-                display: none;
+            .tag-pills-desktop, .ts-more-wrap {
+                display: none !important;
             }
             .tag-strip-mobile-dropdown {
                 display: flex;
@@ -1460,10 +1485,24 @@
                 <button class="tag-pill active" onclick="selectTag('all', this)">All</button>
                 <button class="tag-pill" onclick="selectTag('activation', this)">Activations</button>
                 <button class="tag-pill" onclick="selectTag('conference', this)">Conferences</button>
-                <button class="tag-pill" onclick="selectTag('video', this)">Video</button>
-                <button class="tag-pill" onclick="selectTag('corporate', this)">Corporate</button>
-                <button class="tag-pill" onclick="selectTag('portraits', this)">Portraits</button>
-                <button class="tag-pill" onclick="selectTag('party', this)">Party</button>
+                <button class="tag-pill tag-p3" onclick="selectTag('video', this)">Video</button>
+                <button class="tag-pill tag-p2" onclick="selectTag('corporate', this)">Corporate</button>
+                <button class="tag-pill tag-p1" onclick="selectTag('portraits', this)">Portraits</button>
+                <button class="tag-pill tag-p1" onclick="selectTag('party', this)">Party</button>
+            </div>
+
+            <!-- More dropdown (appears as tags collapse) -->
+            <div class="tb-dropdown ts-more-wrap" id="moreDropdownWrap">
+                <button class="tag-pill ts-more-btn" onclick="toggleMoreDropdown()">
+                    More
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width:10px;height:10px;stroke-width:2.5;margin-left:4px;vertical-align:middle;"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+                </button>
+                <div class="tb-panel ts-more-panel" id="morePanel">
+                    <button class="tb-option ts-more-option" data-cat="video" onclick="selectCategoryFromMore('video', this)">Video</button>
+                    <button class="tb-option ts-more-option" data-cat="corporate" onclick="selectCategoryFromMore('corporate', this)">Corporate</button>
+                    <button class="tb-option ts-more-option" data-cat="portraits" onclick="selectCategoryFromMore('portraits', this)">Portraits</button>
+                    <button class="tb-option ts-more-option" data-cat="party" onclick="selectCategoryFromMore('party', this)">Party</button>
+                </div>
             </div>
 
             <!-- Mobile: Event Type dropdown -->
@@ -1672,7 +1711,7 @@
         }
 
         document.addEventListener('click', e => {
-            if (!e.target.closest('.tb-dropdown')) {
+            if (!e.target.closest('.tb-dropdown') && !e.target.closest('.ts-more-wrap')) {
                 document.querySelectorAll('.tb-panel').forEach(p => p.classList.remove('show'));
                 document.querySelectorAll('.tb-btn').forEach(b => b.classList.remove('open'));
             }
@@ -1683,6 +1722,7 @@
             currentFilter = val;
             document.querySelectorAll('.tag-pill').forEach(pill => pill.classList.remove('active'));
             btn.classList.add('active');
+            document.querySelector('.ts-more-btn')?.classList.remove('active');
             syncEventTypeDropdown(val);
             renderGallery();
         }
@@ -1703,6 +1743,24 @@
                     pill.classList.add('active');
                 }
             });
+            renderGallery();
+        }
+
+        /* -- More Dropdown (progressive collapse) -- */
+        function toggleMoreDropdown() {
+            const panel = document.getElementById('morePanel');
+            panel.classList.toggle('show');
+        }
+
+        function selectCategoryFromMore(val, btn) {
+            currentFilter = val;
+            // Close More panel
+            document.getElementById('morePanel').classList.remove('show');
+            // Clear all pill actives
+            document.querySelectorAll('.tag-pill').forEach(p => p.classList.remove('active'));
+            // Mark the More button as active
+            document.querySelector('.ts-more-btn')?.classList.add('active');
+            syncEventTypeDropdown(val);
             renderGallery();
         }
 
