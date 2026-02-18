@@ -2021,8 +2021,15 @@
             }
             filtered = sortProjects(filtered);
 
+            /* Preserve scroll position & scrolled-mode colors across innerHTML swap */
+            const wasScrolled = document.body.classList.contains('scrolled');
+            const prevHeight = grid.offsetHeight;
+            grid.style.minHeight = prevHeight + 'px';
+
             if (!filtered.length) {
                 grid.innerHTML = '<div class="empty-state"><p>No projects found.</p></div>';
+                if (wasScrolled) document.body.classList.add('scrolled');
+                requestAnimationFrame(() => { grid.style.minHeight = ''; });
                 return;
             }
 
@@ -2037,6 +2044,8 @@
 
             while (pi < filtered.length) html += tile(filtered[pi++]);
             grid.innerHTML = html;
+            if (wasScrolled) document.body.classList.add('scrolled');
+            requestAnimationFrame(() => { grid.style.minHeight = ''; });
             startReviewSlideshow();
         }
 
