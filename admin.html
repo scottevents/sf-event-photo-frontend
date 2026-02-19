@@ -2963,7 +2963,6 @@
 
         // Process in batches — presign SEQUENTIALLY (avoid backend counter race), then upload in parallel
         const fileArr = [...files];
-        const BATCH = 5;
         for (let i = 0; i < fileArr.length; i += BATCH) {
             const batch = fileArr.slice(i, i + BATCH);
             const items = batch.map((f, j) => addUploadRow(f, i + j));
@@ -3121,7 +3120,6 @@
 
         // Process in batches — presign SEQUENTIALLY (avoid backend counter race), then upload in parallel
         const fileArr = [...files];
-        const BATCH = 5;
         for (let i = 0; i < fileArr.length; i += BATCH) {
             const batch = fileArr.slice(i, i + BATCH);
             const items = batch.map((f, j) => addUploadRow2(f, i + j));
