@@ -612,7 +612,7 @@
         .video-hero-slogan {
             font-family: 'PP Neue York', Georgia, serif;
             font-size: clamp(1rem, 1.6vw, 1.25rem);
-            font-weight: 300;
+            font-weight: 400;
             color: rgba(255,255,255,0.75);
             text-transform: uppercase;
             letter-spacing: 0.18em;
@@ -624,6 +624,7 @@
         .video-hero-subtitle {
             display: block;
             font-size: clamp(0.8rem, 1.2vw, 1rem);
+            font-weight: 300;
             margin-top: 0.75rem;
             color: rgba(255,255,255,0.75);
         }
@@ -1918,6 +1919,8 @@
             });
             syncEventTypeDropdown('all');
             renderGallery();
+            // Scroll to top so user sees the feed from the beginning
+            window.scrollTo({ top: 0, behavior: 'instant' });
             document.getElementById('tbSearchInput')?.focus();
         }
 
