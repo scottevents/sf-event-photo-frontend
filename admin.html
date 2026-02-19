@@ -63,8 +63,9 @@
         .collection-card:hover .drag-handle { opacity:1; }
         .collection-card .drag-handle:active { cursor:grabbing; }
         .collection-card .drag-handle svg { width:16px; height:16px; color:var(--gray-500); }
-        .collection-cover { aspect-ratio:16/10; background:var(--gray-200); position:relative; overflow:hidden; }
-        .collection-cover img { width:100%; height:100%; object-fit:cover; }
+        .collection-cover { aspect-ratio:16/10; background:var(--gray-200); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
+        .collection-cover img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
+        .collection-cover .no-cover-icon { color:var(--gray-400); font-size:24px; }
         .collection-status { position:absolute; top:12px; left:12px; padding:0.25rem 0.6rem; border-radius:4px; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
         .collection-status.published { background:var(--accent); color:white; }
         .collection-status.draft { background:var(--gray-600); color:white; }
@@ -693,7 +694,26 @@
         
         <main class="main-content">
             <div class="tab-content active" id="collectionsTab">
-                <header class="main-header"><h1>Collections</h1><div class="main-header-actions"><button class="btn btn-primary" onclick="openNewProjectModal()">+ New Collection</button></div></header>
+                <header class="main-header">
+                    <div style="display:flex;align-items:center;gap:1rem;">
+                        <h1>Collections</h1>
+                        <select id="collectionFilter" onchange="filterCollections(this.value)" style="padding:0.4rem 0.75rem;border:1px solid var(--gray-200);border-radius:6px;font-size:0.85rem;font-family:inherit;background:#fff;color:var(--gray-700);cursor:pointer;">
+                            <option value="all">Home (All)</option>
+                            <option value="San Francisco">San Francisco</option>
+                            <option value="Los Angeles">Los Angeles</option>
+                            <option disabled style="font-size:0.7rem;">───── Tags ─────</option>
+                            <option value="Activation">Activation</option>
+                            <option value="Conference">Conference</option>
+                            <option value="Corporate">Corporate</option>
+                            <option value="Party">Party</option>
+                            <option value="Portraits">Portraits</option>
+                            <option value="PR">PR</option>
+                            <option value="University">University</option>
+                            <option value="Video">Video</option>
+                        </select>
+                    </div>
+                    <div class="main-header-actions"><button class="btn btn-primary" onclick="openNewProjectModal()">+ New Collection</button></div>
+                </header>
                 <div class="page-content"><div id="collectionsGrid" class="collections-grid"><div class="loading"><div class="spinner"></div></div></div></div>
             </div>
             
@@ -1039,6 +1059,8 @@
                     <div class="form-group"><label>Client / Brands</label><input type="text" id="newBrands" placeholder="Acme Corp, Nike (comma-separated)" oninput="updateNewSeoPreview()"></div>
                     <div class="form-group"><label>Tags</label>
                         <div class="tags-selector" id="newTagsSelector">
+                            <span class="tag-option" data-tag="San Francisco" onclick="toggleTag(this)">San Francisco</span>
+                            <span class="tag-option" data-tag="Los Angeles" onclick="toggleTag(this)">Los Angeles</span>
                             <span class="tag-option" data-tag="Activation" onclick="toggleTag(this)">Activation</span>
                             <span class="tag-option" data-tag="Conference" onclick="toggleTag(this)">Conference</span>
                             <span class="tag-option" data-tag="Corporate" onclick="toggleTag(this)">Corporate</span>
@@ -1119,6 +1141,8 @@
             <div class="form-group"><label>Venue</label><input type="text" id="editVenue"></div>
             <div class="form-group"><label>Tags</label>
                 <div class="tags-selector" id="editTagsSelector">
+                    <span class="tag-option" data-tag="San Francisco" onclick="toggleTag(this)">San Francisco</span>
+                    <span class="tag-option" data-tag="Los Angeles" onclick="toggleTag(this)">Los Angeles</span>
                     <span class="tag-option" data-tag="Activation" onclick="toggleTag(this)">Activation</span>
                     <span class="tag-option" data-tag="Conference" onclick="toggleTag(this)">Conference</span>
                     <span class="tag-option" data-tag="Corporate" onclick="toggleTag(this)">Corporate</span>
@@ -1442,7 +1466,7 @@
         document.getElementById('projectTab').classList.add('active');setActiveNav(-1);
         document.getElementById('projectTitle').textContent=currentProject.title;
         document.getElementById('projectMeta').textContent=`${formatDateRange(currentProject.event_date, currentProject.event_end_date)} • ${currentProject.photo_count||0} photos`;
-        document.getElementById('projectCover').src=currentProject.cover_image_url||'';
+        document.getElementById('projectCover').src=currentProject.cover_image_url||'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" fill="%23e5e5e5"><rect width="400" height="250"/><text x="200" y="130" text-anchor="middle" fill="%23999" font-size="14">No cover image — click ⭐ on a photo</text></svg>';
         const fp=currentProject.cover_focal_point||'50% 50%';
         document.getElementById('projectCover').style.objectPosition=fp;
         if(currentProject.cover_focal_point){const parts=currentProject.cover_focal_point.replace(/%/g,'').split(' ');updateFocalPointIndicator(parseFloat(parts[0]),parseFloat(parts[1]));}else{document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';}
@@ -1614,12 +1638,33 @@
         }catch(e){showToast('Error','error');}
     }
     
+    let currentCollectionFilter = 'all';
+
     async function loadProjects(){try{const r=await fetch(`${API_URL}/api/admin/projects`,{headers:{'x-admin-key':ADMIN_PASSWORD}});const d=await r.json();projects=d.projects||[];renderCollections();updateDropdown();}catch(e){document.getElementById('collectionsGrid').innerHTML='<div class="empty-state"><p>Error loading</p></div>';}}
-    
-    function renderCollections(){const g=document.getElementById('collectionsGrid');if(!projects.length){g.innerHTML='<div class="empty-state"><h3>No collections yet</h3><p>Create your first collection</p></div>';return;}
-    g.innerHTML=projects.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="if(!projectDragOccurred)showProject('${p.id}')">
+
+    function filterCollections(value) {
+        currentCollectionFilter = value;
+        renderCollections();
+    }
+
+    function getFilteredProjects() {
+        if (currentCollectionFilter === 'all') return projects;
+        return projects.filter(p => {
+            const tags = Array.isArray(p.tags) ? p.tags : [];
+            return tags.includes(currentCollectionFilter);
+        });
+    }
+
+    function renderCollections(){const g=document.getElementById('collectionsGrid');
+    const filtered = getFilteredProjects();
+    if(!filtered.length){
+        const label = currentCollectionFilter === 'all' ? '' : ` tagged "${currentCollectionFilter}"`;
+        g.innerHTML=`<div class="empty-state"><h3>No collections${label}</h3><p>${currentCollectionFilter === 'all' ? 'Create your first collection' : 'Tag projects with "' + currentCollectionFilter + '" to see them here'}</p></div>`;
+        return;
+    }
+    g.innerHTML=filtered.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="if(!projectDragOccurred)showProject('${p.id}')">
         <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
-        <div class="collection-cover">${p.cover_image_url?`<img src="${p.cover_image_url}">`:''}<span class="collection-status ${p.published?'published':'draft'}">${p.published?'Published':'Draft'}</span>${p.featured?'<span class="collection-featured">⭐ Featured</span>':''}</div>
+        <div class="collection-cover">${p.cover_image_url?`<img src="${p.cover_image_url}">`:'<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published?'published':'draft'}">${p.published?'Published':'Draft'}</span>${p.featured?'<span class="collection-featured">⭐ Featured</span>':''}</div>
         <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count||0} items</span>${p.event_date?`<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>`:''}</div></div>
     </div>`).join('');
     initDragAndDrop();}
@@ -1643,7 +1688,7 @@
         g.innerHTML = featuredProjects.map((p, idx) => `<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" data-featured="true" onclick="if(!projectDragOccurred)showProject('${p.id}')">
             <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
             <button class="collection-remove" onclick="event.stopPropagation();removeFromFeatured('${p.id}')" title="Remove from featured">×</button>
-            <div class="collection-cover">${p.cover_image_url ? `<img src="${p.cover_image_url}">` : ''}<span class="collection-status ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></div>
+            <div class="collection-cover">${p.cover_image_url ? `<img src="${p.cover_image_url}">` : '<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></div>
             <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count || 0} items</span>${p.event_date ? `<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>` : ''}</div></div>
         </div>`).join('');
         
@@ -1730,7 +1775,7 @@
         
         list.innerHTML = nonFeatured.map(p => `
             <div class="available-project-item" onclick="addToFeatured('${p.id}')">
-                <img src="${p.cover_image_url || ''}" alt="">
+                ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="">` : '<div style="width:48px;height:48px;background:var(--gray-200);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0">📷</div>'}
                 <div class="available-project-item-info">
                     <div class="available-project-item-title">${p.title}</div>
                     <div class="available-project-item-meta">${p.photo_count || 0} photos${p.event_date ? ' • ' + formatDateRange(p.event_date, p.event_end_date) : ''}</div>
@@ -2439,7 +2484,7 @@
     
     async function saveTags(id){const people=document.getElementById(`tags-${id}`).value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});showToast('Saved!','success');}catch(e){showToast('Error','error');}}
     async function saveAllTags(){showToast('Saving...','');let n=0;for(const p of currentPhotos){const el=document.getElementById(`tags-${p.id}`);if(!el)continue;const people=el.value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${p.id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});n++;}catch(e){}}showToast(`${n} saved!`,'success');}
-    async function setCover(id){const photo=currentPhotos.find(p=>p.id===id);if(!photo)return;const url=photo.original_url||photo.large_url||photo.thumbnail_url;try{await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_image_url:url,cover_focal_point:'50% 50%'})});currentProject.cover_image_url=url;currentProject.cover_focal_point='50% 50%';document.getElementById('projectCover').src=url;document.getElementById('projectCover').style.objectPosition='50% 50%';document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';loadProjectPhotos();showToast('Cover set!','success');}catch(e){showToast('Error','error');}}
+    async function setCover(id){const photo=currentPhotos.find(p=>p.id===id);if(!photo)return;const url=photo.original_url||photo.large_url||photo.thumbnail_url;try{const resp=await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_image_url:url})});if(!resp.ok){const err=await resp.json().catch(()=>({}));console.error('setCover error:',err);showToast('Error setting cover','error');return;}currentProject.cover_image_url=url;document.getElementById('projectCover').src=url;document.getElementById('projectCover').style.objectPosition='50% 50%';document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';loadProjectPhotos();showToast('Cover set!','success');}catch(e){console.error('setCover exception:',e);showToast('Error','error');}}
     function handleFocalPointClick(event){
         const container=document.getElementById('coverPreviewContainer');
         const img=document.getElementById('projectCover');
@@ -2462,7 +2507,9 @@
         label.textContent='Focal: '+Math.round(xPercent)+'% '+Math.round(yPercent)+'%';
     }
     async function saveFocalPoint(focalPoint){
-        try{await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_focal_point:focalPoint})});currentProject.cover_focal_point=focalPoint;showToast('Focal point saved','success');}catch(e){showToast('Error saving focal point','error');}
+        // Note: cover_focal_point column doesn't exist in DB yet, store locally only
+        currentProject.cover_focal_point=focalPoint;
+        showToast('Focal point set (local only)','success');
     }
     async function deletePhoto(id){if(!confirm('Delete?'))return;try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'DELETE',headers:{'x-admin-key':ADMIN_PASSWORD}});showToast('Deleted','success');loadProjectPhotos();loadProjects();}catch(e){showToast('Error','error');}}
     
@@ -3551,11 +3598,10 @@
                     'Content-Type': 'application/json',
                     'x-admin-key': ADMIN_PASSWORD 
                 },
-                body: JSON.stringify({ cover_image_url: photo.url, cover_focal_point: '50% 50%' })
+                body: JSON.stringify({ cover_image_url: photo.url })
             });
 
             currentProject.cover_image_url = photo.url;
-            currentProject.cover_focal_point = '50% 50%';
             document.getElementById('projectCover').src = photo.url;
             document.getElementById('projectCover').style.objectPosition = '50% 50%';
             document.getElementById('focalPointDot').classList.remove('active');
