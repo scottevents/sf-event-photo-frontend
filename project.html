@@ -818,16 +818,15 @@
             background: #1a1a1a;
             border-radius: 0;
             height: auto;
-            contain: layout style paint;
-            transition: background 0.3s;
+            content-visibility: auto;
+            contain-intrinsic-size: auto 300px;
         }
         body.scrolled .photo-card { background: #f5f5f5; }
-        
+
         .photo-image {
             width: 100%;
             height: auto;
             display: block;
-            content-visibility: auto;
         }
         
         .photo-card:hover .photo-image {
@@ -2597,12 +2596,20 @@
             window.addEventListener('resize', setHeaderHeight);
 
             // Scroll detection — toggle body.scrolled when sets-row touches header
+            let cachedHeaderH = header.offsetHeight || 56;
+            let scrollTicking = false;
+            window.addEventListener('resize', () => { cachedHeaderH = header.offsetHeight || 56; });
             window.addEventListener('scroll', function() {
-                const setsRow = document.getElementById('setsRow');
-                if (!setsRow) return;
-                const headerH = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 56;
-                const setsTop = setsRow.getBoundingClientRect().top;
-                document.body.classList.toggle('scrolled', setsTop <= headerH + 2);
+                if (scrollTicking) return;
+                scrollTicking = true;
+                requestAnimationFrame(() => {
+                    const setsRow = document.getElementById('setsRow');
+                    if (setsRow) {
+                        const setsTop = setsRow.getBoundingClientRect().top;
+                        document.body.classList.toggle('scrolled', setsTop <= cachedHeaderH + 2);
+                    }
+                    scrollTicking = false;
+                });
             }, { passive: true });
         });
 
