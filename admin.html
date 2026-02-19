@@ -2143,17 +2143,9 @@
             const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
             const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
             currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
-            // Deduplicate by photo id, then by image URL
+            // Deduplicate by photo id
             const seenIds=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
-            const seenUrls=new Set();
-            currentPhotos=currentPhotos.filter(p=>{
-                const url=p.thumbnail_url||p.large_url||p.original_url;
-                if(!url)return true;
-                if(seenUrls.has(url))return false;
-                seenUrls.add(url);
-                return true;
-            });
             currentPhotos.sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
 
             // Reset filter and manual sets, render sidebar
@@ -2175,6 +2167,8 @@
             if (titleEl) titleEl.textContent = 'All Photos';
 
             renderPhotosGrid(currentPhotos);
+            // Update header with actual loaded count
+            document.getElementById('projectMeta').textContent=`${formatDateRange(currentProject.event_date, currentProject.event_end_date)} • ${currentPhotos.length} photos`;
         } catch(e) {
             console.error('loadProjectPhotos error:', e);
             g.innerHTML='<div class="empty-state"><p>Error loading photos</p></div>';
@@ -2219,6 +2213,19 @@
             </div>`;
         }).join('');
         initPhotoDragDrop();
+        // Restore selection state after DOM rebuild
+        if (selectedPhotos.size > 0) {
+            photos.forEach(photo => {
+                if (selectedPhotos.has(photo.id)) {
+                    const card = g.querySelector(`[data-id="${photo.id}"]`);
+                    if (card) {
+                        card.classList.add('selected');
+                        const cb = card.querySelector('.photo-select-checkbox');
+                        if (cb) cb.classList.add('checked');
+                    }
+                }
+            });
+        }
     }
 
     // ── Photo Drag & Drop ──
@@ -3009,17 +3016,9 @@
             const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
             const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
             currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
-            // Deduplicate by photo id, then by image URL
+            // Deduplicate by photo id
             const seenIds2=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
-            const seenUrls2=new Set();
-            currentPhotos=currentPhotos.filter(p=>{
-                const url=p.thumbnail_url||p.large_url||p.original_url;
-                if(!url)return true;
-                if(seenUrls2.has(url))return false;
-                seenUrls2.add(url);
-                return true;
-            });
 
             manualSets = savedManual;
             selectSet(savedFilter);
