@@ -2143,9 +2143,11 @@
             const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
             const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
             currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
-            // Deduplicate by photo id
+            // Deduplicate by photo id, then by URL (backend race condition can create multiple DB records for one R2 file)
             const seenIds=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
+            const seenUrls=new Set();
+            currentPhotos=currentPhotos.filter(p=>{const url=p.thumbnail_url||p.large_url||p.original_url;if(!url)return true;if(seenUrls.has(url))return false;seenUrls.add(url);return true;});
             currentPhotos.sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
 
             // Reset filter and manual sets, render sidebar
@@ -2913,11 +2915,10 @@
         let completed = 0, failed = 0;
         const BATCH = 5;
 
-        async function uploadOne(file, idx) {
+        // Build UI rows and prepare file list
+        function addUploadRow(file, idx) {
             const sizeKB = (file.size/1024).toFixed(0);
             const itemId = `up-${Date.now()}-${idx}`;
-
-            // Add a simple row (no blob preview to save memory)
             const row = document.createElement('div');
             row.className = 'upload-popup-item';
             row.id = itemId;
@@ -2929,26 +2930,14 @@
                 </div>
                 <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
             list.appendChild(row);
+            return { file, idx, sizeKB, itemId, row };
+        }
 
-            // Check file size before uploading (Cloudflare limit ~10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(file.size/1024/1024).toFixed(1)}MB, max 10MB)`;
-                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
-                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
-                failed++;
-                return;
-            }
-
-            // Upload with step-level retry (reuse presign data to avoid duplicate DB records)
-            let pd = null;
+        // Upload a single file (presign data already obtained)
+        async function uploadWithPresign(item, pd) {
+            const { file, idx, sizeKB, itemId, row } = item;
             for (let attempt = 0; attempt < 2; attempt++) {
                 try {
-                    if (!pd) {
-                        const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
-                        pd = await pr.json();
-                        if (pd.error) { const errMsg = pd.error; pd = null; throw new Error(errMsg); }
-                    }
-
                     const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
                     if (!ur.ok) throw new Error('Upload failed');
 
@@ -2961,26 +2950,50 @@
                     document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
                     document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
                     completed++;
-                    break;
+                    return;
                 } catch(err) {
-                    if (attempt === 0) {
-                        row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...';
-                        continue;
-                    }
+                    if (attempt === 0) { row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...'; continue; }
                     row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
                     document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
                     document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
                     failed++;
                 }
             }
-            count.textContent = `${completed} of ${total} items`;
         }
 
-        // Process in batches of BATCH concurrent uploads
+        // Process in batches — presign SEQUENTIALLY (avoid backend counter race), then upload in parallel
         const fileArr = [...files];
+        const BATCH = 5;
         for (let i = 0; i < fileArr.length; i += BATCH) {
             const batch = fileArr.slice(i, i + BATCH);
-            await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
+            const items = batch.map((f, j) => addUploadRow(f, i + j));
+
+            // Step 1: Get presign data sequentially to avoid backend photo_number race condition
+            const presigned = [];
+            for (const item of items) {
+                if (item.file.size > 10 * 1024 * 1024) {
+                    item.row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(item.file.size/1024/1024).toFixed(1)}MB, max 10MB)`;
+                    document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
+                    document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                    failed++;
+                    continue;
+                }
+                try {
+                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:item.file.type, projectSlug:currentProject.slug})});
+                    const pd = await pr.json();
+                    if (pd.error) throw new Error(pd.error);
+                    presigned.push({ item, pd });
+                } catch(err) {
+                    item.row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
+                    document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
+                    document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                    failed++;
+                }
+            }
+
+            // Step 2: Upload to R2 + register in parallel (each file has a unique filename now)
+            await Promise.all(presigned.map(({ item, pd }) => uploadWithPresign(item, pd)));
+            count.textContent = `${completed} of ${total} items`;
         }
 
         popup.classList.add('completed');
@@ -3016,9 +3029,11 @@
             const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
             const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
             currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
-            // Deduplicate by photo id
+            // Deduplicate by photo id, then by URL (backend race condition can create multiple DB records for one R2 file)
             const seenIds2=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
+            const seenUrls2=new Set();
+            currentPhotos=currentPhotos.filter(p=>{const url=p.thumbnail_url||p.large_url||p.original_url;if(!url)return true;if(seenUrls2.has(url))return false;seenUrls2.add(url);return true;});
 
             manualSets = savedManual;
             selectSet(savedFilter);
@@ -3058,10 +3073,10 @@
         let completed = 0, failed = 0;
         const BATCH = 5;
 
-        async function uploadOne(file, idx) {
+        // Build UI rows
+        function addUploadRow2(file, idx) {
             const sizeKB = (file.size/1024).toFixed(0);
             const itemId = `up-${Date.now()}-${idx}`;
-
             const row = document.createElement('div');
             row.className = 'upload-popup-item';
             row.id = itemId;
@@ -3073,56 +3088,70 @@
                 </div>
                 <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
             list.appendChild(row);
+            return { file, idx, sizeKB, itemId, row };
+        }
 
-            // Check file size before uploading (Cloudflare limit ~10MB)
-            if (file.size > 10 * 1024 * 1024) {
-                row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(file.size/1024/1024).toFixed(1)}MB, max 10MB)`;
-                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
-                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
-                failed++;
-                return;
-            }
-
-            // Upload with step-level retry (reuse presign data to avoid duplicate DB records)
-            let pd = null;
+        // Upload a single file (presign data already obtained)
+        async function uploadWithPresign2(item, pd) {
+            const { file, idx, sizeKB, itemId, row } = item;
             for (let attempt = 0; attempt < 2; attempt++) {
                 try {
-                    if (!pd) {
-                        const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
-                        pd = await pr.json();
-                        if (pd.error) { const errMsg = pd.error; pd = null; throw new Error(errMsg); }
-                    }
-
                     const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
                     if (!ur.ok) throw new Error('Upload failed');
 
-                    const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:idx})});
+                    const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
+                        projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:idx
+                    })});
                     if (!cr.ok) throw new Error('Registration failed');
 
                     row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
                     document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
                     document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
                     completed++;
-                    break;
+                    return;
                 } catch(err) {
-                    if (attempt === 0) {
-                        row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...';
-                        continue;
-                    }
+                    if (attempt === 0) { row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...'; continue; }
                     row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
                     document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
                     document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
                     failed++;
                 }
             }
-            count.textContent = `${completed} of ${total} items`;
         }
 
-        // Process in batches of BATCH concurrent uploads
+        // Process in batches — presign SEQUENTIALLY (avoid backend counter race), then upload in parallel
         const fileArr = [...files];
+        const BATCH = 5;
         for (let i = 0; i < fileArr.length; i += BATCH) {
             const batch = fileArr.slice(i, i + BATCH);
-            await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
+            const items = batch.map((f, j) => addUploadRow2(f, i + j));
+
+            // Step 1: Get presign data sequentially to avoid backend photo_number race condition
+            const presigned = [];
+            for (const item of items) {
+                if (item.file.size > 10 * 1024 * 1024) {
+                    item.row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(item.file.size/1024/1024).toFixed(1)}MB, max 10MB)`;
+                    document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
+                    document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                    failed++;
+                    continue;
+                }
+                try {
+                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:item.file.type, projectSlug:project.slug})});
+                    const pd = await pr.json();
+                    if (pd.error) throw new Error(pd.error);
+                    presigned.push({ item, pd });
+                } catch(err) {
+                    item.row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
+                    document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
+                    document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                    failed++;
+                }
+            }
+
+            // Step 2: Upload to R2 + register in parallel (each file has a unique filename now)
+            await Promise.all(presigned.map(({ item, pd }) => uploadWithPresign2(item, pd)));
+            count.textContent = `${completed} of ${total} items`;
         }
 
         popup.classList.add('completed');
