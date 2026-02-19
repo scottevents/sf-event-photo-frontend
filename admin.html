@@ -1617,8 +1617,8 @@
     async function loadProjects(){try{const r=await fetch(`${API_URL}/api/admin/projects`,{headers:{'x-admin-key':ADMIN_PASSWORD}});const d=await r.json();projects=d.projects||[];renderCollections();updateDropdown();}catch(e){document.getElementById('collectionsGrid').innerHTML='<div class="empty-state"><p>Error loading</p></div>';}}
     
     function renderCollections(){const g=document.getElementById('collectionsGrid');if(!projects.length){g.innerHTML='<div class="empty-state"><h3>No collections yet</h3><p>Create your first collection</p></div>';return;}
-    g.innerHTML=projects.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="showProject('${p.id}')">
-        <div class="drag-handle" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+    g.innerHTML=projects.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="if(!projectDragOccurred)showProject('${p.id}')">
+        <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
         <div class="collection-cover">${p.cover_image_url?`<img src="${p.cover_image_url}">`:''}<span class="collection-status ${p.published?'published':'draft'}">${p.published?'Published':'Draft'}</span>${p.featured?'<span class="collection-featured">⭐ Featured</span>':''}</div>
         <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count||0} items</span>${p.event_date?`<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>`:''}</div></div>
     </div>`).join('');
@@ -1640,8 +1640,8 @@
             return;
         }
         
-        g.innerHTML = featuredProjects.map((p, idx) => `<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" data-featured="true" onclick="showProject('${p.id}')">
-            <div class="drag-handle" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+        g.innerHTML = featuredProjects.map((p, idx) => `<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" data-featured="true" onclick="if(!projectDragOccurred)showProject('${p.id}')">
+            <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
             <button class="collection-remove" onclick="event.stopPropagation();removeFromFeatured('${p.id}')" title="Remove from featured">×</button>
             <div class="collection-cover">${p.cover_image_url ? `<img src="${p.cover_image_url}">` : ''}<span class="collection-status ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></div>
             <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count || 0} items</span>${p.event_date ? `<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>` : ''}</div></div>
@@ -1668,17 +1668,19 @@
     
     function handleFeaturedDragStart(e) {
         draggedFeaturedCard = this;
+        projectDragOccurred = true;
         this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', this.dataset.id);
     }
-    
+
     function handleFeaturedDragEnd(e) {
         this.classList.remove('dragging');
         document.querySelectorAll('#featuredGrid .collection-card').forEach(card => {
             card.classList.remove('drag-over');
         });
         draggedFeaturedCard = null;
+        setTimeout(() => { projectDragOccurred = false; }, 100);
     }
     
     async function handleFeaturedDrop(e) {
@@ -1775,12 +1777,13 @@
     }
 
     // Drag and drop for project ordering
-    let draggedCard = null;
-    
+    let draggedProjectCard = null;
+    let projectDragOccurred = false;
+
     function initDragAndDrop() {
         const grid = document.getElementById('collectionsGrid');
         const cards = grid.querySelectorAll('.collection-card');
-        
+
         cards.forEach(card => {
             card.addEventListener('dragstart', handleDragStart);
             card.addEventListener('dragend', handleDragEnd);
@@ -1790,56 +1793,57 @@
             card.addEventListener('dragleave', handleDragLeave);
         });
     }
-    
+
     function handleDragStart(e) {
-        draggedCard = this;
+        draggedProjectCard = this;
+        projectDragOccurred = true;
         this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', this.dataset.id);
     }
-    
+
     function handleDragEnd(e) {
         this.classList.remove('dragging');
         document.querySelectorAll('.collection-card').forEach(card => {
             card.classList.remove('drag-over');
         });
-        draggedCard = null;
+        draggedProjectCard = null;
+        // Reset drag flag after a tick so click handler can check it
+        setTimeout(() => { projectDragOccurred = false; }, 100);
     }
-    
+
     function handleDragOver(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
     }
-    
+
     function handleDragEnter(e) {
         e.preventDefault();
-        if (this !== draggedCard) {
+        if (this !== draggedProjectCard) {
             this.classList.add('drag-over');
         }
     }
-    
+
     function handleDragLeave(e) {
         this.classList.remove('drag-over');
     }
-    
+
     async function handleDrop(e) {
         e.preventDefault();
         e.stopPropagation();
         this.classList.remove('drag-over');
-        
-        if (draggedCard && this !== draggedCard) {
-            const fromId = draggedCard.dataset.id;
-            const toId = this.dataset.id;
-            const fromIndex = parseInt(draggedCard.dataset.index);
+
+        if (draggedProjectCard && this !== draggedProjectCard) {
+            const fromIndex = parseInt(draggedProjectCard.dataset.index);
             const toIndex = parseInt(this.dataset.index);
-            
+
             // Reorder in local array
             const [moved] = projects.splice(fromIndex, 1);
             projects.splice(toIndex, 0, moved);
-            
+
             // Re-render
             renderCollections();
-            
+
             // Save new order to backend
             await saveProjectOrder();
         }
@@ -2074,23 +2078,30 @@
     async function loadProjectPhotos(){
         nextPhotoSeq = 0; // Reset so it recalculates from loaded photos
         const g=document.getElementById('photosGrid');
+        if (!g) return;
         g.innerHTML='<div class="loading"><div class="spinner"></div></div>';
+        const projectId = currentProject?.id;
+        const projectSlug = currentProject?.slug;
+        if (!projectId || !projectSlug) {
+            g.innerHTML='<div class="empty-state"><p>No project selected</p></div>';
+            return;
+        }
         try {
             // Fetch admin and public endpoints in parallel for speed
             const [adminRes, publicRes] = await Promise.allSettled([
-                fetch(`${API_URL}/api/admin/projects/${currentProject.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}}).then(r=>r.json()),
-                fetch(`${API_URL}/api/projects/${currentProject.slug}`).then(r=>r.json())
+                fetch(`${API_URL}/api/admin/projects/${projectId}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}),
+                fetch(`${API_URL}/api/projects/${projectSlug}`).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
             ]);
+            // If user switched projects while loading, bail out
+            if (currentProject?.id !== projectId) return;
             const adminData = adminRes.status==='fulfilled' ? adminRes.value : null;
             const publicData = publicRes.status==='fulfilled' ? publicRes.value : null;
-            const adminPhotos = adminData?.photos || [];
-            const publicPhotos = publicData?.photos || (Array.isArray(publicData) ? publicData : []);
-            const d = adminPhotos.length > 0 ? adminData : (publicPhotos.length > 0 ? publicData : {photos:[]});
-            currentPhotos=d.photos||d||[];
-            if(!Array.isArray(currentPhotos))currentPhotos=[];
+            const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
+            const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
+            currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
             // Deduplicate by photo id, then by image URL
             const seenIds=new Set();
-            currentPhotos=currentPhotos.filter(p=>{if(seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
+            currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
             const seenUrls=new Set();
             currentPhotos=currentPhotos.filter(p=>{
                 const url=p.thumbnail_url||p.large_url||p.original_url;
@@ -2100,28 +2111,28 @@
                 return true;
             });
             currentPhotos.sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
-            const coverUrl=d.project?.cover_image_url||currentProject.cover_image_url;
-            
+
             // Reset filter and manual sets, render sidebar
             currentSetFilter = null;
             manualSets = [];
             renderSetsSidebar();
-            
+
             // Bind set upload listeners (DOM now exists)
             setupSetUpload();
-            
+
             // Show upload zone if no photos
             const uploadZone = document.getElementById('setUploadZone');
             if (uploadZone) {
                 uploadZone.style.display = currentPhotos.length === 0 ? 'block' : 'none';
             }
-            
+
             // Update title
             const titleEl = document.getElementById('currentSetTitle');
             if (titleEl) titleEl.textContent = 'All Photos';
-            
+
             renderPhotosGrid(currentPhotos);
         } catch(e) {
+            console.error('loadProjectPhotos error:', e);
             g.innerHTML='<div class="empty-state"><p>Error loading photos</p></div>';
         }
     }
@@ -2168,6 +2179,8 @@
 
     // ── Photo Drag & Drop ──
 
+    let draggedPhotoCard = null;
+
     function initPhotoDragDrop() {
         const grid = document.getElementById('photosGrid');
         const cards = grid.querySelectorAll('.photo-card');
@@ -2176,7 +2189,7 @@
             card.addEventListener('dragstart', e => {
                 // Don't drag if interacting with inputs/selects/buttons
                 if (e.target.closest('input, select, button')) { e.preventDefault(); return; }
-                draggedCard = card;
+                draggedPhotoCard = card;
                 card.classList.add('dragging');
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('text/plain', card.dataset.id);
@@ -2185,13 +2198,13 @@
             card.addEventListener('dragend', () => {
                 card.classList.remove('dragging');
                 grid.querySelectorAll('.photo-card').forEach(c => c.classList.remove('drag-over'));
-                draggedCard = null;
+                draggedPhotoCard = null;
             });
 
             card.addEventListener('dragover', e => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
-                if (draggedCard && card !== draggedCard) {
+                if (draggedPhotoCard && card !== draggedPhotoCard) {
                     card.classList.add('drag-over');
                 }
             });
@@ -2203,17 +2216,17 @@
             card.addEventListener('drop', e => {
                 e.preventDefault();
                 card.classList.remove('drag-over');
-                if (!draggedCard || card === draggedCard) return;
+                if (!draggedPhotoCard || card === draggedPhotoCard) return;
 
                 // Reorder in DOM
                 const allCards = [...grid.querySelectorAll('.photo-card')];
-                const fromIdx = allCards.indexOf(draggedCard);
+                const fromIdx = allCards.indexOf(draggedPhotoCard);
                 const toIdx = allCards.indexOf(card);
 
                 if (fromIdx < toIdx) {
-                    card.after(draggedCard);
+                    card.after(draggedPhotoCard);
                 } else {
-                    card.before(draggedCard);
+                    card.before(draggedPhotoCard);
                 }
 
                 // Reorder in data & save
@@ -2932,23 +2945,27 @@
         const savedFilter = currentSetFilter;
         const savedManual = [...manualSets];
         const g = document.getElementById('photosGrid');
+        if (!g) return;
         g.innerHTML='<div class="loading"><div class="spinner"></div></div>';
+        const projectId = currentProject?.id;
+        const projectSlug = currentProject?.slug;
+        if (!projectId || !projectSlug) return;
         try {
             // Fetch admin and public endpoints in parallel for speed
             const [adminRes, publicRes] = await Promise.allSettled([
-                fetch(`${API_URL}/api/admin/projects/${currentProject.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}}).then(r=>r.json()),
-                fetch(`${API_URL}/api/projects/${currentProject.slug}`).then(r=>r.json())
+                fetch(`${API_URL}/api/admin/projects/${projectId}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}),
+                fetch(`${API_URL}/api/projects/${projectSlug}`).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
             ]);
+            // If user switched projects while loading, bail out
+            if (currentProject?.id !== projectId) return;
             const adminData = adminRes.status==='fulfilled' ? adminRes.value : null;
             const publicData = publicRes.status==='fulfilled' ? publicRes.value : null;
-            const adminPhotos = adminData?.photos || [];
-            const publicPhotos = publicData?.photos || (Array.isArray(publicData) ? publicData : []);
-            const d = adminPhotos.length > 0 ? adminData : (publicPhotos.length > 0 ? publicData : {photos:[]});
-            currentPhotos=d.photos||d||[];
-            if(!Array.isArray(currentPhotos))currentPhotos=[];
+            const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
+            const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
+            currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
             // Deduplicate by photo id, then by image URL
             const seenIds2=new Set();
-            currentPhotos=currentPhotos.filter(p=>{if(seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
+            currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
             const seenUrls2=new Set();
             currentPhotos=currentPhotos.filter(p=>{
                 const url=p.thumbnail_url||p.large_url||p.original_url;
@@ -2961,6 +2978,7 @@
             manualSets = savedManual;
             selectSet(savedFilter);
         } catch(e) {
+            console.error('reloadProjectPhotosKeepSet error:', e);
             g.innerHTML='<div class="empty-state"><p>Error loading photos</p></div>';
         }
     }
