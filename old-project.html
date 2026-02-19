@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V3 — Editorial Scroll | Project - SF Event Photo</title>
+    <title>Project - SF Event Photo</title>
     <meta name="description" id="meta-description" content="Event photography gallery by SF Event Photo - Professional event photography in San Francisco and Los Angeles">
     <meta name="robots" content="index, follow">
     <meta name="author" content="SF Event Photo">
@@ -98,7 +98,7 @@
         body {
             font-family: 'PP Neue York', Georgia, serif;
             color: var(--black);
-            background: #fafafa;
+            background: var(--white);
             line-height: 1.5;
             -webkit-font-smoothing: antialiased;
         }
@@ -291,7 +291,6 @@
         /* Main Content */
         .main {
             padding: 2.5rem 1.5rem;
-            background: #fafafa;
         }
         
         @media (max-width: 900px) {
@@ -463,11 +462,7 @@
         }
         
         .project-header {
-            padding: 4rem 2rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-            border-bottom: 1px solid #e0e0e0;
-            margin-bottom: 2rem;
+            margin-bottom: 0;
         }
         
         .project-header-top {
@@ -490,12 +485,12 @@
         }
         
         .project-title {
-            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-size: 2.25rem;
             font-weight: 500;
-            letter-spacing: -0.01em;
-            text-transform: none;
-            margin-bottom: 0.5rem;
-            line-height: 1.1;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+            line-height: 1.15;
         }
         
         .project-venue {
@@ -657,75 +652,38 @@
             height: 16px;
         }
         
-        /* Photos Grid - Editorial Scroll layout */
+        /* Photos Grid - BFA style with orientation-aware sizing */
         .photos-grid {
             display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 0 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .editorial-row {
-            display: flex;
-            gap: 6px;
-            width: 100%;
-        }
-        .editorial-row .photo-card {
-            flex: 1;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-            border-radius: 0;
-            background: #e8e8e8;
-            height: auto;
-        }
-        .editorial-row.row-single .photo-card {
-            height: 70vh;
-            max-height: 600px;
-        }
-        .editorial-row.row-double .photo-card {
-            height: 45vh;
-            max-height: 450px;
-        }
-        .editorial-row.row-triple .photo-card {
-            height: 35vh;
-            max-height: 350px;
-        }
-        .editorial-row .photo-image {
-            width: 100%; height: 100%;
-            object-fit: cover; display: block;
-        }
-
-        @media (max-width: 768px) {
-            .photos-grid { padding: 0 1rem; }
-            .editorial-row { flex-direction: column; }
-            .editorial-row.row-single .photo-card,
-            .editorial-row.row-double .photo-card,
-            .editorial-row.row-triple .photo-card {
-                height: 50vh;
-                max-height: 400px;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .photos-grid { padding: 0 0.5rem; }
-            .editorial-row.row-single .photo-card,
-            .editorial-row.row-double .photo-card,
-            .editorial-row.row-triple .photo-card {
-                height: 40vh;
-                max-height: 300px;
-            }
+            flex-wrap: wrap;
+            gap: 12px;
+            contain: layout;
+            margin-top: 0;
         }
         
         .photo-card {
             position: relative;
             overflow: hidden;
             cursor: pointer;
-            background: #e8e8e8;
-            border-radius: 0;
-            height: auto;
+            background: #1a1a1a;
+            border-radius: 4px;
+            height: 300px;
+            /* Default sizing to reduce CLS */
+            flex: 300 1 300px;
             contain: layout style paint;
+        }
+        
+        /* Orientation classes set by JS based on actual image */
+        .photo-card.landscape {
+            flex: 400 1 400px;
+        }
+        
+        .photo-card.portrait {
+            flex: 200 1 200px;
+        }
+        
+        .photo-card.square {
+            flex: 300 1 300px;
         }
         
         .photo-image {
@@ -738,10 +696,35 @@
         }
         
         .photo-card:hover .photo-image {
-            filter: brightness(1.05);
-            transition: filter 0.3s ease;
+            transform: scale(1.02);
+            transition: transform 0.4s ease;
         }
         
+        @media (max-width: 900px) {
+            .photos-grid { gap: 10px; }
+            .photo-card { 
+                height: auto;
+            }
+            .photo-card .photo-image {
+                height: auto;
+                aspect-ratio: auto;
+            }
+            .photo-card.landscape { flex: 1 1 calc(50% - 5px); }
+            .photo-card.portrait { flex: 1 1 calc(33% - 7px); }
+            .photo-card.square { flex: 1 1 calc(50% - 5px); }
+        }
+        
+        @media (max-width: 600px) {
+            .photos-grid { gap: 8px; }
+            .photo-card { 
+                height: auto;
+                flex: 0 0 100% !important;
+            }
+            .photo-card .photo-image {
+                height: auto;
+                aspect-ratio: auto;
+            }
+        }
         
         /* Photo action buttons - bottom right corner */
         .photo-actions {
@@ -1521,6 +1504,11 @@
         @media (max-width: 768px) {
             .project-title {
                 font-size: 2rem;
+            }
+            
+            .photos-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
             }
             
             .cart-sidebar {
@@ -2577,58 +2565,49 @@
             const photos = getCurrentPhotos();
             const grid = document.getElementById('photosGrid');
             if (!grid) return;
-
+            
             const videoCards = renderVideoCards();
             const hasVideos = (currentProject?.videos || []).length > 0;
-
+            
             if (photos.length === 0 && !hasVideos) {
                 grid.innerHTML = '<div class="empty-state"><p>No photos in this set</p></div>';
                 return;
             }
-
-            let html = '';
-            if (hasVideos) {
-                html += '<div class="editorial-row row-single">' + videoCards + '</div>';
-            }
-
-            const pattern = [1, 2, 3];
-            let photoIdx = 0;
-            let patternIdx = 0;
-
-            while (photoIdx < photos.length) {
-                const count = Math.min(pattern[patternIdx % pattern.length], photos.length - photoIdx);
-                const rowClass = count === 1 ? 'row-single' : count === 2 ? 'row-double' : 'row-triple';
-
-                html += '<div class="editorial-row ' + rowClass + '">';
-                for (let i = 0; i < count; i++) {
-                    const idx = photoIdx + i;
-                    const photo = photos[idx];
-                    html += '<div class="photo-card" onclick="openLightbox(' + idx + ')">' +
-                        '<img src="' + (photo.thumbnail_url || photo.large_url) + '" ' +
-                        'alt="Event photo" class="photo-image" ' +
-                        'loading="' + (idx < 6 ? 'eager' : 'lazy') + '" decoding="async"' +
-                        (idx < 4 ? ' fetchpriority="high"' : '') + '>' +
-                        '<div class="photo-actions">' +
-                        (cartEnabled ? '<button class="photo-action-btn" onclick="event.stopPropagation(); openLightbox(' + idx + ')" title="Add to cart">' +
-                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>' +
-                        '</button>' : '') +
-                        '<button class="photo-action-btn" onclick="event.stopPropagation(); downloadSinglePhoto(' + idx + ')" title="Download">' +
-                        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>' +
-                        '</button>' +
-                        '</div>' +
-                        '<div class="photo-info-overlay">' +
-                        (photo.people && photo.people.length > 0 ? '<div class="photo-info-name">' + photo.people.join(', ') + '</div>' : '') +
-                        '<div class="photo-info-id">' + (photo.photo_number || '') + '</div>' +
-                        '</div>' +
-                        '</div>';
-                }
-                html += '</div>';
-
-                photoIdx += count;
-                patternIdx++;
-            }
-
-            grid.innerHTML = html;
+            
+            const photoCards = photos.map((photo, index) => `
+                <div class="photo-card" id="card-${index}" onclick="openLightbox(${index})">
+                    <img 
+                        src="${photo.thumbnail_url || photo.large_url}" 
+                        alt="Event photo"
+                        class="photo-image"
+                        loading="${index < 8 ? 'eager' : 'lazy'}"
+                        decoding="async"
+                        ${index < 4 ? 'fetchpriority="high"' : ''}
+                        onload="setOrientation(this, 'card-${index}')"
+                    >
+                    <!-- Action buttons - bottom right -->
+                    <div class="photo-actions">
+                        ${cartEnabled ? `<button class="photo-action-btn" onclick="event.stopPropagation(); openLightbox(${index})" title="Add to cart">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+                            </svg>
+                        </button>` : ''}
+                        <button class="photo-action-btn" onclick="event.stopPropagation(); downloadSinglePhoto(${index})" title="Download">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Info overlay - names above ID -->
+                    <div class="photo-info-overlay">
+                        ${photo.people && photo.people.length > 0 ? `<div class="photo-info-name">${photo.people.join(', ')}</div>` : ''}
+                        <div class="photo-info-id">${photo.photo_number || photo.filename?.replace(/\.[^.]+$/, '') || ''}</div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Videos appear first, then photos
+            grid.innerHTML = videoCards + photoCards;
         }
         
         async function loadProject() {
