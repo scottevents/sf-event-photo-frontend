@@ -1668,7 +1668,6 @@
     
     function handleFeaturedDragStart(e) {
         draggedFeaturedCard = this;
-        projectDragOccurred = true;
         this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', this.dataset.id);
@@ -1680,7 +1679,6 @@
             card.classList.remove('drag-over');
         });
         draggedFeaturedCard = null;
-        setTimeout(() => { projectDragOccurred = false; }, 100);
     }
     
     async function handleFeaturedDrop(e) {
@@ -1689,13 +1687,15 @@
         this.classList.remove('drag-over');
         
         if (draggedFeaturedCard && this !== draggedFeaturedCard) {
+            projectDragOccurred = true;
+            setTimeout(() => { projectDragOccurred = false; }, 200);
             const fromIndex = parseInt(draggedFeaturedCard.dataset.index);
             const toIndex = parseInt(this.dataset.index);
-            
+
             // Reorder in local array
             const [moved] = featuredProjects.splice(fromIndex, 1);
             featuredProjects.splice(toIndex, 0, moved);
-            
+
             // Re-render
             renderFeatured();
             
@@ -1796,7 +1796,6 @@
 
     function handleDragStart(e) {
         draggedProjectCard = this;
-        projectDragOccurred = true;
         this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', this.dataset.id);
@@ -1808,8 +1807,6 @@
             card.classList.remove('drag-over');
         });
         draggedProjectCard = null;
-        // Reset drag flag after a tick so click handler can check it
-        setTimeout(() => { projectDragOccurred = false; }, 100);
     }
 
     function handleDragOver(e) {
@@ -1834,6 +1831,8 @@
         this.classList.remove('drag-over');
 
         if (draggedProjectCard && this !== draggedProjectCard) {
+            projectDragOccurred = true;
+            setTimeout(() => { projectDragOccurred = false; }, 200);
             const fromIndex = parseInt(draggedProjectCard.dataset.index);
             const toIndex = parseInt(this.dataset.index);
 
