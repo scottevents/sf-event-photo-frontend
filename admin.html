@@ -1257,6 +1257,15 @@
     const API_URL='https://sf-event-photo-backend.vercel.app';
     const ADMIN_PASSWORD='sfeventphoto2024';
     let projects=[],currentProject=null,currentPhotos=[];
+    let urlDuplicateIds=new Map(); // Maps photo URL -> all DB record IDs sharing that URL
+    // Given a photo ID, return all DB record IDs that share the same URL (including the ID itself)
+    function getAllIdsForPhoto(photoId) {
+        const photo = currentPhotos.find(p => String(p.id) === String(photoId));
+        if (!photo) return [photoId];
+        const url = photo.thumbnail_url || photo.large_url || photo.original_url;
+        if (!url || !urlDuplicateIds.has(url)) return [photoId];
+        return urlDuplicateIds.get(url);
+    }
     let nextPhotoSeq = 142763; // Start at 142763 so first photo is 142764
     
     // Generate XXXXXX filename from a sequential counter
@@ -1640,7 +1649,25 @@
     
     let currentCollectionFilter = 'all';
 
-    async function loadProjects(){try{const r=await fetch(`${API_URL}/api/admin/projects`,{headers:{'x-admin-key':ADMIN_PASSWORD}});const d=await r.json();projects=d.projects||[];renderCollections();updateDropdown();}catch(e){document.getElementById('collectionsGrid').innerHTML='<div class="empty-state"><p>Error loading</p></div>';}}
+    async function loadProjects(retryCount=0){
+        try{
+            const r=await fetch(`${API_URL}/api/admin/projects`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
+            if(!r.ok) throw new Error('HTTP '+r.status+': '+r.statusText);
+            const d=await r.json();
+            projects=d.projects||[];
+            renderCollections();
+            updateDropdown();
+        }catch(e){
+            console.error('loadProjects error (attempt '+(retryCount+1)+'):', e);
+            if(retryCount<1){
+                // Retry once after 2s (handles Vercel cold starts)
+                await new Promise(res=>setTimeout(res,2000));
+                return loadProjects(retryCount+1);
+            }
+            document.getElementById('collectionsGrid').innerHTML=
+                '<div class="empty-state"><p>Error loading collections</p><p style="font-size:0.85rem;color:var(--gray-500);margin-top:0.5rem;">'+e.message+'</p><button class="btn btn-primary" style="margin-top:1rem;" onclick="loadProjects()">Retry</button></div>';
+        }
+    }
 
     function filterCollections(value) {
         currentCollectionFilter = value;
@@ -2146,9 +2173,19 @@
             // Deduplicate by photo id, then by URL (backend race condition can create multiple DB records for one R2 file)
             const seenIds=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
+            // Build URL -> all duplicate IDs map BEFORE URL dedup so deletes can target all records
+            urlDuplicateIds=new Map();
+            currentPhotos.forEach(p=>{
+                const url=p.thumbnail_url||p.large_url||p.original_url;
+                if(!url)return;
+                if(!urlDuplicateIds.has(url))urlDuplicateIds.set(url,[]);
+                urlDuplicateIds.get(url).push(String(p.id));
+            });
             const seenUrls=new Set();
             currentPhotos=currentPhotos.filter(p=>{const url=p.thumbnail_url||p.large_url||p.original_url;if(!url)return true;if(seenUrls.has(url))return false;seenUrls.add(url);return true;});
             currentPhotos.sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+            // Sync photo_count with actual deduped count so collection cards show correct number
+            if (currentProject) currentProject.photo_count = currentPhotos.length;
 
             // Reset filter and manual sets, render sidebar
             currentSetFilter = null;
@@ -2380,28 +2417,35 @@
         const count = selectedPhotos.size;
         if (!count) return;
         if (!confirm(`Delete ${count} photo${count > 1 ? 's' : ''}? This cannot be undone.`)) return;
-        
+
         showToast(`Deleting ${count} photos...`, '');
         let deleted = 0;
-        const ids = [...selectedPhotos];
-        
+        // Expand selected IDs to include all duplicate DB records sharing the same URL
+        const expandedIds = new Set();
+        for (const id of selectedPhotos) {
+            for (const dupId of getAllIdsForPhoto(id)) {
+                expandedIds.add(String(dupId));
+            }
+        }
+        const ids = [...expandedIds];
+
         // Delete in batches of 5
         for (let i = 0; i < ids.length; i += 5) {
             const batch = ids.slice(i, i + 5);
             await Promise.all(batch.map(async id => {
                 try {
-                    await fetch(`${API_URL}/api/admin/photos/${id}`, {
+                    const r = await fetch(`${API_URL}/api/admin/photos/${id}`, {
                         method: 'DELETE', headers: { 'x-admin-key': ADMIN_PASSWORD }
                     });
-                    deleted++;
-                } catch(e) {}
+                    if (r.ok) deleted++;
+                } catch(e) { console.error('bulkDelete error for id:', id, e); }
             }));
         }
-        
+
         selectedPhotos.clear();
-        showToast(`${deleted} photos deleted`, 'success');
-        loadProjectPhotos();
-        loadProjects();
+        showToast(`${deleted} records deleted (${count} photos)`, 'success');
+        await loadProjectPhotos();
+        await loadProjects();
     }
     
     async function bulkMoveToSet(setName) {
@@ -2426,7 +2470,7 @@
                         body: JSON.stringify({ set_name: actualSet })
                     });
                     moved++;
-                } catch(e) {}
+                } catch(e) { console.error('bulkMoveToSet error:', id, e); }
             }));
         }
         
@@ -2455,9 +2499,9 @@
                     headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
                     body: JSON.stringify({ sort_order: newOrder + i })
                 });
-            } catch(e) {}
+            } catch(e) { console.error('bulkMoveToFront error:', ids[i], e); }
         }
-        
+
         selectedPhotos.clear();
         showToast(`${count} photos moved to front`, 'success');
         await reloadProjectPhotosKeepSet();
@@ -2483,16 +2527,16 @@
                     headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
                     body: JSON.stringify({ sort_order: newOrder + i })
                 });
-            } catch(e) {}
+            } catch(e) { console.error('bulkMoveToBack error:', ids[i], e); }
         }
-        
+
         selectedPhotos.clear();
         showToast(`${count} photos moved to back`, 'success');
         await reloadProjectPhotosKeepSet();
     }
     
     async function saveTags(id){const people=document.getElementById(`tags-${id}`).value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});showToast('Saved!','success');}catch(e){showToast('Error','error');}}
-    async function saveAllTags(){showToast('Saving...','');let n=0;for(const p of currentPhotos){const el=document.getElementById(`tags-${p.id}`);if(!el)continue;const people=el.value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${p.id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});n++;}catch(e){}}showToast(`${n} saved!`,'success');}
+    async function saveAllTags(){showToast('Saving...','');let n=0;for(const p of currentPhotos){const el=document.getElementById(`tags-${p.id}`);if(!el)continue;const people=el.value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${p.id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});n++;}catch(e){ console.error('saveAllTags error:', p.id, e); }}showToast(`${n} saved!`,'success');}
     async function setCover(id){const photo=currentPhotos.find(p=>p.id===id);if(!photo)return;const url=photo.original_url||photo.large_url||photo.thumbnail_url;try{const resp=await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_image_url:url})});if(!resp.ok){const err=await resp.json().catch(()=>({}));console.error('setCover error:',err);showToast('Error setting cover','error');return;}currentProject.cover_image_url=url;document.getElementById('projectCover').src=url;document.getElementById('projectCover').style.objectPosition='50% 50%';document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';loadProjectPhotos();showToast('Cover set!','success');}catch(e){console.error('setCover exception:',e);showToast('Error','error');}}
     function handleFocalPointClick(event){
         const container=document.getElementById('coverPreviewContainer');
@@ -2520,7 +2564,17 @@
         currentProject.cover_focal_point=focalPoint;
         showToast('Focal point set (local only)','success');
     }
-    async function deletePhoto(id){if(!confirm('Delete?'))return;try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'DELETE',headers:{'x-admin-key':ADMIN_PASSWORD}});showToast('Deleted','success');loadProjectPhotos();loadProjects();}catch(e){showToast('Error','error');}}
+    async function deletePhoto(id){
+        if(!confirm('Delete?'))return;
+        try{
+            // Delete all duplicate DB records for this photo's URL
+            const allIds=getAllIdsForPhoto(id);
+            for(const dupId of allIds){
+                await fetch(`${API_URL}/api/admin/photos/${dupId}`,{method:'DELETE',headers:{'x-admin-key':ADMIN_PASSWORD}});
+            }
+            showToast('Deleted','success');await loadProjectPhotos();await loadProjects();
+        }catch(e){console.error('deletePhoto error:',e);showToast('Error','error');}
+    }
     
     function renderDomains(){const list=document.getElementById('projectDomains');const domains=currentProject.whitelisted_domains||[];if(!domains.length){list.innerHTML='<span style="font-size:0.75rem;color:var(--gray-400);">None</span>';return;}list.innerHTML=domains.map(d=>`<span class="domain-tag">${d}<button onclick="removeDomain('${d}')">×</button></span>`).join('');}
     async function addDomain(){const input=document.getElementById('newDomainInput');let domain=input.value.trim().toLowerCase();if(!domain)return;if(!domain.startsWith('@'))domain='@'+domain;if(!domain.includes('.')){showToast('Invalid domain','error');return;}const domains=currentProject.whitelisted_domains||[];if(domains.includes(domain)){showToast('Already added','error');return;}domains.push(domain);try{await fetch(`${API_URL}/api/gallery-access/domains/${currentProject.id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({whitelisted_domains:domains})});currentProject.whitelisted_domains=domains;renderDomains();input.value='';showToast('Added','success');}catch(e){showToast('Error','error');}}
@@ -3031,8 +3085,18 @@
             // Deduplicate by photo id, then by URL (backend race condition can create multiple DB records for one R2 file)
             const seenIds2=new Set();
             currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
+            // Rebuild URL -> all duplicate IDs map BEFORE URL dedup
+            urlDuplicateIds=new Map();
+            currentPhotos.forEach(p=>{
+                const url=p.thumbnail_url||p.large_url||p.original_url;
+                if(!url)return;
+                if(!urlDuplicateIds.has(url))urlDuplicateIds.set(url,[]);
+                urlDuplicateIds.get(url).push(String(p.id));
+            });
             const seenUrls2=new Set();
             currentPhotos=currentPhotos.filter(p=>{const url=p.thumbnail_url||p.large_url||p.original_url;if(!url)return true;if(seenUrls2.has(url))return false;seenUrls2.add(url);return true;});
+            // Sync photo_count with actual deduped count
+            if (currentProject) currentProject.photo_count = currentPhotos.length;
 
             manualSets = savedManual;
             selectSet(savedFilter);
@@ -3565,16 +3629,20 @@
         if (!confirm(`Delete ${count} photo${count > 1 ? 's' : ''}? This cannot be undone.`)) return;
         
         try {
-            const ids = Array.from(previewSelectedPhotos);
-            
-            // Delete each photo via API
-            for (const id of ids) {
+            // Expand preview selection to include all duplicate DB records
+            const expandedIds = new Set();
+            for (const id of previewSelectedPhotos) {
+                for (const dupId of getAllIdsForPhoto(id)) expandedIds.add(String(dupId));
+            }
+
+            // Delete all records via API
+            for (const id of expandedIds) {
                 await fetch(`${API_URL}/api/admin/photos/${id}`, {
                     method: 'DELETE',
                     headers: { 'x-admin-key': ADMIN_PASSWORD }
                 });
             }
-            
+
             showToast(`Deleted ${count} photo${count > 1 ? 's' : ''}`, 'success');
             previewSelectedPhotos.clear();
             
@@ -3592,12 +3660,16 @@
     
     async function deleteSinglePreview(photoId) {
         if (!confirm('Delete this photo? This cannot be undone.')) return;
-        
+
         try {
-            await fetch(`${API_URL}/api/admin/photos/${photoId}`, {
-                method: 'DELETE',
-                headers: { 'x-admin-key': ADMIN_PASSWORD }
-            });
+            // Delete all duplicate DB records for this photo's URL
+            const allIds = getAllIdsForPhoto(photoId);
+            for (const dupId of allIds) {
+                await fetch(`${API_URL}/api/admin/photos/${dupId}`, {
+                    method: 'DELETE',
+                    headers: { 'x-admin-key': ADMIN_PASSWORD }
+                });
+            }
             
             showToast('Photo deleted', 'success');
             previewSelectedPhotos.delete(photoId);

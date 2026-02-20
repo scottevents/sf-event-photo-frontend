@@ -1971,9 +1971,9 @@
         function tile(p) {
             const tag = Array.isArray(p.tags) && p.tags.length ? p.tags[0] : (p.event_type || '');
             const tagDisplay = Array.isArray(p.tags) && p.tags.length ? p.tags.join(' \u00b7 ') : (p.event_type || '');
-            const topLine = currentSort === 'featured'
-                ? tagDisplay
-                : formatDateRange(p.event_date, p.event_end_date);
+            const topLine = pressFeedActive
+                ? formatDateRange(p.event_date, p.event_end_date)
+                : tagDisplay;
             const dateStr = formatDateRange(p.event_date, p.event_end_date);
             const isPrivate = p.is_private === true;
             return `<div class="g-project ${isPrivate ? 'g-project-private' : ''}" onclick="viewProject('${p.slug}')">
