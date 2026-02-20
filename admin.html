@@ -3021,13 +3021,20 @@
                 }
                 seenUploadUrls.add(pd.uploadUrl);
 
-                // Step 2: Upload original file to R2
-                for (let attempt = 0; attempt < 2; attempt++) {
+                // Step 2: Read file into ArrayBuffer once (reusable across retries, unlike File stream)
+                const fileBuffer = await file.arrayBuffer();
+
+                // Step 3: Upload to R2 with retry + backoff
+                for (let attempt = 0; attempt < 3; attempt++) {
                     try {
-                        const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
+                        if (attempt > 0) {
+                            item.row.querySelector('.upload-popup-item-meta').textContent = `Retry ${attempt}/2 • ${sizeKB} KB`;
+                            await new Promise(r => setTimeout(r, attempt * 1000));
+                        }
+                        const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:fileBuffer});
                         if (!ur.ok) throw new Error('R2 upload failed: ' + ur.status);
 
-                        // Step 3: Register in database
+                        // Step 4: Register in database
                         const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
                             projectId: currentProject.id, publicUrl: pd.publicUrl, photoId: pd.photoId, filename: pd.filename, originalFilename: file.name, sortOrder: i, set_name: setName
                         })});
@@ -3039,7 +3046,7 @@
                         completed++;
                         break;
                     } catch(err) {
-                        if (attempt === 0) { item.row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...'; continue; }
+                        if (attempt < 2) continue;
                         throw err;
                     }
                 }
@@ -3050,6 +3057,8 @@
                 failed++;
             }
             count.textContent = `${completed} of ${total} items`;
+            // Small delay between files to avoid R2 throttling
+            if (i < fileArr.length - 1) await new Promise(r => setTimeout(r, 100));
         }
 
         popup.classList.add('completed');
@@ -3193,13 +3202,20 @@
                 }
                 seenUploadUrls.add(pd.uploadUrl);
 
-                // Step 2: Upload original file to R2
-                for (let attempt = 0; attempt < 2; attempt++) {
+                // Step 2: Read file into ArrayBuffer once (reusable across retries, unlike File stream)
+                const fileBuffer = await file.arrayBuffer();
+
+                // Step 3: Upload to R2 with retry + backoff
+                for (let attempt = 0; attempt < 3; attempt++) {
                     try {
-                        const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
+                        if (attempt > 0) {
+                            item.row.querySelector('.upload-popup-item-meta').textContent = `Retry ${attempt}/2 • ${sizeKB} KB`;
+                            await new Promise(r => setTimeout(r, attempt * 1000));
+                        }
+                        const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:fileBuffer});
                         if (!ur.ok) throw new Error('R2 upload failed: ' + ur.status);
 
-                        // Step 3: Register in database
+                        // Step 4: Register in database
                         const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
                             projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:i
                         })});
@@ -3211,7 +3227,7 @@
                         completed++;
                         break;
                     } catch(err) {
-                        if (attempt === 0) { item.row.querySelector('.upload-popup-item-meta').textContent = 'Retrying...'; continue; }
+                        if (attempt < 2) continue;
                         throw err;
                     }
                 }
@@ -3222,6 +3238,8 @@
                 failed++;
             }
             count.textContent = `${completed} of ${total} items`;
+            // Small delay between files to avoid R2 throttling
+            if (i < fileArr.length - 1) await new Promise(r => setTimeout(r, 100));
         }
 
         popup.classList.add('completed');
