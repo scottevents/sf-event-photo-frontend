@@ -1657,6 +1657,8 @@
             projects=d.projects||[];
             renderCollections();
             updateDropdown();
+            // Background: correct photo counts by deduplicating URLs
+            correctPhotoCounts();
         }catch(e){
             console.error('loadProjects error (attempt '+(retryCount+1)+'):', e);
             if(retryCount<1){
@@ -1667,6 +1669,33 @@
             document.getElementById('collectionsGrid').innerHTML=
                 '<div class="empty-state"><p>Error loading collections</p><p style="font-size:0.85rem;color:var(--gray-500);margin-top:0.5rem;">'+e.message+'</p><button class="btn btn-primary" style="margin-top:1rem;" onclick="loadProjects()">Retry</button></div>';
         }
+    }
+
+    // Fetch each project's photos in background, deduplicate by URL, and fix photo_count
+    async function correctPhotoCounts(){
+        let changed = false;
+        // Process 3 projects at a time to avoid hammering the API
+        for(let i=0; i<projects.length; i+=3){
+            const batch = projects.slice(i, i+3);
+            await Promise.all(batch.map(async p=>{
+                try{
+                    const r=await fetch(`${API_URL}/api/admin/projects/${p.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
+                    if(!r.ok) return;
+                    const d=await r.json();
+                    const photos=(d.photos||[]);
+                    // Deduplicate by id then by URL (same logic as loadProjectPhotos)
+                    const seenIds=new Set();
+                    const unique1=photos.filter(ph=>{if(!ph||seenIds.has(ph.id))return false;seenIds.add(ph.id);return true;});
+                    const seenUrls=new Set();
+                    const unique=unique1.filter(ph=>{const url=ph.thumbnail_url||ph.large_url||ph.original_url;if(!url)return true;if(seenUrls.has(url))return false;seenUrls.add(url);return true;});
+                    if(p.photo_count!==unique.length){
+                        p.photo_count=unique.length;
+                        changed=true;
+                    }
+                }catch(e){}
+            }));
+        }
+        if(changed) renderCollections();
     }
 
     function filterCollections(value) {
@@ -1692,7 +1721,7 @@
     g.innerHTML=filtered.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="if(!projectDragOccurred)showProject('${p.id}')">
         <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
         <div class="collection-cover">${p.cover_image_url?`<img src="${p.cover_image_url}">`:'<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published?'published':'draft'}">${p.published?'Published':'Draft'}</span>${p.featured?'<span class="collection-featured">⭐ Featured</span>':''}</div>
-        <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta">${p.event_date?`<span>${formatDateRange(p.event_date, p.event_end_date)}</span>`:''}</div></div>
+        <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count||0} items</span>${p.event_date?`<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>`:''}</div></div>
     </div>`).join('');
     initDragAndDrop();}
     
@@ -1716,7 +1745,7 @@
             <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
             <button class="collection-remove" onclick="event.stopPropagation();removeFromFeatured('${p.id}')" title="Remove from featured">×</button>
             <div class="collection-cover">${p.cover_image_url ? `<img src="${p.cover_image_url}">` : '<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></div>
-            <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta">${p.event_date ? `<span>${formatDateRange(p.event_date, p.event_end_date)}</span>` : ''}</div></div>
+            <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count || 0} items</span>${p.event_date ? `<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>` : ''}</div></div>
         </div>`).join('');
         
         initFeaturedDragAndDrop();
