@@ -1692,7 +1692,7 @@
     g.innerHTML=filtered.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="if(!projectDragOccurred)showProject('${p.id}')">
         <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
         <div class="collection-cover">${p.cover_image_url?`<img src="${p.cover_image_url}">`:'<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published?'published':'draft'}">${p.published?'Published':'Draft'}</span>${p.featured?'<span class="collection-featured">⭐ Featured</span>':''}</div>
-        <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count||0} items</span>${p.event_date?`<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>`:''}</div></div>
+        <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta">${p.event_date?`<span>${formatDateRange(p.event_date, p.event_end_date)}</span>`:''}</div></div>
     </div>`).join('');
     initDragAndDrop();}
     
@@ -1716,7 +1716,7 @@
             <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
             <button class="collection-remove" onclick="event.stopPropagation();removeFromFeatured('${p.id}')" title="Remove from featured">×</button>
             <div class="collection-cover">${p.cover_image_url ? `<img src="${p.cover_image_url}">` : '<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></div>
-            <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count || 0} items</span>${p.event_date ? `<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>` : ''}</div></div>
+            <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta">${p.event_date ? `<span>${formatDateRange(p.event_date, p.event_end_date)}</span>` : ''}</div></div>
         </div>`).join('');
         
         initFeaturedDragAndDrop();
