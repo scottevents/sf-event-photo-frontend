@@ -3042,9 +3042,11 @@
                 }
             }
 
-            // Step 2: Upload to R2 + register in parallel (each file has a unique filename now)
-            await Promise.all(presigned.map(({ item, pd }) => uploadWithPresign(item, pd)));
-            count.textContent = `${completed} of ${total} items`;
+            // Step 2: Upload to R2 + register sequentially (avoids R2 rate limiting 429 errors)
+            for (const { item, pd } of presigned) {
+                await uploadWithPresign(item, pd);
+                count.textContent = `${completed} of ${total} items`;
+            }
         }
 
         popup.classList.add('completed');
@@ -3209,9 +3211,11 @@
                 }
             }
 
-            // Step 2: Upload to R2 + register in parallel (each file has a unique filename now)
-            await Promise.all(presigned.map(({ item, pd }) => uploadWithPresign2(item, pd)));
-            count.textContent = `${completed} of ${total} items`;
+            // Step 2: Upload to R2 + register sequentially (avoids R2 rate limiting 429 errors)
+            for (const { item, pd } of presigned) {
+                await uploadWithPresign2(item, pd);
+                count.textContent = `${completed} of ${total} items`;
+            }
         }
 
         popup.classList.add('completed');
