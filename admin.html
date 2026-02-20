@@ -1258,6 +1258,8 @@
     const ADMIN_PASSWORD='sfeventphoto2024';
     let projects=[],currentProject=null,currentPhotos=[];
     let urlDuplicateIds=new Map(); // Maps photo URL -> all DB record IDs sharing that URL
+    let mainUploadBound = false;
+    let setUploadBound = false;
     // Given a photo ID, return all DB record IDs that share the same URL (including the ID itself)
     function getAllIdsForPhoto(photoId) {
         const photo = currentPhotos.find(p => String(p.id) === String(photoId));
@@ -1281,8 +1283,6 @@
         const id = String(nextPhotoSeq).padStart(6, '0');
         return `${id}${ext}`;
     }
-    
-    if(sessionStorage.getItem('adminLoggedIn'))showDashboard();
     
     function login(){if(document.getElementById('passwordInput').value===ADMIN_PASSWORD){sessionStorage.setItem('adminLoggedIn','true');showDashboard();}else{document.getElementById('loginError').style.display='block';}}
     function logout(){sessionStorage.removeItem('adminLoggedIn');location.reload();}
@@ -1657,8 +1657,6 @@
             projects=d.projects||[];
             renderCollections();
             updateDropdown();
-            // Background: correct photo counts by deduplicating URLs
-            correctPhotoCounts();
         }catch(e){
             console.error('loadProjects error (attempt '+(retryCount+1)+'):', e);
             if(retryCount<1){
@@ -1669,33 +1667,6 @@
             document.getElementById('collectionsGrid').innerHTML=
                 '<div class="empty-state"><p>Error loading collections</p><p style="font-size:0.85rem;color:var(--gray-500);margin-top:0.5rem;">'+e.message+'</p><button class="btn btn-primary" style="margin-top:1rem;" onclick="loadProjects()">Retry</button></div>';
         }
-    }
-
-    // Fetch each project's photos in background, deduplicate by URL, and fix photo_count
-    async function correctPhotoCounts(){
-        let changed = false;
-        // Process 3 projects at a time to avoid hammering the API
-        for(let i=0; i<projects.length; i+=3){
-            const batch = projects.slice(i, i+3);
-            await Promise.all(batch.map(async p=>{
-                try{
-                    const r=await fetch(`${API_URL}/api/admin/projects/${p.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
-                    if(!r.ok) return;
-                    const d=await r.json();
-                    const photos=(d.photos||[]);
-                    // Deduplicate by id then by URL (same logic as loadProjectPhotos)
-                    const seenIds=new Set();
-                    const unique1=photos.filter(ph=>{if(!ph||seenIds.has(ph.id))return false;seenIds.add(ph.id);return true;});
-                    const seenUrls=new Set();
-                    const unique=unique1.filter(ph=>{const url=ph.thumbnail_url||ph.large_url||ph.original_url;if(!url)return true;if(seenUrls.has(url))return false;seenUrls.add(url);return true;});
-                    if(p.photo_count!==unique.length){
-                        p.photo_count=unique.length;
-                        changed=true;
-                    }
-                }catch(e){}
-            }));
-        }
-        if(changed) renderCollections();
     }
 
     function filterCollections(value) {
@@ -2932,7 +2903,6 @@
         }catch(e){showToast('Error: '+e.message,'error');}
     }
     
-    let mainUploadBound = false;
     function setupUpload(){
         if (mainUploadBound) return;
         // Main upload zone (Upload tab)
@@ -2948,7 +2918,6 @@
         }
     }
     
-    let setUploadBound = false;
     function setupSetUpload() {
         if (setUploadBound) return;
         const setZone = document.getElementById('setUploadZone');
@@ -3824,6 +3793,9 @@
             selectAllPreview();
         }
     });
+
+    // Auto-login must be at end of script so all let/const variables are initialized (avoids TDZ errors)
+    if(sessionStorage.getItem('adminLoggedIn'))showDashboard();
     </script>
 </body>
 </html>
