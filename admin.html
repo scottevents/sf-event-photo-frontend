@@ -929,7 +929,7 @@
                                 <h3 id="currentSetTitle">All Photos</h3>
                                 <div style="display:flex;gap:0.5rem;align-items:center;">
                                     <button class="btn btn-sm btn-secondary" onclick="toggleSelectAll()" id="selectAllBtn">☐ Select All</button>
-                                    <button class="btn btn-sm btn-primary" onclick="document.getElementById('setUploadZone').style.display='block';window.initSetUppy?.();document.getElementById('uppyDashboardSet')?.scrollIntoView({behavior:'smooth'})">⊕ Add Media</button>
+                                    <button class="btn btn-sm btn-primary" onclick="window.triggerSetUpload?.()">⊕ Add Media</button>
                                     <button class="btn btn-sm btn-secondary" onclick="saveAllTags()">Save All Tags</button>
                                 </div>
                             </div>
@@ -3735,6 +3735,22 @@
             }
             setTimeout(() => { setUppy?.clearUploadedFiles(); }, 3000);
         });
+    };
+
+    // Trigger file picker for the set upload Uppy instance
+    window.triggerSetUpload = function() {
+        const zone = document.getElementById('setUploadZone');
+        if (zone) zone.style.display = 'block';
+        if (!setUppy) window.initSetUppy?.();
+        if (setUppy) {
+            // Open Uppy's file input dialog
+            const dashPlugin = setUppy.getPlugin('Dashboard');
+            if (dashPlugin) dashPlugin.openFileEditorForFile;
+            // Click the hidden file input inside the Uppy Dashboard
+            const fileInput = document.querySelector('#uppyDashboardSet .uppy-Dashboard-input');
+            if (fileInput) fileInput.click();
+        }
+        document.getElementById('uppyDashboardSet')?.scrollIntoView({behavior:'smooth'});
     };
 
     // Clean up Uppy instances when navigating away from project detail
