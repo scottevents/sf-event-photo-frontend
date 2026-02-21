@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - SF Event Photo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://releases.transloadit.com/uppy/v5.2.1/uppy.min.css" rel="stylesheet">
     <style>
         :root { --black:#1a1a1a; --white:#fff; --gray-50:#f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb; --gray-300:#d1d5db; --gray-400:#9ca3af; --gray-500:#6b7280; --gray-600:#4b5563; --accent:#14b8a6; --accent-dark:#0d9488; --danger:#ef4444; --success:#10b981; }
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -665,6 +666,17 @@
         @keyframes spin { to { transform:rotate(360deg); } }
         
         @media (max-width:768px) { .sidebar{display:none;} .main-content{margin-left:0;} .project-layout{flex-direction:column;} .project-sidebar{width:100%;} }
+
+        /* Uppy Dashboard overrides */
+        .uppy-Dashboard-inner { border:2px dashed var(--gray-200) !important; border-radius:12px !important; background:var(--gray-50) !important; font-family:'Inter',sans-serif !important; }
+        .uppy-Dashboard-dropFilesHereHint { font-family:'Inter',sans-serif !important; }
+        .uppy-DashboardContent-bar { font-family:'Inter',sans-serif !important; }
+        .uppy-Dashboard-AddFiles-title { font-family:'Inter',sans-serif !important; }
+        .uppy-Dashboard-browse { color:var(--accent) !important; }
+        .uppy-StatusBar-actionBtn--upload { background:var(--accent) !important; }
+        .uppy-StatusBar-actionBtn--upload:hover { background:#1a1a1a !important; }
+        .uppy-DashboardContent-addMore { color:var(--accent) !important; }
+        .set-upload-zone .uppy-Dashboard-inner { min-height:200px !important; }
     </style>
 </head>
 <body>
@@ -917,7 +929,7 @@
                                 <h3 id="currentSetTitle">All Photos</h3>
                                 <div style="display:flex;gap:0.5rem;align-items:center;">
                                     <button class="btn btn-sm btn-secondary" onclick="toggleSelectAll()" id="selectAllBtn">☐ Select All</button>
-                                    <button class="btn btn-sm btn-primary" onclick="triggerSetUpload()">⊕ Add Media</button>
+                                    <button class="btn btn-sm btn-primary" onclick="document.getElementById('uppyDashboardSet')?.scrollIntoView({behavior:'smooth'})">⊕ Add Media</button>
                                     <button class="btn btn-sm btn-secondary" onclick="saveAllTags()">Save All Tags</button>
                                 </div>
                             </div>
@@ -934,12 +946,7 @@
                             </div>
                             <div id="photosArea">
                                 <div id="setUploadZone" class="set-upload-zone" style="display:none;">
-                                    <div class="upload-zone-inner">
-                                        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                                        <h3>Drag photos and videos here to upload</h3>
-                                        <p>or <a href="#" onclick="document.getElementById('setFileInput').click(); return false;">Browse files</a></p>
-                                        <input type="file" id="setFileInput" multiple accept="image/jpeg,image/png,image/webp" style="display:none;">
-                                    </div>
+                                    <div id="uppyDashboardSet"></div>
                                 </div>
                                 <div id="photosGrid" class="photos-grid"><div class="loading"><div class="spinner"></div></div></div>
                             </div>
@@ -955,12 +962,7 @@
                         <label>Select Collection</label>
                         <select id="uploadProjectSelect" class="sidebar-input"><option value="">Choose...</option></select>
                     </div>
-                    <div class="upload-zone" id="uploadZone">
-                        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="margin:0 auto 1rem;color:var(--gray-400);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
-                        <h3>Drag & drop photos here</h3>
-                        <p>or click to browse • JPG, PNG, WebP</p>
-                        <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/webp">
-                    </div>
+                    <div id="uppyDashboardMain"></div>
                 </div>
             </div>
             
@@ -1258,8 +1260,6 @@
     const ADMIN_PASSWORD='sfeventphoto2024';
     let projects=[],currentProject=null,currentPhotos=[];
     let urlDuplicateIds=new Map(); // Maps photo URL -> all DB record IDs sharing that URL
-    let mainUploadBound = false;
-    let setUploadBound = false;
     // Given a photo ID, return all DB record IDs that share the same URL (including the ID itself)
     function getAllIdsForPhoto(photoId) {
         const photo = currentPhotos.find(p => String(p.id) === String(photoId));
@@ -1286,12 +1286,12 @@
     
     function login(){if(document.getElementById('passwordInput').value===ADMIN_PASSWORD){sessionStorage.setItem('adminLoggedIn','true');showDashboard();}else{document.getElementById('loginError').style.display='block';}}
     function logout(){sessionStorage.removeItem('adminLoggedIn');location.reload();}
-    function showDashboard(){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboard').classList.add('active');loadProjects();setupUpload();}
+    function showDashboard(){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboard').classList.add('active');loadProjects();}
     
     function setActiveNav(idx){document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',i===idx));}
     function showCollections(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('collectionsTab').classList.add('active');setActiveNav(0);}
     function showFeatured(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('featuredTab').classList.add('active');setActiveNav(1);renderFeatured();}
-    function showUpload(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(2);updateDropdown();}
+    function showUpload(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(2);updateDropdown();window.initMainUppy?.();}
     function showOrders(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('ordersTab').classList.add('active');setActiveNav(3);loadOrders();}
     function showLicenses(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('licensesTab').classList.add('active');setActiveNav(4);loadLicenses();}
     function showSettings(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('settingsTabContent').classList.add('active');setActiveNav(5);loadSiteSettings();}
@@ -2192,13 +2192,13 @@
             manualSets = [];
             renderSetsSidebar();
 
-            // Bind set upload listeners (DOM now exists)
-            setupSetUpload();
+            // Init Uppy set upload (DOM now exists)
+            window.initSetUppy?.();
 
-            // Show upload zone if no photos
+            // Always show upload zone (Uppy Dashboard handles empty state)
             const uploadZone = document.getElementById('setUploadZone');
             if (uploadZone) {
-                uploadZone.style.display = currentPhotos.length === 0 ? 'block' : 'none';
+                uploadZone.style.display = 'block';
             }
 
             // Update title
@@ -2785,7 +2785,7 @@
         }
     }
     
-    function openUploadForProject(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(1);updateDropdown();document.getElementById('uploadProjectSelect').value=currentProject.id;}
+    function openUploadForProject(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(2);updateDropdown();document.getElementById('uploadProjectSelect').value=currentProject.id;window.initMainUppy?.();}
     
     async function createProject(e){
         if(e)e.preventDefault();
@@ -2903,173 +2903,7 @@
         }catch(e){showToast('Error: '+e.message,'error');}
     }
     
-    function setupUpload(){
-        if (mainUploadBound) return;
-        // Main upload zone (Upload tab)
-        const zone=document.getElementById('uploadZone');
-        const input=document.getElementById('fileInput');
-        if (zone && input) {
-            zone.addEventListener('click',()=>input.click());
-            zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');});
-            zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
-            zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');handleFiles(e.dataTransfer.files);});
-            input.addEventListener('change',e=>handleFiles(e.target.files));
-            mainUploadBound = true;
-        }
-    }
-    
-    function setupSetUpload() {
-        if (setUploadBound) return;
-        const setZone = document.getElementById('setUploadZone');
-        const setInput = document.getElementById('setFileInput');
-        if (setZone && setInput) {
-            setZone.addEventListener('dragover', e => { e.preventDefault(); setZone.classList.add('dragover'); });
-            setZone.addEventListener('dragleave', () => setZone.classList.remove('dragover'));
-            setZone.addEventListener('drop', e => { e.preventDefault(); setZone.classList.remove('dragover'); handleSetFiles(e.dataTransfer.files); });
-            setInput.addEventListener('change', e => handleSetFiles(e.target.files));
-            setUploadBound = true;
-        }
-    }
-    
-    function triggerSetUpload() {
-        setupSetUpload(); // ensure bound
-        document.getElementById('setFileInput').click();
-    }
-    
-    let isUploading = false;
-
-    async function handleSetFiles(files) {
-        if (!currentProject) {
-            showToast('No project selected', 'error');
-            return;
-        }
-        if (isUploading) {
-            showToast('Upload already in progress', 'error');
-            return;
-        }
-        isUploading = true;
-        try {
-        const setName = (currentSetFilter && currentSetFilter !== '__favorites__') ? currentSetFilter : null;
-        const total = files.length;
-
-        // Show popup
-        const popup = document.getElementById('uploadPopup');
-        const list = document.getElementById('uploadList');
-        const title = document.getElementById('uploadTitle');
-        const count = document.getElementById('uploadCount');
-
-        popup.classList.add('show');
-        popup.classList.remove('completed', 'collapsed');
-        title.textContent = setName ? `Uploading to "${setName}"...` : 'Uploading...';
-        count.textContent = `0 of ${total} items`;
-        list.innerHTML = '';
-
-        let completed = 0, failed = 0;
-
-        function addUploadRow(file, idx) {
-            const sizeKB = (file.size/1024).toFixed(0);
-            const itemId = `up-${Date.now()}-${idx}`;
-            const row = document.createElement('div');
-            row.className = 'upload-popup-item';
-            row.id = itemId;
-            row.innerHTML = `
-                <div class="upload-popup-item-icon" style="background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--gray-400);">IMG</div>
-                <div class="upload-popup-item-info">
-                    <div class="upload-popup-item-name">${file.name}</div>
-                    <div class="upload-popup-item-meta">Queued • ${sizeKB} KB</div>
-                </div>
-                <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
-            list.appendChild(row);
-            return { file, idx, sizeKB, itemId, row };
-        }
-
-        // Process one file at a time: presign → upload → register
-        // This prevents the backend's non-atomic counter from generating duplicate URLs
-        const seenUploadUrls = new Set();
-        const fileArr = [...files];
-        for (let i = 0; i < fileArr.length; i++) {
-            const file = fileArr[i];
-            const item = addUploadRow(file, i);
-
-            // Skip files over 50MB (resize handles everything else)
-            if (file.size > 50 * 1024 * 1024) {
-                item.row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(file.size/1024/1024).toFixed(1)}MB, max 50MB)`;
-                document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
-                document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
-                failed++;
-                continue;
-            }
-
-            try {
-                // Step 1: Get presigned URL
-                const sizeKB = (file.size/1024).toFixed(0);
-                item.row.querySelector('.upload-popup-item-meta').textContent = `Uploading • ${sizeKB} KB`;
-                let pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
-                let pd = await pr.json();
-                if (pd.error) throw new Error(pd.error);
-
-                // Step 1b: Duplicate URL safety net — re-request if backend returned a URL we've already seen
-                if (seenUploadUrls.has(pd.uploadUrl)) {
-                    console.warn('Duplicate presign URL detected, retrying after delay...');
-                    await new Promise(r => setTimeout(r, 500));
-                    pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
-                    pd = await pr.json();
-                    if (pd.error) throw new Error(pd.error);
-                    if (seenUploadUrls.has(pd.uploadUrl)) {
-                        throw new Error('Backend returned duplicate URL twice — skipping to prevent overwrite');
-                    }
-                }
-                seenUploadUrls.add(pd.uploadUrl);
-
-                // Step 2: Upload to R2 with retry + backoff
-                // Use file.slice() for each attempt — creates a fresh readable blob (Safari-safe)
-                for (let attempt = 0; attempt < 3; attempt++) {
-                    try {
-                        if (attempt > 0) {
-                            item.row.querySelector('.upload-popup-item-meta').textContent = `Retry ${attempt}/2 • ${sizeKB} KB`;
-                            await new Promise(r => setTimeout(r, attempt * 1000));
-                        }
-                        const blob = file.slice(0, file.size, file.type);
-                        const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:blob});
-                        if (!ur.ok) throw new Error('R2 upload failed: ' + ur.status);
-
-                        // Step 3: Register in database
-                        const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
-                            projectId: currentProject.id, publicUrl: pd.publicUrl, photoId: pd.photoId, filename: pd.filename, originalFilename: file.name, sortOrder: i, set_name: setName
-                        })});
-                        if (!cr.ok) throw new Error('Registration failed');
-
-                        item.row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
-                        document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status done';
-                        document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
-                        completed++;
-                        break;
-                    } catch(err) {
-                        if (attempt < 2) continue;
-                        throw err;
-                    }
-                }
-            } catch(err) {
-                item.row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
-                document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
-                document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
-                failed++;
-            }
-            count.textContent = `${completed} of ${total} items`;
-            // Small delay between files to avoid R2 throttling
-            if (i < fileArr.length - 1) await new Promise(r => setTimeout(r, 100));
-        }
-
-        popup.classList.add('completed');
-        title.textContent = 'Upload completed';
-        count.textContent = failed ? `${completed} uploaded, ${failed} failed` : `${completed} items uploaded`;
-        loadProjects();
-        await reloadProjectPhotosKeepSet();
-        document.getElementById('setFileInput').value='';
-        } finally {
-            isUploading = false;
-        }
-    }
+    // Old upload functions removed — Uppy handles uploads now
     
     async function reloadProjectPhotosKeepSet() {
         const savedFilter = currentSetFilter;
@@ -3120,136 +2954,7 @@
     function toggleUploadPopup() { document.getElementById('uploadPopup').classList.toggle('collapsed'); }
     function closeUploadPopup() { document.getElementById('uploadPopup').classList.remove('show'); }
     
-    async function handleFiles(files){
-        const projectId=document.getElementById('uploadProjectSelect').value;
-        if(!projectId){showToast('Select collection first!','error');return;}
-        if (isUploading) {
-            showToast('Upload already in progress', 'error');
-            return;
-        }
-        isUploading = true;
-        try {
-        const project=projects.find(p=>p.id===projectId);
-        const total = files.length;
-
-        // Show popup
-        const popup = document.getElementById('uploadPopup');
-        const list = document.getElementById('uploadList');
-        const title = document.getElementById('uploadTitle');
-        const count = document.getElementById('uploadCount');
-
-        popup.classList.add('show');
-        popup.classList.remove('completed', 'collapsed');
-        title.textContent = 'Uploading...';
-        count.textContent = `0 of ${total} items`;
-        list.innerHTML = '';
-
-        let completed = 0, failed = 0;
-
-        function addUploadRow2(file, idx) {
-            const sizeKB = (file.size/1024).toFixed(0);
-            const itemId = `up-${Date.now()}-${idx}`;
-            const row = document.createElement('div');
-            row.className = 'upload-popup-item';
-            row.id = itemId;
-            row.innerHTML = `
-                <div class="upload-popup-item-icon" style="background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--gray-400);">IMG</div>
-                <div class="upload-popup-item-info">
-                    <div class="upload-popup-item-name">${file.name}</div>
-                    <div class="upload-popup-item-meta">Queued • ${sizeKB} KB</div>
-                </div>
-                <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
-            list.appendChild(row);
-            return { file, idx, sizeKB, itemId, row };
-        }
-
-        // Process one file at a time: presign → upload → register
-        // This prevents the backend's non-atomic counter from generating duplicate URLs
-        const seenUploadUrls = new Set();
-        const fileArr = [...files];
-        for (let i = 0; i < fileArr.length; i++) {
-            const file = fileArr[i];
-            const item = addUploadRow2(file, i);
-
-            // Skip files over 50MB (resize handles everything else)
-            if (file.size > 50 * 1024 * 1024) {
-                item.row.querySelector('.upload-popup-item-meta').textContent = `Too large (${(file.size/1024/1024).toFixed(1)}MB, max 50MB)`;
-                document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
-                document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
-                failed++;
-                continue;
-            }
-
-            try {
-                // Step 1: Get presigned URL
-                const sizeKB = (file.size/1024).toFixed(0);
-                item.row.querySelector('.upload-popup-item-meta').textContent = `Uploading • ${sizeKB} KB`;
-                let pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
-                let pd = await pr.json();
-                if (pd.error) throw new Error(pd.error);
-
-                // Step 1b: Duplicate URL safety net
-                if (seenUploadUrls.has(pd.uploadUrl)) {
-                    console.warn('Duplicate presign URL detected, retrying after delay...');
-                    await new Promise(r => setTimeout(r, 500));
-                    pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
-                    pd = await pr.json();
-                    if (pd.error) throw new Error(pd.error);
-                    if (seenUploadUrls.has(pd.uploadUrl)) {
-                        throw new Error('Backend returned duplicate URL twice — skipping to prevent overwrite');
-                    }
-                }
-                seenUploadUrls.add(pd.uploadUrl);
-
-                // Step 2: Upload to R2 with retry + backoff
-                // Use file.slice() for each attempt — creates a fresh readable blob (Safari-safe)
-                for (let attempt = 0; attempt < 3; attempt++) {
-                    try {
-                        if (attempt > 0) {
-                            item.row.querySelector('.upload-popup-item-meta').textContent = `Retry ${attempt}/2 • ${sizeKB} KB`;
-                            await new Promise(r => setTimeout(r, attempt * 1000));
-                        }
-                        const blob = file.slice(0, file.size, file.type);
-                        const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:blob});
-                        if (!ur.ok) throw new Error('R2 upload failed: ' + ur.status);
-
-                        // Step 3: Register in database
-                        const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
-                            projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:i
-                        })});
-                        if (!cr.ok) throw new Error('Registration failed');
-
-                        item.row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
-                        document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status done';
-                        document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
-                        completed++;
-                        break;
-                    } catch(err) {
-                        if (attempt < 2) continue;
-                        throw err;
-                    }
-                }
-            } catch(err) {
-                item.row.querySelector('.upload-popup-item-meta').textContent = `Failed: ${err.message}`;
-                document.getElementById(`stat-${item.itemId}`).className = 'upload-popup-item-status error';
-                document.getElementById(`stat-${item.itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
-                failed++;
-            }
-            count.textContent = `${completed} of ${total} items`;
-            // Small delay between files to avoid R2 throttling
-            if (i < fileArr.length - 1) await new Promise(r => setTimeout(r, 100));
-        }
-
-        popup.classList.add('completed');
-        title.textContent = 'Upload completed';
-        count.textContent = failed ? `${completed} uploaded, ${failed} failed` : `${completed} items uploaded`;
-        loadProjects();
-        if(currentProject) await loadProjectPhotos();
-        document.getElementById('fileInput').value='';
-        } finally {
-            isUploading = false;
-        }
-    }
+    // handleFiles removed — Uppy handles main uploads now
     
     async function loadOrders(){const el=document.getElementById('ordersList');try{const r=await fetch(`${API_URL}/api/admin/orders`,{headers:{'x-admin-key':ADMIN_PASSWORD}});const d=await r.json();if(!d.orders?.length){el.innerHTML='<div class="empty-state"><p>No orders yet</p></div>';return;}el.innerHTML=`<table style="width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;"><thead><tr style="background:var(--gray-50);text-align:left;"><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Order</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Date</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Customer</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Total</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Status</th></tr></thead><tbody>${d.orders.map(o=>`<tr style="border-top:1px solid var(--gray-200);"><td style="padding:0.75rem 1rem;font-weight:500;">${o.order_number||o.id.slice(0,8)}</td><td style="padding:0.75rem 1rem;color:var(--gray-600);">${new Date(o.created_at).toLocaleDateString()}</td><td style="padding:0.75rem 1rem;">${o.customer_email||'-'}</td><td style="padding:0.75rem 1rem;font-weight:500;">$${((o.total_amount||0)/100).toFixed(2)}</td><td style="padding:0.75rem 1rem;"><span style="background:${o.status==='completed'?'var(--success)':'var(--gray-400)'};color:white;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600;">${o.status}</span></td></tr>`).join('')}</tbody></table>`;}catch(e){el.innerHTML='<div class="empty-state"><p>Error</p></div>';}}
     
@@ -3822,6 +3527,229 @@
 
     // Auto-login must be at end of script so all let/const variables are initialized (avoids TDZ errors)
     if(sessionStorage.getItem('adminLoggedIn'))showDashboard();
+    </script>
+
+    <!-- Uppy upload module (ESM) -->
+    <script type="module">
+    import Uppy from 'https://releases.transloadit.com/uppy/v5.2.1/uppy.min.mjs';
+    import Dashboard from 'https://releases.transloadit.com/uppy/v5.2.1/%40uppy/dashboard/dist/dashboard.min.mjs';
+    import AwsS3 from 'https://releases.transloadit.com/uppy/v5.2.1/%40uppy/aws-s3/dist/aws-s3.min.mjs';
+
+    const API_URL = 'https://sf-event-photo-backend.vercel.app';
+    const ADMIN_PASSWORD = 'sfeventphoto2024';
+
+    // Track presigned URLs to detect backend counter race duplicates
+    const seenUploadUrls = new Set();
+
+    // Helper: get presigned URL from backend, with duplicate detection + retry
+    async function getPresignParams(file, projectSlug, setName) {
+        let pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
+            body: JSON.stringify({ contentType: file.type, projectSlug })
+        });
+        let pd = await pr.json();
+        if (pd.error) throw new Error(pd.error);
+
+        // Duplicate safety net
+        if (seenUploadUrls.has(pd.uploadUrl)) {
+            console.warn('Duplicate presign URL detected, retrying after delay...');
+            await new Promise(r => setTimeout(r, 500));
+            pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
+                body: JSON.stringify({ contentType: file.type, projectSlug })
+            });
+            pd = await pr.json();
+            if (pd.error) throw new Error(pd.error);
+            if (seenUploadUrls.has(pd.uploadUrl)) {
+                throw new Error('Backend returned duplicate URL twice');
+            }
+        }
+        seenUploadUrls.add(pd.uploadUrl);
+
+        // Store metadata on the file for the complete-with-id call
+        file.meta.backendData = pd;
+        if (setName) file.meta.setName = setName;
+
+        return {
+            method: 'PUT',
+            url: pd.uploadUrl,
+            headers: { 'Content-Type': file.type }
+        };
+    }
+
+    // Helper: register uploaded file in database
+    async function completeUpload(file, projectId) {
+        const bd = file.meta.backendData;
+        if (!bd) return;
+        const body = {
+            projectId,
+            publicUrl: bd.publicUrl,
+            photoId: bd.photoId,
+            filename: bd.filename,
+            originalFilename: file.name,
+            sortOrder: 0
+        };
+        if (file.meta.setName) body.set_name = file.meta.setName;
+        const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
+            body: JSON.stringify(body)
+        });
+        if (!cr.ok) console.error('complete-with-id failed for', file.name);
+    }
+
+    // ===== MAIN UPLOAD (Upload tab) =====
+    let mainUppy = null;
+
+    window.initMainUppy = function() {
+        const target = document.getElementById('uppyDashboardMain');
+        if (!target) return;
+        // Don't re-init if already mounted
+        if (mainUppy) {
+            // Re-check project selection is valid
+            return;
+        }
+
+        mainUppy = new Uppy({
+            restrictions: {
+                allowedFileTypes: ['image/*'],
+                maxFileSize: 50 * 1024 * 1024 // 50MB
+            },
+            autoProceed: false
+        });
+
+        mainUppy.use(Dashboard, {
+            inline: true,
+            target: '#uppyDashboardMain',
+            height: 400,
+            width: '100%',
+            showProgressDetails: true,
+            proudlyDisplayPoweredByUppy: false,
+            note: 'Images only, up to 50 MB each',
+            locale: {
+                strings: {
+                    dropPasteFiles: 'Drop photos here or %{browseFiles}',
+                    browseFiles: 'browse files'
+                }
+            }
+        });
+
+        mainUppy.use(AwsS3, {
+            limit: 1,
+            async getUploadParameters(file) {
+                const sel = document.getElementById('uploadProjectSelect');
+                const projectId = sel?.value;
+                if (!projectId) throw new Error('Select a collection first');
+                const opt = sel.selectedOptions[0];
+                const projectSlug = opt?.dataset?.slug;
+                if (!projectSlug) throw new Error('Collection has no slug');
+                file.meta.projectId = projectId;
+                return getPresignParams(file, projectSlug, null);
+            }
+        });
+
+        mainUppy.on('upload-success', async (file) => {
+            try {
+                await completeUpload(file, file.meta.projectId);
+            } catch(e) { console.error('complete error:', e); }
+        });
+
+        mainUppy.on('complete', (result) => {
+            if (result.successful.length > 0) {
+                window.showToast?.(`${result.successful.length} photo(s) uploaded`, 'success');
+                window.loadProjects?.();
+                if (window.currentProject) window.reloadProjectPhotosKeepSet?.();
+            }
+            if (result.failed.length > 0) {
+                window.showToast?.(`${result.failed.length} upload(s) failed`, 'error');
+            }
+            // Clear files after a short delay so user sees the success state
+            setTimeout(() => { mainUppy?.clearUploadedFiles(); }, 3000);
+        });
+
+        mainUppy.on('upload', () => {
+            const sel = document.getElementById('uploadProjectSelect');
+            if (!sel?.value) {
+                window.showToast?.('Select a collection first!', 'error');
+                mainUppy.cancelAll();
+            }
+        });
+    };
+
+    // ===== SET UPLOAD (Project detail) =====
+    let setUppy = null;
+
+    window.initSetUppy = function() {
+        const target = document.getElementById('uppyDashboardSet');
+        if (!target) return;
+        // Don't re-init if already mounted to the same target
+        if (setUppy) {
+            return;
+        }
+
+        setUppy = new Uppy({
+            restrictions: {
+                allowedFileTypes: ['image/*'],
+                maxFileSize: 50 * 1024 * 1024
+            },
+            autoProceed: false
+        });
+
+        setUppy.use(Dashboard, {
+            inline: true,
+            target: '#uppyDashboardSet',
+            height: 250,
+            width: '100%',
+            showProgressDetails: true,
+            proudlyDisplayPoweredByUppy: false,
+            note: 'Add photos to this collection',
+            locale: {
+                strings: {
+                    dropPasteFiles: 'Drop photos here or %{browseFiles}',
+                    browseFiles: 'browse files'
+                }
+            }
+        });
+
+        setUppy.use(AwsS3, {
+            limit: 1,
+            async getUploadParameters(file) {
+                const proj = window.currentProject;
+                if (!proj) throw new Error('No project selected');
+                file.meta.projectId = proj.id;
+                const setName = (window.currentSetFilter && window.currentSetFilter !== '__favorites__') ? window.currentSetFilter : null;
+                return getPresignParams(file, proj.slug, setName);
+            }
+        });
+
+        setUppy.on('upload-success', async (file) => {
+            try {
+                await completeUpload(file, file.meta.projectId);
+            } catch(e) { console.error('complete error:', e); }
+        });
+
+        setUppy.on('complete', (result) => {
+            if (result.successful.length > 0) {
+                window.showToast?.(`${result.successful.length} photo(s) uploaded`, 'success');
+                window.loadProjects?.();
+                window.reloadProjectPhotosKeepSet?.();
+            }
+            if (result.failed.length > 0) {
+                window.showToast?.(`${result.failed.length} upload(s) failed`, 'error');
+            }
+            setTimeout(() => { setUppy?.clearUploadedFiles(); }, 3000);
+        });
+    };
+
+    // Clean up Uppy instances when navigating away from project detail
+    // (prevents stale Dashboard targets after DOM changes)
+    const origShowCollections = window.showCollections;
+    window.showCollections = function() {
+        if (setUppy) { setUppy.destroy(); setUppy = null; }
+        origShowCollections?.();
+    };
     </script>
 </body>
 </html>
