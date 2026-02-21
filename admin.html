@@ -3746,6 +3746,17 @@
         if (setUppy) { setUppy.destroy(); setUppy = null; }
         origShowCollections?.();
     };
+
+    // Module scripts are deferred — by the time this runs, the regular <script>
+    // may have already called initMainUppy/initSetUppy (which were undefined).
+    // Auto-init any Dashboard targets that already exist in the DOM.
+    window.uppyReady = true;
+    if (document.getElementById('uppyDashboardMain')?.offsetParent !== null) {
+        window.initMainUppy();
+    }
+    if (document.getElementById('uppyDashboardSet')?.offsetParent !== null) {
+        window.initSetUppy();
+    }
     </script>
 </body>
 </html>
