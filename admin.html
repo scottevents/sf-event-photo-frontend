@@ -3682,15 +3682,13 @@
         }
 
         async function uploadToR2(file, uploadUrl) {
-            return withRetry('upload failed', async () => {
-                const body = file.slice(0, file.size, file.type || 'application/octet-stream');
-                const r = await fetch(uploadUrl, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': file.type || 'application/octet-stream' },
-                    body
-                });
-                if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            const body = file.slice(0, file.size, file.type || 'application/octet-stream');
+            const r = await fetch(uploadUrl, {
+                method: 'PUT',
+                headers: { 'Content-Type': file.type || 'application/octet-stream' },
+                body
             });
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
         }
 
         async function completeUpload(meta, projectId, originalFilename, setName) {
@@ -3715,9 +3713,20 @@
 
         async function uploadOneFile(item) {
             const project = item.target;
-            const presign = await requestPresign(item.file, project.projectSlug);
-            await uploadToR2(item.file, presign.uploadUrl);
-            await completeUpload(presign, project.projectId, item.name, project.setName);
+            let lastError = null;
+            for (let attempt = 1; attempt <= MAX_RETRIES; attempt += 1) {
+                try {
+                    // Retry the full file pipeline with a fresh presigned URL each attempt.
+                    const presign = await requestPresign(item.file, project.projectSlug);
+                    await uploadToR2(item.file, presign.uploadUrl);
+                    await completeUpload(presign, project.projectId, item.name, project.setName);
+                    return;
+                } catch (err) {
+                    lastError = err;
+                    if (attempt < MAX_RETRIES) await sleep(450 * attempt);
+                }
+            }
+            throw lastError || new Error('Upload failed');
         }
 
         async function processQueue(context) {
