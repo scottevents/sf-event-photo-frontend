@@ -3537,22 +3537,25 @@
 
     // Helper: get presigned URL from backend, with duplicate detection + retry
     async function getPresignParams(file, projectSlug, setName) {
+        const contentType = file.type || 'image/jpeg';
+        console.log('[Uppy] getPresignParams for', file.name, 'type:', contentType, 'slug:', projectSlug);
         let pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
-            body: JSON.stringify({ contentType: file.type, projectSlug })
+            body: JSON.stringify({ contentType, projectSlug })
         });
         let pd = await pr.json();
+        console.log('[Uppy] presign response:', pd);
         if (pd.error) throw new Error(pd.error);
 
         // Duplicate safety net
         if (seenUploadUrls.has(pd.uploadUrl)) {
-            console.warn('Duplicate presign URL detected, retrying after delay...');
+            console.warn('[Uppy] Duplicate presign URL detected, retrying after delay...');
             await new Promise(r => setTimeout(r, 500));
             pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
-                body: JSON.stringify({ contentType: file.type, projectSlug })
+                body: JSON.stringify({ contentType, projectSlug })
             });
             pd = await pr.json();
             if (pd.error) throw new Error(pd.error);
@@ -3566,10 +3569,11 @@
         file.meta.backendData = pd;
         if (setName) file.meta.setName = setName;
 
+        console.log('[Uppy] returning upload params, url:', pd.uploadUrl.substring(0, 80) + '...');
         return {
             method: 'PUT',
             url: pd.uploadUrl,
-            headers: { 'Content-Type': file.type }
+            headers: { 'Content-Type': contentType }
         };
     }
 
@@ -3670,6 +3674,14 @@
                 mainUppy.cancelAll();
             }
         });
+
+        mainUppy.on('upload-error', (file, error, response) => {
+            console.error('[Uppy Main] upload-error:', file?.name, error?.message, 'status:', response?.status, response);
+        });
+
+        mainUppy.on('error', (error) => {
+            console.error('[Uppy Main] error:', error);
+        });
     };
 
     // ===== SET UPLOAD (Project detail) =====
@@ -3734,6 +3746,14 @@
                 window.showToast?.(`${result.failed.length} upload(s) failed`, 'error');
             }
             setTimeout(() => { setUppy?.clearUploadedFiles(); }, 3000);
+        });
+
+        setUppy.on('upload-error', (file, error, response) => {
+            console.error('[Uppy Set] upload-error:', file?.name, error?.message, 'status:', response?.status, response);
+        });
+
+        setUppy.on('error', (error) => {
+            console.error('[Uppy Set] error:', error);
         });
     };
 
