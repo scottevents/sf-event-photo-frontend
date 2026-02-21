@@ -929,7 +929,7 @@
                                 <h3 id="currentSetTitle">All Photos</h3>
                                 <div style="display:flex;gap:0.5rem;align-items:center;">
                                     <button class="btn btn-sm btn-secondary" onclick="toggleSelectAll()" id="selectAllBtn">☐ Select All</button>
-                                    <button class="btn btn-sm btn-primary" onclick="document.getElementById('uppyDashboardSet')?.scrollIntoView({behavior:'smooth'})">⊕ Add Media</button>
+                                    <button class="btn btn-sm btn-primary" onclick="document.getElementById('setUploadZone').style.display='block';window.initSetUppy?.();document.getElementById('uppyDashboardSet')?.scrollIntoView({behavior:'smooth'})">⊕ Add Media</button>
                                     <button class="btn btn-sm btn-secondary" onclick="saveAllTags()">Save All Tags</button>
                                 </div>
                             </div>
@@ -2093,13 +2093,9 @@
             titleEl.textContent = setName;
         }
         
-        // Show upload zone for custom sets (not All Photos or Favorites)
+        // Always show upload zone (Uppy Dashboard handles its own UI)
         const uploadZone = document.getElementById('setUploadZone');
-        if (setName && setName !== '__favorites__') {
-            uploadZone.style.display = 'block';
-        } else {
-            uploadZone.style.display = currentPhotos.length === 0 ? 'block' : 'none';
-        }
+        if (uploadZone) uploadZone.style.display = 'block';
     }
     
     function renderFilteredPhotos() {
