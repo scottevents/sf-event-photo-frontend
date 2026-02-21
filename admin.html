@@ -3643,9 +3643,10 @@
                 if (!projectId || !projectSlug) throw new Error('Select a collection first');
                 return { projectId, projectSlug, setName: null };
             }
-            const proj = window.currentProject;
+            const proj = (typeof currentProject !== 'undefined' && currentProject) ? currentProject : window.currentProject;
             if (!proj?.id || !proj?.slug) throw new Error('Open a collection first');
-            const setName = (window.currentSetFilter && window.currentSetFilter !== '__favorites__') ? window.currentSetFilter : null;
+            const activeSetFilter = (typeof currentSetFilter !== 'undefined') ? currentSetFilter : window.currentSetFilter;
+            const setName = (activeSetFilter && activeSetFilter !== '__favorites__') ? activeSetFilter : null;
             return { projectId: proj.id, projectSlug: proj.slug, setName };
         }
 
@@ -3754,7 +3755,8 @@
                     window.showToast?.(`${uploader.failedInRun} upload(s) failed`, 'error');
                 }
                 window.loadProjects?.();
-                if (window.currentProject) window.reloadProjectPhotosKeepSet?.();
+                const activeProject = (typeof currentProject !== 'undefined' && currentProject) ? currentProject : window.currentProject;
+                if (activeProject) window.reloadProjectPhotosKeepSet?.();
             }
             uploader.completedInRun = 0;
             uploader.failedInRun = 0;
