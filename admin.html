@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - SF Event Photo</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://releases.transloadit.com/uppy/v5.2.1/uppy.min.css" rel="stylesheet">
     <style>
         :root { --black:#1a1a1a; --white:#fff; --gray-50:#f9fafb; --gray-100:#f3f4f6; --gray-200:#e5e7eb; --gray-300:#d1d5db; --gray-400:#9ca3af; --gray-500:#6b7280; --gray-600:#4b5563; --accent:#14b8a6; --accent-dark:#0d9488; --danger:#ef4444; --success:#10b981; }
         * { margin:0; padding:0; box-sizing:border-box; }
@@ -64,9 +63,8 @@
         .collection-card:hover .drag-handle { opacity:1; }
         .collection-card .drag-handle:active { cursor:grabbing; }
         .collection-card .drag-handle svg { width:16px; height:16px; color:var(--gray-500); }
-        .collection-cover { aspect-ratio:16/10; background:var(--gray-200); position:relative; overflow:hidden; display:flex; align-items:center; justify-content:center; }
-        .collection-cover img { width:100%; height:100%; object-fit:cover; position:absolute; inset:0; }
-        .collection-cover .no-cover-icon { color:var(--gray-400); font-size:24px; }
+        .collection-cover { aspect-ratio:16/10; background:var(--gray-200); position:relative; overflow:hidden; }
+        .collection-cover img { width:100%; height:100%; object-fit:cover; }
         .collection-status { position:absolute; top:12px; left:12px; padding:0.25rem 0.6rem; border-radius:4px; font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
         .collection-status.published { background:var(--accent); color:white; }
         .collection-status.draft { background:var(--gray-600); color:white; }
@@ -95,11 +93,8 @@
         
         .project-layout { display:flex; gap:2rem; }
         .project-sidebar { width:280px; flex-shrink:0; }
-        .project-cover-preview { aspect-ratio:16/10; border-radius:8px; overflow:hidden; background:var(--gray-200); margin-bottom:1rem; position:relative; cursor:crosshair; }
+        .project-cover-preview { aspect-ratio:16/10; border-radius:8px; overflow:hidden; background:var(--gray-200); margin-bottom:1rem; }
         .project-cover-preview img { width:100%; height:100%; object-fit:cover; }
-        .focal-point-indicator { position:absolute; width:20px; height:20px; border:2px solid #fff; border-radius:50%; background:rgba(20,184,166,0.5); box-shadow:0 0 0 1px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.3); transform:translate(-50%,-50%); pointer-events:none; z-index:5; display:none; }
-        .focal-point-indicator.active { display:block; }
-        .focal-point-label { position:absolute; bottom:8px; left:8px; background:rgba(0,0,0,0.7); color:#fff; font-size:0.65rem; padding:0.2rem 0.4rem; border-radius:4px; pointer-events:none; z-index:5; }
         .sidebar-section { margin-bottom:1.5rem; }
         .sidebar-section-title { font-size:0.7rem; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; color:var(--gray-400); margin-bottom:0.5rem; }
         
@@ -666,24 +661,6 @@
         @keyframes spin { to { transform:rotate(360deg); } }
         
         @media (max-width:768px) { .sidebar{display:none;} .main-content{margin-left:0;} .project-layout{flex-direction:column;} .project-sidebar{width:100%;} }
-
-        .native-upload-card { background:white; border:2px dashed var(--gray-300); border-radius:12px; padding:1rem; }
-        .native-upload-card.dragover { border-color:var(--accent); background:#f0fdfa; }
-        .native-upload-header { display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; }
-        .native-upload-copy h3 { font-size:1rem; margin-bottom:0.25rem; }
-        .native-upload-copy p { font-size:0.8rem; color:var(--gray-500); }
-        .native-upload-actions { display:flex; gap:0.5rem; flex-wrap:wrap; }
-        .native-upload-list { margin-top:0.75rem; max-height:220px; overflow-y:auto; border:1px solid var(--gray-100); border-radius:8px; }
-        .native-upload-row { display:grid; grid-template-columns:1fr auto auto; align-items:center; gap:0.75rem; padding:0.6rem 0.75rem; border-bottom:1px solid var(--gray-100); font-size:0.8rem; }
-        .native-upload-row:last-child { border-bottom:none; }
-        .native-upload-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:500; }
-        .native-upload-size { color:var(--gray-500); font-size:0.75rem; }
-        .native-upload-status { font-size:0.75rem; font-weight:600; text-transform:uppercase; letter-spacing:0.02em; }
-        .native-upload-status.queued { color:var(--gray-500); }
-        .native-upload-status.uploading { color:var(--accent); }
-        .native-upload-status.done { color:var(--success); }
-        .native-upload-status.error { color:var(--danger); }
-        .native-upload-empty { padding:1rem; text-align:center; color:var(--gray-500); font-size:0.8rem; }
     </style>
 </head>
 <body>
@@ -713,26 +690,7 @@
         
         <main class="main-content">
             <div class="tab-content active" id="collectionsTab">
-                <header class="main-header">
-                    <div style="display:flex;align-items:center;gap:1rem;">
-                        <h1>Collections</h1>
-                        <select id="collectionFilter" onchange="filterCollections(this.value)" style="padding:0.4rem 0.75rem;border:1px solid var(--gray-200);border-radius:6px;font-size:0.85rem;font-family:inherit;background:#fff;color:var(--gray-700);cursor:pointer;">
-                            <option value="all">Home (All)</option>
-                            <option value="San Francisco">San Francisco</option>
-                            <option value="Los Angeles">Los Angeles</option>
-                            <option disabled style="font-size:0.7rem;">───── Tags ─────</option>
-                            <option value="Activation">Activation</option>
-                            <option value="Conference">Conference</option>
-                            <option value="Corporate">Corporate</option>
-                            <option value="Party">Party</option>
-                            <option value="Portraits">Portraits</option>
-                            <option value="PR">PR</option>
-                            <option value="University">University</option>
-                            <option value="Video">Video</option>
-                        </select>
-                    </div>
-                    <div class="main-header-actions"><button class="btn btn-primary" onclick="openNewProjectModal()">+ New Collection</button></div>
-                </header>
+                <header class="main-header"><h1>Collections</h1><div class="main-header-actions"><button class="btn btn-primary" onclick="openNewProjectModal()">+ New Collection</button></div></header>
                 <div class="page-content"><div id="collectionsGrid" class="collections-grid"><div class="loading"><div class="spinner"></div></div></div></div>
             </div>
             
@@ -792,10 +750,8 @@
                 <div class="page-content" id="projectEditContent">
                     <div class="project-layout-pixieset">
                         <div class="project-sidebar-pixieset">
-                            <div class="project-cover-preview" id="coverPreviewContainer" onclick="handleFocalPointClick(event)">
+                            <div class="project-cover-preview">
                                 <img id="projectCover" src="" alt="">
-                                <div class="focal-point-indicator" id="focalPointDot"></div>
-                                <div class="focal-point-label" id="focalPointLabel" style="display:none;">Focal Point</div>
                             </div>
                             
                             <div class="sidebar-tabs">
@@ -936,7 +892,7 @@
                                 <h3 id="currentSetTitle">All Photos</h3>
                                 <div style="display:flex;gap:0.5rem;align-items:center;">
                                     <button class="btn btn-sm btn-secondary" onclick="toggleSelectAll()" id="selectAllBtn">☐ Select All</button>
-                                    <button class="btn btn-sm btn-primary" onclick="window.triggerSetUpload?.()">⊕ Add Media</button>
+                                    <button class="btn btn-sm btn-primary" onclick="triggerSetUpload()">⊕ Add Media</button>
                                     <button class="btn btn-sm btn-secondary" onclick="saveAllTags()">Save All Tags</button>
                                 </div>
                             </div>
@@ -953,7 +909,12 @@
                             </div>
                             <div id="photosArea">
                                 <div id="setUploadZone" class="set-upload-zone" style="display:none;">
-                                    <div id="uppyDashboardSet"></div>
+                                    <div class="upload-zone-inner">
+                                        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                                        <h3>Drag photos and videos here to upload</h3>
+                                        <p>or <a href="#" onclick="document.getElementById('setFileInput').click(); return false;">Browse files</a></p>
+                                        <input type="file" id="setFileInput" multiple accept="image/jpeg,image/png,image/webp" style="display:none;">
+                                    </div>
                                 </div>
                                 <div id="photosGrid" class="photos-grid"><div class="loading"><div class="spinner"></div></div></div>
                             </div>
@@ -969,7 +930,12 @@
                         <label>Select Collection</label>
                         <select id="uploadProjectSelect" class="sidebar-input"><option value="">Choose...</option></select>
                     </div>
-                    <div id="uppyDashboardMain"></div>
+                    <div class="upload-zone" id="uploadZone">
+                        <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="margin:0 auto 1rem;color:var(--gray-400);"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/></svg>
+                        <h3>Drag & drop photos here</h3>
+                        <p>or click to browse • JPG, PNG, WebP</p>
+                        <input type="file" id="fileInput" multiple accept="image/jpeg,image/png,image/webp">
+                    </div>
                 </div>
             </div>
             
@@ -1068,8 +1034,6 @@
                     <div class="form-group"><label>Client / Brands</label><input type="text" id="newBrands" placeholder="Acme Corp, Nike (comma-separated)" oninput="updateNewSeoPreview()"></div>
                     <div class="form-group"><label>Tags</label>
                         <div class="tags-selector" id="newTagsSelector">
-                            <span class="tag-option" data-tag="San Francisco" onclick="toggleTag(this)">San Francisco</span>
-                            <span class="tag-option" data-tag="Los Angeles" onclick="toggleTag(this)">Los Angeles</span>
                             <span class="tag-option" data-tag="Activation" onclick="toggleTag(this)">Activation</span>
                             <span class="tag-option" data-tag="Conference" onclick="toggleTag(this)">Conference</span>
                             <span class="tag-option" data-tag="Corporate" onclick="toggleTag(this)">Corporate</span>
@@ -1150,8 +1114,6 @@
             <div class="form-group"><label>Venue</label><input type="text" id="editVenue"></div>
             <div class="form-group"><label>Tags</label>
                 <div class="tags-selector" id="editTagsSelector">
-                    <span class="tag-option" data-tag="San Francisco" onclick="toggleTag(this)">San Francisco</span>
-                    <span class="tag-option" data-tag="Los Angeles" onclick="toggleTag(this)">Los Angeles</span>
                     <span class="tag-option" data-tag="Activation" onclick="toggleTag(this)">Activation</span>
                     <span class="tag-option" data-tag="Conference" onclick="toggleTag(this)">Conference</span>
                     <span class="tag-option" data-tag="Corporate" onclick="toggleTag(this)">Corporate</span>
@@ -1266,15 +1228,6 @@
     const API_URL='https://sf-event-photo-backend.vercel.app';
     const ADMIN_PASSWORD='sfeventphoto2024';
     let projects=[],currentProject=null,currentPhotos=[];
-    let urlDuplicateIds=new Map(); // Maps photo URL -> all DB record IDs sharing that URL
-    // Given a photo ID, return all DB record IDs that share the same URL (including the ID itself)
-    function getAllIdsForPhoto(photoId) {
-        const photo = currentPhotos.find(p => String(p.id) === String(photoId));
-        if (!photo) return [photoId];
-        const url = photo.thumbnail_url || photo.large_url || photo.original_url;
-        if (!url || !urlDuplicateIds.has(url)) return [photoId];
-        return urlDuplicateIds.get(url);
-    }
     let nextPhotoSeq = 142763; // Start at 142763 so first photo is 142764
     
     // Generate XXXXXX filename from a sequential counter
@@ -1291,14 +1244,16 @@
         return `${id}${ext}`;
     }
     
+    if(sessionStorage.getItem('adminLoggedIn'))showDashboard();
+    
     function login(){if(document.getElementById('passwordInput').value===ADMIN_PASSWORD){sessionStorage.setItem('adminLoggedIn','true');showDashboard();}else{document.getElementById('loginError').style.display='block';}}
     function logout(){sessionStorage.removeItem('adminLoggedIn');location.reload();}
-    function showDashboard(){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboard').classList.add('active');loadProjects();}
+    function showDashboard(){document.getElementById('loginScreen').style.display='none';document.getElementById('dashboard').classList.add('active');loadProjects();setupUpload();}
     
     function setActiveNav(idx){document.querySelectorAll('.nav-item').forEach((n,i)=>n.classList.toggle('active',i===idx));}
     function showCollections(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('collectionsTab').classList.add('active');setActiveNav(0);}
     function showFeatured(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('featuredTab').classList.add('active');setActiveNav(1);renderFeatured();}
-    function showUpload(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(2);updateDropdown();window.initMainUppy?.();}
+    function showUpload(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(2);updateDropdown();}
     function showOrders(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('ordersTab').classList.add('active');setActiveNav(3);loadOrders();}
     function showLicenses(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('licensesTab').classList.add('active');setActiveNav(4);loadLicenses();}
     function showSettings(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('settingsTabContent').classList.add('active');setActiveNav(5);loadSiteSettings();}
@@ -1482,20 +1437,16 @@
         document.getElementById('projectTab').classList.add('active');setActiveNav(-1);
         document.getElementById('projectTitle').textContent=currentProject.title;
         document.getElementById('projectMeta').textContent=`${formatDateRange(currentProject.event_date, currentProject.event_end_date)} • ${currentProject.photo_count||0} photos`;
-        document.getElementById('projectCover').src=currentProject.cover_image_url||'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="250" fill="%23e5e5e5"><rect width="400" height="250"/><text x="200" y="130" text-anchor="middle" fill="%23999" font-size="14">No cover image — click ⭐ on a photo</text></svg>';
-        const fp=currentProject.cover_focal_point||'50% 50%';
-        document.getElementById('projectCover').style.objectPosition=fp;
-        if(currentProject.cover_focal_point){const parts=currentProject.cover_focal_point.replace(/%/g,'').split(' ');updateFocalPointIndicator(parseFloat(parts[0]),parseFloat(parts[1]));}else{document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';}
+        document.getElementById('projectCover').src=currentProject.cover_image_url||'';
         document.getElementById('projectCode').value=currentProject.download_code||'';
         document.getElementById('projectBrands').value=(currentProject.brands||[]).join(', ');
         document.getElementById('publishBtn').textContent=currentProject.published?'Unpublish':'Publish';
         document.getElementById('projectCartToggle').checked=currentProject.cart_enabled!==false;
         document.getElementById('projectDownloadsToggle').checked=currentProject.downloads_enabled!==false;
         document.getElementById('projectFeaturedToggle').checked=currentProject.featured===true;
-        // Load licenses and photos in parallel for speed
-        renderDomains();renderVideos();
-        await Promise.all([loadLicenses(), loadProjectPhotos()]);
-        renderProjectLicenses();loadSeoData();
+        // Load site settings to get latest licenses
+        await loadLicenses();
+        renderDomains();renderVideos();renderProjectLicenses();loadProjectPhotos();loadSeoData();
     }
     
     // Video management
@@ -1654,51 +1605,12 @@
         }catch(e){showToast('Error','error');}
     }
     
-    let currentCollectionFilter = 'all';
-
-    async function loadProjects(retryCount=0){
-        try{
-            const r=await fetch(`${API_URL}/api/admin/projects`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
-            if(!r.ok) throw new Error('HTTP '+r.status+': '+r.statusText);
-            const d=await r.json();
-            projects=d.projects||[];
-            renderCollections();
-            updateDropdown();
-        }catch(e){
-            console.error('loadProjects error (attempt '+(retryCount+1)+'):', e);
-            if(retryCount<1){
-                // Retry once after 2s (handles Vercel cold starts)
-                await new Promise(res=>setTimeout(res,2000));
-                return loadProjects(retryCount+1);
-            }
-            document.getElementById('collectionsGrid').innerHTML=
-                '<div class="empty-state"><p>Error loading collections</p><p style="font-size:0.85rem;color:var(--gray-500);margin-top:0.5rem;">'+e.message+'</p><button class="btn btn-primary" style="margin-top:1rem;" onclick="loadProjects()">Retry</button></div>';
-        }
-    }
-
-    function filterCollections(value) {
-        currentCollectionFilter = value;
-        renderCollections();
-    }
-
-    function getFilteredProjects() {
-        if (currentCollectionFilter === 'all') return projects;
-        return projects.filter(p => {
-            const tags = Array.isArray(p.tags) ? p.tags : [];
-            return tags.includes(currentCollectionFilter);
-        });
-    }
-
-    function renderCollections(){const g=document.getElementById('collectionsGrid');
-    const filtered = getFilteredProjects();
-    if(!filtered.length){
-        const label = currentCollectionFilter === 'all' ? '' : ` tagged "${currentCollectionFilter}"`;
-        g.innerHTML=`<div class="empty-state"><h3>No collections${label}</h3><p>${currentCollectionFilter === 'all' ? 'Create your first collection' : 'Tag projects with "' + currentCollectionFilter + '" to see them here'}</p></div>`;
-        return;
-    }
-    g.innerHTML=filtered.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="if(!projectDragOccurred)showProject('${p.id}')">
-        <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
-        <div class="collection-cover">${p.cover_image_url?`<img src="${p.cover_image_url}">`:'<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published?'published':'draft'}">${p.published?'Published':'Draft'}</span>${p.featured?'<span class="collection-featured">⭐ Featured</span>':''}</div>
+    async function loadProjects(){try{const r=await fetch(`${API_URL}/api/admin/projects`,{headers:{'x-admin-key':ADMIN_PASSWORD}});const d=await r.json();projects=d.projects||[];renderCollections();updateDropdown();}catch(e){document.getElementById('collectionsGrid').innerHTML='<div class="empty-state"><p>Error loading</p></div>';}}
+    
+    function renderCollections(){const g=document.getElementById('collectionsGrid');if(!projects.length){g.innerHTML='<div class="empty-state"><h3>No collections yet</h3><p>Create your first collection</p></div>';return;}
+    g.innerHTML=projects.map((p,idx)=>`<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" onclick="showProject('${p.id}')">
+        <div class="drag-handle" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+        <div class="collection-cover">${p.cover_image_url?`<img src="${p.cover_image_url}">`:''}<span class="collection-status ${p.published?'published':'draft'}">${p.published?'Published':'Draft'}</span>${p.featured?'<span class="collection-featured">⭐ Featured</span>':''}</div>
         <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count||0} items</span>${p.event_date?`<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>`:''}</div></div>
     </div>`).join('');
     initDragAndDrop();}
@@ -1719,10 +1631,10 @@
             return;
         }
         
-        g.innerHTML = featuredProjects.map((p, idx) => `<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" data-featured="true" onclick="if(!projectDragOccurred)showProject('${p.id}')">
-            <div class="drag-handle" onclick="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
+        g.innerHTML = featuredProjects.map((p, idx) => `<div class="collection-card" draggable="true" data-id="${p.id}" data-index="${idx}" data-featured="true" onclick="showProject('${p.id}')">
+            <div class="drag-handle" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="5" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="19" r="1"/><circle cx="15" cy="5" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="19" r="1"/></svg></div>
             <button class="collection-remove" onclick="event.stopPropagation();removeFromFeatured('${p.id}')" title="Remove from featured">×</button>
-            <div class="collection-cover">${p.cover_image_url ? `<img src="${p.cover_image_url}">` : '<span class="no-cover-icon">📷</span>'}<span class="collection-status ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></div>
+            <div class="collection-cover">${p.cover_image_url ? `<img src="${p.cover_image_url}">` : ''}<span class="collection-status ${p.published ? 'published' : 'draft'}">${p.published ? 'Published' : 'Draft'}</span></div>
             <div class="collection-info"><div class="collection-title">${p.title}</div><div class="collection-meta"><span class="count">${p.photo_count || 0} items</span>${p.event_date ? `<span class="dot"></span><span>${formatDateRange(p.event_date, p.event_end_date)}</span>` : ''}</div></div>
         </div>`).join('');
         
@@ -1751,7 +1663,7 @@
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', this.dataset.id);
     }
-
+    
     function handleFeaturedDragEnd(e) {
         this.classList.remove('dragging');
         document.querySelectorAll('#featuredGrid .collection-card').forEach(card => {
@@ -1766,15 +1678,13 @@
         this.classList.remove('drag-over');
         
         if (draggedFeaturedCard && this !== draggedFeaturedCard) {
-            projectDragOccurred = true;
-            setTimeout(() => { projectDragOccurred = false; }, 200);
             const fromIndex = parseInt(draggedFeaturedCard.dataset.index);
             const toIndex = parseInt(this.dataset.index);
-
+            
             // Reorder in local array
             const [moved] = featuredProjects.splice(fromIndex, 1);
             featuredProjects.splice(toIndex, 0, moved);
-
+            
             // Re-render
             renderFeatured();
             
@@ -1809,7 +1719,7 @@
         
         list.innerHTML = nonFeatured.map(p => `
             <div class="available-project-item" onclick="addToFeatured('${p.id}')">
-                ${p.cover_image_url ? `<img src="${p.cover_image_url}" alt="">` : '<div style="width:48px;height:48px;background:var(--gray-200);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0">📷</div>'}
+                <img src="${p.cover_image_url || ''}" alt="">
                 <div class="available-project-item-info">
                     <div class="available-project-item-title">${p.title}</div>
                     <div class="available-project-item-meta">${p.photo_count || 0} photos${p.event_date ? ' • ' + formatDateRange(p.event_date, p.event_end_date) : ''}</div>
@@ -1856,13 +1766,12 @@
     }
 
     // Drag and drop for project ordering
-    let draggedProjectCard = null;
-    let projectDragOccurred = false;
-
+    let draggedCard = null;
+    
     function initDragAndDrop() {
         const grid = document.getElementById('collectionsGrid');
         const cards = grid.querySelectorAll('.collection-card');
-
+        
         cards.forEach(card => {
             card.addEventListener('dragstart', handleDragStart);
             card.addEventListener('dragend', handleDragEnd);
@@ -1872,56 +1781,56 @@
             card.addEventListener('dragleave', handleDragLeave);
         });
     }
-
+    
     function handleDragStart(e) {
-        draggedProjectCard = this;
+        draggedCard = this;
         this.classList.add('dragging');
         e.dataTransfer.effectAllowed = 'move';
         e.dataTransfer.setData('text/plain', this.dataset.id);
     }
-
+    
     function handleDragEnd(e) {
         this.classList.remove('dragging');
         document.querySelectorAll('.collection-card').forEach(card => {
             card.classList.remove('drag-over');
         });
-        draggedProjectCard = null;
+        draggedCard = null;
     }
-
+    
     function handleDragOver(e) {
         e.preventDefault();
         e.dataTransfer.dropEffect = 'move';
     }
-
+    
     function handleDragEnter(e) {
         e.preventDefault();
-        if (this !== draggedProjectCard) {
+        if (this !== draggedCard) {
             this.classList.add('drag-over');
         }
     }
-
+    
     function handleDragLeave(e) {
         this.classList.remove('drag-over');
     }
-
+    
     async function handleDrop(e) {
         e.preventDefault();
         e.stopPropagation();
         this.classList.remove('drag-over');
-
-        if (draggedProjectCard && this !== draggedProjectCard) {
-            projectDragOccurred = true;
-            setTimeout(() => { projectDragOccurred = false; }, 200);
-            const fromIndex = parseInt(draggedProjectCard.dataset.index);
+        
+        if (draggedCard && this !== draggedCard) {
+            const fromId = draggedCard.dataset.id;
+            const toId = this.dataset.id;
+            const fromIndex = parseInt(draggedCard.dataset.index);
             const toIndex = parseInt(this.dataset.index);
-
+            
             // Reorder in local array
             const [moved] = projects.splice(fromIndex, 1);
             projects.splice(toIndex, 0, moved);
-
+            
             // Re-render
             renderCollections();
-
+            
             // Save new order to backend
             await saveProjectOrder();
         }
@@ -2100,9 +2009,13 @@
             titleEl.textContent = setName;
         }
         
-        // Always show upload zone (native uploader mounts itself)
+        // Show upload zone for custom sets (not All Photos or Favorites)
         const uploadZone = document.getElementById('setUploadZone');
-        if (uploadZone) uploadZone.style.display = 'block';
+        if (setName && setName !== '__favorites__') {
+            uploadZone.style.display = 'block';
+        } else {
+            uploadZone.style.display = currentPhotos.length === 0 ? 'block' : 'none';
+        }
     }
     
     function renderFilteredPhotos() {
@@ -2152,67 +2065,41 @@
     async function loadProjectPhotos(){
         nextPhotoSeq = 0; // Reset so it recalculates from loaded photos
         const g=document.getElementById('photosGrid');
-        if (!g) return;
         g.innerHTML='<div class="loading"><div class="spinner"></div></div>';
-        const projectId = currentProject?.id;
-        const projectSlug = currentProject?.slug;
-        if (!projectId || !projectSlug) {
-            g.innerHTML='<div class="empty-state"><p>No project selected</p></div>';
-            return;
-        }
         try {
-            // Fetch admin and public endpoints in parallel for speed
-            const [adminRes, publicRes] = await Promise.allSettled([
-                fetch(`${API_URL}/api/admin/projects/${projectId}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}),
-                fetch(`${API_URL}/api/projects/${projectSlug}`).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
-            ]);
-            // If user switched projects while loading, bail out
-            if (currentProject?.id !== projectId) return;
-            const adminData = adminRes.status==='fulfilled' ? adminRes.value : null;
-            const publicData = publicRes.status==='fulfilled' ? publicRes.value : null;
-            const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
-            const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
-            currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
-            // Deduplicate by photo id, then by URL (backend race condition can create multiple DB records for one R2 file)
-            const seenIds=new Set();
-            currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds.has(p.id))return false;seenIds.add(p.id);return true;});
-            // Build URL -> all duplicate IDs map BEFORE URL dedup so deletes can target all records
-            urlDuplicateIds=new Map();
-            currentPhotos.forEach(p=>{
-                const url=p.thumbnail_url||p.large_url||p.original_url;
-                if(!url)return;
-                if(!urlDuplicateIds.has(url))urlDuplicateIds.set(url,[]);
-                urlDuplicateIds.get(url).push(String(p.id));
-            });
-            const seenUrls=new Set();
-            currentPhotos=currentPhotos.filter(p=>{const url=p.thumbnail_url||p.large_url||p.original_url;if(!url)return true;if(seenUrls.has(url))return false;seenUrls.add(url);return true;});
+            let d;
+            try {
+                const r=await fetch(`${API_URL}/api/admin/projects/${currentProject.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
+                d=await r.json();
+            } catch(e) {
+                const r2=await fetch(`${API_URL}/api/projects/${currentProject.slug}`);
+                d=await r2.json();
+            }
+            currentPhotos=d.photos||d||[];
+            if(!Array.isArray(currentPhotos))currentPhotos=[];
             currentPhotos.sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
-            // Sync photo_count with actual deduped count so collection cards show correct number
-            if (currentProject) currentProject.photo_count = currentPhotos.length;
-
+            const coverUrl=d.project?.cover_image_url||currentProject.cover_image_url;
+            
             // Reset filter and manual sets, render sidebar
             currentSetFilter = null;
             manualSets = [];
             renderSetsSidebar();
-
-            // Init set uploader (DOM now exists)
-            window.initSetUppy?.();
-
-            // Always show upload zone (native uploader handles empty state)
+            
+            // Bind set upload listeners (DOM now exists)
+            setupSetUpload();
+            
+            // Show upload zone if no photos
             const uploadZone = document.getElementById('setUploadZone');
             if (uploadZone) {
-                uploadZone.style.display = 'block';
+                uploadZone.style.display = currentPhotos.length === 0 ? 'block' : 'none';
             }
-
+            
             // Update title
             const titleEl = document.getElementById('currentSetTitle');
             if (titleEl) titleEl.textContent = 'All Photos';
-
+            
             renderPhotosGrid(currentPhotos);
-            // Update header with actual loaded count
-            document.getElementById('projectMeta').textContent=`${formatDateRange(currentProject.event_date, currentProject.event_end_date)} • ${currentPhotos.length} photos`;
         } catch(e) {
-            console.error('loadProjectPhotos error:', e);
             g.innerHTML='<div class="empty-state"><p>Error loading photos</p></div>';
         }
     }
@@ -2255,24 +2142,9 @@
             </div>`;
         }).join('');
         initPhotoDragDrop();
-        // Restore selection state after DOM rebuild
-        if (selectedPhotos.size > 0) {
-            photos.forEach(photo => {
-                if (selectedPhotos.has(photo.id)) {
-                    const card = g.querySelector(`[data-id="${photo.id}"]`);
-                    if (card) {
-                        card.classList.add('selected');
-                        const cb = card.querySelector('.photo-select-checkbox');
-                        if (cb) cb.classList.add('checked');
-                    }
-                }
-            });
-        }
     }
 
     // ── Photo Drag & Drop ──
-
-    let draggedPhotoCard = null;
 
     function initPhotoDragDrop() {
         const grid = document.getElementById('photosGrid');
@@ -2282,7 +2154,7 @@
             card.addEventListener('dragstart', e => {
                 // Don't drag if interacting with inputs/selects/buttons
                 if (e.target.closest('input, select, button')) { e.preventDefault(); return; }
-                draggedPhotoCard = card;
+                draggedCard = card;
                 card.classList.add('dragging');
                 e.dataTransfer.effectAllowed = 'move';
                 e.dataTransfer.setData('text/plain', card.dataset.id);
@@ -2291,13 +2163,13 @@
             card.addEventListener('dragend', () => {
                 card.classList.remove('dragging');
                 grid.querySelectorAll('.photo-card').forEach(c => c.classList.remove('drag-over'));
-                draggedPhotoCard = null;
+                draggedCard = null;
             });
 
             card.addEventListener('dragover', e => {
                 e.preventDefault();
                 e.dataTransfer.dropEffect = 'move';
-                if (draggedPhotoCard && card !== draggedPhotoCard) {
+                if (draggedCard && card !== draggedCard) {
                     card.classList.add('drag-over');
                 }
             });
@@ -2309,17 +2181,17 @@
             card.addEventListener('drop', e => {
                 e.preventDefault();
                 card.classList.remove('drag-over');
-                if (!draggedPhotoCard || card === draggedPhotoCard) return;
+                if (!draggedCard || card === draggedCard) return;
 
                 // Reorder in DOM
                 const allCards = [...grid.querySelectorAll('.photo-card')];
-                const fromIdx = allCards.indexOf(draggedPhotoCard);
+                const fromIdx = allCards.indexOf(draggedCard);
                 const toIdx = allCards.indexOf(card);
 
                 if (fromIdx < toIdx) {
-                    card.after(draggedPhotoCard);
+                    card.after(draggedCard);
                 } else {
-                    card.before(draggedPhotoCard);
+                    card.before(draggedCard);
                 }
 
                 // Reorder in data & save
@@ -2420,35 +2292,28 @@
         const count = selectedPhotos.size;
         if (!count) return;
         if (!confirm(`Delete ${count} photo${count > 1 ? 's' : ''}? This cannot be undone.`)) return;
-
+        
         showToast(`Deleting ${count} photos...`, '');
         let deleted = 0;
-        // Expand selected IDs to include all duplicate DB records sharing the same URL
-        const expandedIds = new Set();
-        for (const id of selectedPhotos) {
-            for (const dupId of getAllIdsForPhoto(id)) {
-                expandedIds.add(String(dupId));
-            }
-        }
-        const ids = [...expandedIds];
-
+        const ids = [...selectedPhotos];
+        
         // Delete in batches of 5
         for (let i = 0; i < ids.length; i += 5) {
             const batch = ids.slice(i, i + 5);
             await Promise.all(batch.map(async id => {
                 try {
-                    const r = await fetch(`${API_URL}/api/admin/photos/${id}`, {
+                    await fetch(`${API_URL}/api/admin/photos/${id}`, {
                         method: 'DELETE', headers: { 'x-admin-key': ADMIN_PASSWORD }
                     });
-                    if (r.ok) deleted++;
-                } catch(e) { console.error('bulkDelete error for id:', id, e); }
+                    deleted++;
+                } catch(e) {}
             }));
         }
-
+        
         selectedPhotos.clear();
-        showToast(`${deleted} records deleted (${count} photos)`, 'success');
-        await loadProjectPhotos();
-        await loadProjects();
+        showToast(`${deleted} photos deleted`, 'success');
+        loadProjectPhotos();
+        loadProjects();
     }
     
     async function bulkMoveToSet(setName) {
@@ -2473,7 +2338,7 @@
                         body: JSON.stringify({ set_name: actualSet })
                     });
                     moved++;
-                } catch(e) { console.error('bulkMoveToSet error:', id, e); }
+                } catch(e) {}
             }));
         }
         
@@ -2502,9 +2367,9 @@
                     headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
                     body: JSON.stringify({ sort_order: newOrder + i })
                 });
-            } catch(e) { console.error('bulkMoveToFront error:', ids[i], e); }
+            } catch(e) {}
         }
-
+        
         selectedPhotos.clear();
         showToast(`${count} photos moved to front`, 'success');
         await reloadProjectPhotosKeepSet();
@@ -2530,54 +2395,18 @@
                     headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_PASSWORD },
                     body: JSON.stringify({ sort_order: newOrder + i })
                 });
-            } catch(e) { console.error('bulkMoveToBack error:', ids[i], e); }
+            } catch(e) {}
         }
-
+        
         selectedPhotos.clear();
         showToast(`${count} photos moved to back`, 'success');
         await reloadProjectPhotosKeepSet();
     }
     
     async function saveTags(id){const people=document.getElementById(`tags-${id}`).value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});showToast('Saved!','success');}catch(e){showToast('Error','error');}}
-    async function saveAllTags(){showToast('Saving...','');let n=0;for(const p of currentPhotos){const el=document.getElementById(`tags-${p.id}`);if(!el)continue;const people=el.value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${p.id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});n++;}catch(e){ console.error('saveAllTags error:', p.id, e); }}showToast(`${n} saved!`,'success');}
-    async function setCover(id){const photo=currentPhotos.find(p=>p.id===id);if(!photo)return;const url=photo.original_url||photo.large_url||photo.thumbnail_url;try{const resp=await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_image_url:url})});if(!resp.ok){const err=await resp.json().catch(()=>({}));console.error('setCover error:',err);showToast('Error setting cover','error');return;}currentProject.cover_image_url=url;document.getElementById('projectCover').src=url;document.getElementById('projectCover').style.objectPosition='50% 50%';document.getElementById('focalPointDot').classList.remove('active');document.getElementById('focalPointLabel').style.display='none';loadProjectPhotos();showToast('Cover set!','success');}catch(e){console.error('setCover exception:',e);showToast('Error','error');}}
-    function handleFocalPointClick(event){
-        const container=document.getElementById('coverPreviewContainer');
-        const img=document.getElementById('projectCover');
-        if(!img.src||!currentProject)return;
-        const rect=container.getBoundingClientRect();
-        const x=((event.clientX-rect.left)/rect.width*100).toFixed(1);
-        const y=((event.clientY-rect.top)/rect.height*100).toFixed(1);
-        const focalPoint=x+'% '+y+'%';
-        updateFocalPointIndicator(x,y);
-        img.style.objectPosition=focalPoint;
-        saveFocalPoint(focalPoint);
-    }
-    function updateFocalPointIndicator(xPercent,yPercent){
-        const dot=document.getElementById('focalPointDot');
-        const label=document.getElementById('focalPointLabel');
-        dot.style.left=xPercent+'%';
-        dot.style.top=yPercent+'%';
-        dot.classList.add('active');
-        label.style.display='block';
-        label.textContent='Focal: '+Math.round(xPercent)+'% '+Math.round(yPercent)+'%';
-    }
-    async function saveFocalPoint(focalPoint){
-        // Note: cover_focal_point column doesn't exist in DB yet, store locally only
-        currentProject.cover_focal_point=focalPoint;
-        showToast('Focal point set (local only)','success');
-    }
-    async function deletePhoto(id){
-        if(!confirm('Delete?'))return;
-        try{
-            // Delete all duplicate DB records for this photo's URL
-            const allIds=getAllIdsForPhoto(id);
-            for(const dupId of allIds){
-                await fetch(`${API_URL}/api/admin/photos/${dupId}`,{method:'DELETE',headers:{'x-admin-key':ADMIN_PASSWORD}});
-            }
-            showToast('Deleted','success');await loadProjectPhotos();await loadProjects();
-        }catch(e){console.error('deletePhoto error:',e);showToast('Error','error');}
-    }
+    async function saveAllTags(){showToast('Saving...','');let n=0;for(const p of currentPhotos){const el=document.getElementById(`tags-${p.id}`);if(!el)continue;const people=el.value.split(',').map(s=>s.trim()).filter(Boolean);try{await fetch(`${API_URL}/api/admin/photos/${p.id}`,{method:'PUT',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({people})});n++;}catch(e){}}showToast(`${n} saved!`,'success');}
+    async function setCover(id){const photo=currentPhotos.find(p=>p.id===id);if(!photo)return;const url=photo.original_url||photo.large_url||photo.thumbnail_url;try{await fetch(`${API_URL}/api/admin/projects/${currentProject.id}`,{method:'PATCH',headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},body:JSON.stringify({cover_image_url:url})});currentProject.cover_image_url=url;document.getElementById('projectCover').src=url;loadProjectPhotos();showToast('Cover set!','success');}catch(e){showToast('Error','error');}}
+    async function deletePhoto(id){if(!confirm('Delete?'))return;try{await fetch(`${API_URL}/api/admin/photos/${id}`,{method:'DELETE',headers:{'x-admin-key':ADMIN_PASSWORD}});showToast('Deleted','success');loadProjectPhotos();loadProjects();}catch(e){showToast('Error','error');}}
     
     function renderDomains(){const list=document.getElementById('projectDomains');const domains=currentProject.whitelisted_domains||[];if(!domains.length){list.innerHTML='<span style="font-size:0.75rem;color:var(--gray-400);">None</span>';return;}list.innerHTML=domains.map(d=>`<span class="domain-tag">${d}<button onclick="removeDomain('${d}')">×</button></span>`).join('');}
     async function addDomain(){const input=document.getElementById('newDomainInput');let domain=input.value.trim().toLowerCase();if(!domain)return;if(!domain.startsWith('@'))domain='@'+domain;if(!domain.includes('.')){showToast('Invalid domain','error');return;}const domains=currentProject.whitelisted_domains||[];if(domains.includes(domain)){showToast('Already added','error');return;}domains.push(domain);try{await fetch(`${API_URL}/api/gallery-access/domains/${currentProject.id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({whitelisted_domains:domains})});currentProject.whitelisted_domains=domains;renderDomains();input.value='';showToast('Added','success');}catch(e){showToast('Error','error');}}
@@ -2644,71 +2473,69 @@
     function autoGenerateNewSeo() {
         const title = document.getElementById('newTitle').value || '';
         const venue = document.getElementById('newVenue').value || '';
-        const brandsStr = document.getElementById('newBrands').value || '';
+        const brands = document.getElementById('newBrands').value || '';
         const date = document.getElementById('newDate').value;
         const tags = Array.from(document.querySelectorAll('#newTagsSelector .tag-option.selected')).map(t => t.dataset.tag);
-
-        if (!title) { showToast('Enter a title first', 'error'); return; }
-
-        // Extract city from venue
+        
+        if (!title) {
+            showToast('Enter a title first', 'error');
+            return;
+        }
+        
+        // Extract city from venue if possible
         let city = 'San Francisco';
-        if (venue) {
-            const vLC = venue.toLowerCase();
-            if (vLC.includes('los angeles') || vLC.includes(', la')) city = 'Los Angeles';
-            else if (vLC.includes('new york') || vLC.includes('nyc')) city = 'New York';
-            else if (vLC.includes('san francisco') || vLC.includes(', sf')) city = 'San Francisco';
-            else city = venue.split(',').pop()?.trim() || city;
-        }
-
+        const venueLC = venue.toLowerCase();
+        if (venueLC.includes('los angeles') || venueLC.includes('la ') || venueLC.includes(', la')) city = 'Los Angeles';
+        else if (venueLC.includes('new york') || venueLC.includes('nyc')) city = 'New York';
+        else if (venueLC.includes('san francisco') || venueLC.includes('sf')) city = 'San Francisco';
+        else if (venue) city = venue.split(',').pop()?.trim() || city;
+        
         // Determine event type from tags
-        let eventType = 'Event';
-        if (tags.includes('Conference')) eventType = 'Conference';
-        else if (tags.includes('Corporate')) eventType = 'Corporate Event';
-        else if (tags.includes('Party')) eventType = 'Party';
-        else if (tags.includes('Activation')) eventType = 'Brand Activation';
-        else if (tags.includes('Portraits')) eventType = 'Portrait Session';
-        else if (tags.includes('PR')) eventType = 'PR Event';
-        else if (tags.includes('Video')) eventType = 'Video Production';
-
-        // Title: "Event Name | Venue or City | SF Event Photo"
-        let seoTitle = title;
-        if (venue && seoTitle.length + venue.length + 3 < 50) {
-            seoTitle += ' | ' + venue;
-        } else if (city && seoTitle.length + city.length + 3 < 50) {
-            seoTitle += ' | ' + city;
-        }
-        if (seoTitle.length < 45) seoTitle += ' | SF Event Photo';
+        let eventType = 'event';
+        if (tags.includes('Conference')) eventType = 'conference';
+        else if (tags.includes('Corporate')) eventType = 'corporate event';
+        else if (tags.includes('Party')) eventType = 'party';
+        else if (tags.includes('Activation')) eventType = 'brand activation';
+        else if (tags.includes('Portraits')) eventType = 'portrait';
+        else if (tags.includes('PR')) eventType = 'PR event';
+        else if (tags.includes('Video')) eventType = 'video production';
+        
+        // Generate SEO Title (max 60 chars)
+        let seoTitle = `${title} Photos | ${city}`;
+        if (seoTitle.length < 50) seoTitle += ' | SF Event Photo';
+        if (seoTitle.length > 60) seoTitle = `${title} Photos | SF Event Photo`;
         if (seoTitle.length > 60) seoTitle = seoTitle.substring(0, 57) + '...';
-
-        // Description: natural sentence with venue, date, brands
-        let seoDesc = `Photos from ${title}`;
-        if (venue && seoDesc.length + venue.length + 4 < 110) seoDesc += ` at ${venue}`;
+        
+        // Generate SEO Description (max 160 chars)
+        let seoDesc = `SF Event Photo captured ${title}`;
+        if (venue && seoDesc.length + venue.length + 5 < 120) seoDesc += ` at ${venue}`;
         if (date) {
-            const dateStr = new Date(date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-            if (seoDesc.length + dateStr.length + 4 < 130) seoDesc += `, ${dateStr}`;
+            const dateStr = new Date(date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+            if (seoDesc.length + dateStr.length + 5 < 130) seoDesc += `, ${dateStr}`;
         }
-        seoDesc += '.';
-        const brands = brandsStr ? brandsStr.split(',').map(b => b.trim()).filter(Boolean) : [];
-        if (brands.length > 0 && seoDesc.length + brands.join(', ').length + 15 < 155) {
-            seoDesc += ` Featuring ${brands.join(', ')}.`;
-        }
-        seoDesc += ` ${eventType} photography by SF Event Photo.`;
+        seoDesc += `. Professional ${eventType} photography coverage.`;
         if (seoDesc.length > 160) seoDesc = seoDesc.substring(0, 157) + '...';
-
-        // Keywords
-        let keywords = [title.toLowerCase()];
+        
+        // Generate Keywords
+        let keywords = [];
+        if (brands) keywords = brands.split(',').map(b => b.trim().toLowerCase());
+        keywords.push(title.toLowerCase());
+        keywords.push(`${eventType} photography`);
+        keywords.push(`${city.toLowerCase()} event photographer`);
+        keywords.push('corporate event photos');
         if (venue) keywords.push(venue.toLowerCase());
-        if (city && city !== venue) keywords.push(city.toLowerCase());
-        brands.forEach(b => keywords.push(b.toLowerCase()));
-        keywords.push(eventType.toLowerCase() + ' photography');
-        keywords.push('event photos ' + city.toLowerCase());
+        // Dedupe and limit
         keywords = [...new Set(keywords)].slice(0, 8);
-
+        
+        // Set values
         document.getElementById('newSeoTitle').value = seoTitle;
         document.getElementById('newSeoDesc').value = seoDesc;
         document.getElementById('newSeoKeywords').value = keywords.join(', ');
+        
+        // Update counts
         document.getElementById('newSeoTitleCount').textContent = seoTitle.length;
         document.getElementById('newSeoDescCount').textContent = seoDesc.length;
+        
         updateNewSeoPreview();
     }
     
@@ -2788,7 +2615,7 @@
         }
     }
     
-    function openUploadForProject(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(2);updateDropdown();document.getElementById('uploadProjectSelect').value=currentProject.id;window.initMainUppy?.();}
+    function openUploadForProject(){document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.getElementById('uploadTab').classList.add('active');setActiveNav(1);updateDropdown();document.getElementById('uploadProjectSelect').value=currentProject.id;}
     
     async function createProject(e){
         if(e)e.preventDefault();
@@ -2906,50 +2733,139 @@
         }catch(e){showToast('Error: '+e.message,'error');}
     }
     
-    // Old upload functions removed — native queue uploader handles uploads now
+    function setupUpload(){
+        // Main upload zone (Upload tab)
+        const zone=document.getElementById('uploadZone');
+        const input=document.getElementById('fileInput');
+        if (zone && input) {
+            zone.addEventListener('click',()=>input.click());
+            zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('dragover');});
+            zone.addEventListener('dragleave',()=>zone.classList.remove('dragover'));
+            zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('dragover');handleFiles(e.dataTransfer.files);});
+            input.addEventListener('change',e=>handleFiles(e.target.files));
+        }
+    }
+    
+    let setUploadBound = false;
+    function setupSetUpload() {
+        if (setUploadBound) return;
+        const setZone = document.getElementById('setUploadZone');
+        const setInput = document.getElementById('setFileInput');
+        if (setZone && setInput) {
+            setZone.addEventListener('dragover', e => { e.preventDefault(); setZone.classList.add('dragover'); });
+            setZone.addEventListener('dragleave', () => setZone.classList.remove('dragover'));
+            setZone.addEventListener('drop', e => { e.preventDefault(); setZone.classList.remove('dragover'); handleSetFiles(e.dataTransfer.files); });
+            setInput.addEventListener('change', e => handleSetFiles(e.target.files));
+            setUploadBound = true;
+        }
+    }
+    
+    function triggerSetUpload() {
+        setupSetUpload(); // ensure bound
+        document.getElementById('setFileInput').click();
+    }
+    
+    async function handleSetFiles(files) {
+        if (!currentProject) {
+            showToast('No project selected', 'error');
+            return;
+        }
+        
+        const setName = (currentSetFilter && currentSetFilter !== '__favorites__') ? currentSetFilter : null;
+        const total = files.length;
+        
+        // Show popup
+        const popup = document.getElementById('uploadPopup');
+        const list = document.getElementById('uploadList');
+        const title = document.getElementById('uploadTitle');
+        const count = document.getElementById('uploadCount');
+        
+        popup.classList.add('show');
+        popup.classList.remove('completed', 'collapsed');
+        title.textContent = setName ? `Uploading to "${setName}"...` : 'Uploading...';
+        count.textContent = `0 of ${total} items`;
+        list.innerHTML = '';
+        
+        let completed = 0, failed = 0;
+        const BATCH = 5;
+        
+        async function uploadOne(file, idx) {
+            const sizeKB = (file.size/1024).toFixed(0);
+            const itemId = `up-${Date.now()}-${idx}`;
+            
+            // Add a simple row (no blob preview to save memory)
+            const row = document.createElement('div');
+            row.className = 'upload-popup-item';
+            row.id = itemId;
+            row.innerHTML = `
+                <div class="upload-popup-item-icon" style="background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--gray-400);">IMG</div>
+                <div class="upload-popup-item-info">
+                    <div class="upload-popup-item-name">${file.name}</div>
+                    <div class="upload-popup-item-meta">Uploading • ${sizeKB} KB</div>
+                </div>
+                <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
+            list.appendChild(row);
+            
+            try {
+                const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
+                const pd = await pr.json();
+                if (pd.error) throw new Error(pd.error);
+                
+                const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
+                if (!ur.ok) throw new Error('Upload failed');
+                
+                await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
+                    projectId: currentProject.id, publicUrl: pd.publicUrl, photoId: pd.photoId, filename: pd.filename, originalFilename: file.name, sortOrder: idx, set_name: setName
+                })});
+                
+                row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
+                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
+                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
+                completed++;
+            } catch(err) {
+                row.querySelector('.upload-popup-item-meta').textContent = 'Failed';
+                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
+                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                failed++;
+            }
+            count.textContent = `${completed} of ${total} items`;
+        }
+        
+        // Process in batches of BATCH concurrent uploads
+        const fileArr = [...files];
+        for (let i = 0; i < fileArr.length; i += BATCH) {
+            const batch = fileArr.slice(i, i + BATCH);
+            await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
+        }
+        
+        popup.classList.add('completed');
+        title.textContent = 'Upload completed';
+        count.textContent = failed ? `${completed} uploaded, ${failed} failed` : `${completed} items uploaded`;
+        loadProjects();
+        await reloadProjectPhotosKeepSet();
+        document.getElementById('setFileInput').value='';
+    }
     
     async function reloadProjectPhotosKeepSet() {
         const savedFilter = currentSetFilter;
         const savedManual = [...manualSets];
         const g = document.getElementById('photosGrid');
-        if (!g) return;
         g.innerHTML='<div class="loading"><div class="spinner"></div></div>';
-        const projectId = currentProject?.id;
-        const projectSlug = currentProject?.slug;
-        if (!projectId || !projectSlug) return;
         try {
-            // Fetch admin and public endpoints in parallel for speed
-            const [adminRes, publicRes] = await Promise.allSettled([
-                fetch(`${API_URL}/api/admin/projects/${projectId}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}}).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();}),
-                fetch(`${API_URL}/api/projects/${projectSlug}`).then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
-            ]);
-            // If user switched projects while loading, bail out
-            if (currentProject?.id !== projectId) return;
-            const adminData = adminRes.status==='fulfilled' ? adminRes.value : null;
-            const publicData = publicRes.status==='fulfilled' ? publicRes.value : null;
-            const adminPhotos = (adminData && Array.isArray(adminData.photos)) ? adminData.photos : [];
-            const publicPhotos = (publicData && Array.isArray(publicData.photos)) ? publicData.photos : [];
-            currentPhotos = adminPhotos.length > 0 ? [...adminPhotos] : (publicPhotos.length > 0 ? [...publicPhotos] : []);
-            // Deduplicate by photo id, then by URL (backend race condition can create multiple DB records for one R2 file)
-            const seenIds2=new Set();
-            currentPhotos=currentPhotos.filter(p=>{if(!p||seenIds2.has(p.id))return false;seenIds2.add(p.id);return true;});
-            // Rebuild URL -> all duplicate IDs map BEFORE URL dedup
-            urlDuplicateIds=new Map();
-            currentPhotos.forEach(p=>{
-                const url=p.thumbnail_url||p.large_url||p.original_url;
-                if(!url)return;
-                if(!urlDuplicateIds.has(url))urlDuplicateIds.set(url,[]);
-                urlDuplicateIds.get(url).push(String(p.id));
-            });
-            const seenUrls2=new Set();
-            currentPhotos=currentPhotos.filter(p=>{const url=p.thumbnail_url||p.large_url||p.original_url;if(!url)return true;if(seenUrls2.has(url))return false;seenUrls2.add(url);return true;});
-            // Sync photo_count with actual deduped count
-            if (currentProject) currentProject.photo_count = currentPhotos.length;
-
+            let d;
+            try {
+                const r=await fetch(`${API_URL}/api/admin/projects/${currentProject.id}/photos`,{headers:{'x-admin-key':ADMIN_PASSWORD}});
+                d=await r.json();
+            } catch(e) {
+                const r2=await fetch(`${API_URL}/api/projects/${currentProject.slug}`);
+                d=await r2.json();
+            }
+            currentPhotos=d.photos||d||[];
+            if(!Array.isArray(currentPhotos))currentPhotos=[];
+            
             manualSets = savedManual;
             selectSet(savedFilter);
         } catch(e) {
-            console.error('reloadProjectPhotosKeepSet error:', e);
             g.innerHTML='<div class="empty-state"><p>Error loading photos</p></div>';
         }
     }
@@ -2957,7 +2873,80 @@
     function toggleUploadPopup() { document.getElementById('uploadPopup').classList.toggle('collapsed'); }
     function closeUploadPopup() { document.getElementById('uploadPopup').classList.remove('show'); }
     
-    // handleFiles removed — native queue uploader handles main uploads now
+    async function handleFiles(files){
+        const projectId=document.getElementById('uploadProjectSelect').value;
+        if(!projectId){showToast('Select collection first!','error');return;}
+        const project=projects.find(p=>p.id===projectId);
+        const total = files.length;
+        
+        // Show popup
+        const popup = document.getElementById('uploadPopup');
+        const list = document.getElementById('uploadList');
+        const title = document.getElementById('uploadTitle');
+        const count = document.getElementById('uploadCount');
+        
+        popup.classList.add('show');
+        popup.classList.remove('completed', 'collapsed');
+        title.textContent = 'Uploading...';
+        count.textContent = `0 of ${total} items`;
+        list.innerHTML = '';
+        
+        let completed = 0, failed = 0;
+        const BATCH = 5;
+        
+        async function uploadOne(file, idx) {
+            const sizeKB = (file.size/1024).toFixed(0);
+            const itemId = `up-${Date.now()}-${idx}`;
+            
+            const row = document.createElement('div');
+            row.className = 'upload-popup-item';
+            row.id = itemId;
+            row.innerHTML = `
+                <div class="upload-popup-item-icon" style="background:var(--gray-100);display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:var(--gray-400);">IMG</div>
+                <div class="upload-popup-item-info">
+                    <div class="upload-popup-item-name">${file.name}</div>
+                    <div class="upload-popup-item-meta">Uploading • ${sizeKB} KB</div>
+                </div>
+                <div class="upload-popup-item-status uploading" id="stat-${itemId}"></div>`;
+            list.appendChild(row);
+            
+            try {
+                const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
+                const pd = await pr.json();
+                if (pd.error) throw new Error(pd.error);
+                
+                const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
+                if (!ur.ok) throw new Error('Upload failed');
+                
+                await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:idx})});
+                
+                row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
+                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
+                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>';
+                completed++;
+            } catch(err) {
+                row.querySelector('.upload-popup-item-meta').textContent = 'Failed';
+                document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status error';
+                document.getElementById(`stat-${itemId}`).innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>';
+                failed++;
+            }
+            count.textContent = `${completed} of ${total} items`;
+        }
+        
+        // Process in batches of BATCH concurrent uploads
+        const fileArr = [...files];
+        for (let i = 0; i < fileArr.length; i += BATCH) {
+            const batch = fileArr.slice(i, i + BATCH);
+            await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
+        }
+        
+        popup.classList.add('completed');
+        title.textContent = 'Upload completed';
+        count.textContent = failed ? `${completed} uploaded, ${failed} failed` : `${completed} items uploaded`;
+        loadProjects();
+        if(currentProject) loadProjectPhotos();
+        document.getElementById('fileInput').value='';
+    }
     
     async function loadOrders(){const el=document.getElementById('ordersList');try{const r=await fetch(`${API_URL}/api/admin/orders`,{headers:{'x-admin-key':ADMIN_PASSWORD}});const d=await r.json();if(!d.orders?.length){el.innerHTML='<div class="empty-state"><p>No orders yet</p></div>';return;}el.innerHTML=`<table style="width:100%;border-collapse:collapse;background:white;border-radius:8px;overflow:hidden;"><thead><tr style="background:var(--gray-50);text-align:left;"><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Order</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Date</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Customer</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Total</th><th style="padding:0.75rem 1rem;font-size:0.8rem;font-weight:600;">Status</th></tr></thead><tbody>${d.orders.map(o=>`<tr style="border-top:1px solid var(--gray-200);"><td style="padding:0.75rem 1rem;font-weight:500;">${o.order_number||o.id.slice(0,8)}</td><td style="padding:0.75rem 1rem;color:var(--gray-600);">${new Date(o.created_at).toLocaleDateString()}</td><td style="padding:0.75rem 1rem;">${o.customer_email||'-'}</td><td style="padding:0.75rem 1rem;font-weight:500;">$${((o.total_amount||0)/100).toFixed(2)}</td><td style="padding:0.75rem 1rem;"><span style="background:${o.status==='completed'?'var(--success)':'var(--gray-400)'};color:white;padding:0.2rem 0.5rem;border-radius:4px;font-size:0.7rem;font-weight:600;">${o.status}</span></td></tr>`).join('')}</tbody></table>`;}catch(e){el.innerHTML='<div class="empty-state"><p>Error</p></div>';}}
     
@@ -3029,68 +3018,44 @@
     
     function generateSeoSuggestions() {
         if (!currentProject) return;
+        
         const p = currentProject;
-        const photoCount = p.photo_count || currentPhotos.length || 0;
-        const brands = (p.brands || []);
-        const tags = (p.tags || []);
+        const brands = (p.brands || []).join(', ');
         const date = p.event_date ? new Date(p.event_date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : '';
-        const venue = p.venue || '';
-
-        // Determine event type from tags
-        let eventType = 'Event';
-        if (tags.includes('Conference')) eventType = 'Conference';
-        else if (tags.includes('Corporate')) eventType = 'Corporate Event';
-        else if (tags.includes('Party')) eventType = 'Party';
-        else if (tags.includes('Activation')) eventType = 'Brand Activation';
-        else if (tags.includes('Portraits')) eventType = 'Portrait Session';
-        else if (tags.includes('PR')) eventType = 'PR Event';
-
-        // Extract city from venue
-        let city = '';
-        if (venue) {
-            const vLC = venue.toLowerCase();
-            if (vLC.includes('los angeles') || vLC.includes(', la')) city = 'Los Angeles';
-            else if (vLC.includes('new york') || vLC.includes('nyc')) city = 'New York';
-            else if (vLC.includes('san francisco') || vLC.includes(', sf')) city = 'San Francisco';
-            else city = venue.split(',').pop()?.trim() || '';
+        const venue = p.venue || 'San Francisco';
+        
+        // Generate title (under 60 chars)
+        let title = `${p.title} Photos`;
+        if (title.length < 45 && venue) {
+            title = `${p.title} Photos | ${venue}`;
         }
-        if (!city) city = 'San Francisco';
-
-        // Title: "Event Name | Venue or City | SF Event Photo"
-        let title = p.title;
-        if (venue && title.length + venue.length + 3 < 50) {
-            title += ' | ' + venue;
-        } else if (city && title.length + city.length + 3 < 50) {
-            title += ' | ' + city;
-        }
-        if (title.length < 45) title += ' | SF Event Photo';
         if (title.length > 60) title = title.substring(0, 57) + '...';
-
-        // Description: natural sentence with photo count, venue, date, brands
-        let desc = photoCount > 0 ? `${photoCount} photos from ${p.title}` : `Photos from ${p.title}`;
-        if (venue && desc.length + venue.length + 4 < 110) desc += ` at ${venue}`;
-        if (date && desc.length + date.length + 4 < 130) desc += `, ${date}`;
-        desc += '.';
-        if (brands.length > 0 && desc.length + brands.join(', ').length + 15 < 155) {
-            desc += ` Featuring ${brands.join(', ')}.`;
+        
+        // Generate description (under 160 chars)
+        let desc = `SF Event Photo captured ${p.title}`;
+        if (date) desc += ` on ${date}`;
+        if (venue) desc += ` at ${venue}`;
+        desc += '. Professional event photography coverage.';
+        if (brands && desc.length + brands.length + 15 < 160) {
+            desc += ` Featuring ${brands}.`;
         }
-        desc += ` ${eventType} photography by SF Event Photo.`;
         if (desc.length > 160) desc = desc.substring(0, 157) + '...';
-
-        // Keywords
+        
+        // Generate keywords
         let keywords = [p.title.toLowerCase()];
         if (venue) keywords.push(venue.toLowerCase());
-        if (city && city !== venue) keywords.push(city.toLowerCase());
-        brands.forEach(b => keywords.push(b.toLowerCase()));
-        keywords.push(eventType.toLowerCase() + ' photography');
-        keywords.push('event photos ' + city.toLowerCase());
-        keywords = [...new Set(keywords)].slice(0, 8);
-
+        if (brands) keywords = keywords.concat(p.brands.map(b => b.toLowerCase()));
+        keywords.push('event photos', 'professional photography', 'high resolution');
+        
+        // Set values
         document.getElementById('seoTitle').value = title;
         document.getElementById('seoDescription').value = desc;
-        document.getElementById('seoKeywords').value = keywords.join(', ');
+        document.getElementById('seoKeywords').value = keywords.slice(0, 8).join(', ');
+        
+        // Update counts
         document.getElementById('seoTitleCount').textContent = title.length;
         document.getElementById('seoDescCount').textContent = desc.length;
+        
         updateSeoPreview();
         showToast('SEO suggestions generated!', 'success');
     }
@@ -3361,20 +3326,16 @@
         if (!confirm(`Delete ${count} photo${count > 1 ? 's' : ''}? This cannot be undone.`)) return;
         
         try {
-            // Expand preview selection to include all duplicate DB records
-            const expandedIds = new Set();
-            for (const id of previewSelectedPhotos) {
-                for (const dupId of getAllIdsForPhoto(id)) expandedIds.add(String(dupId));
-            }
-
-            // Delete all records via API
-            for (const id of expandedIds) {
+            const ids = Array.from(previewSelectedPhotos);
+            
+            // Delete each photo via API
+            for (const id of ids) {
                 await fetch(`${API_URL}/api/admin/photos/${id}`, {
                     method: 'DELETE',
                     headers: { 'x-admin-key': ADMIN_PASSWORD }
                 });
             }
-
+            
             showToast(`Deleted ${count} photo${count > 1 ? 's' : ''}`, 'success');
             previewSelectedPhotos.clear();
             
@@ -3392,16 +3353,12 @@
     
     async function deleteSinglePreview(photoId) {
         if (!confirm('Delete this photo? This cannot be undone.')) return;
-
+        
         try {
-            // Delete all duplicate DB records for this photo's URL
-            const allIds = getAllIdsForPhoto(photoId);
-            for (const dupId of allIds) {
-                await fetch(`${API_URL}/api/admin/photos/${dupId}`, {
-                    method: 'DELETE',
-                    headers: { 'x-admin-key': ADMIN_PASSWORD }
-                });
-            }
+            await fetch(`${API_URL}/api/admin/photos/${photoId}`, {
+                method: 'DELETE',
+                headers: { 'x-admin-key': ADMIN_PASSWORD }
+            });
             
             showToast('Photo deleted', 'success');
             previewSelectedPhotos.delete(photoId);
@@ -3430,12 +3387,9 @@
                 },
                 body: JSON.stringify({ cover_image_url: photo.url })
             });
-
+            
             currentProject.cover_image_url = photo.url;
             document.getElementById('projectCover').src = photo.url;
-            document.getElementById('projectCover').style.objectPosition = '50% 50%';
-            document.getElementById('focalPointDot').classList.remove('active');
-            document.getElementById('focalPointLabel').style.display = 'none';
             showToast('Cover image updated', 'success');
         } catch (err) {
             console.error('Error setting cover:', err);
@@ -3527,218 +3481,6 @@
             selectAllPreview();
         }
     });
-
-    // Auto-login must be at end of script so all let/const variables are initialized (avoids TDZ errors)
-    if(sessionStorage.getItem('adminLoggedIn'))showDashboard();
-    </script>
-
-    <script type="module">
-    import { Uppy, Dashboard, Transloadit } from 'https://releases.transloadit.com/uppy/v5.2.1/uppy.min.mjs';
-
-    const BACKEND_API_URL = 'https://sf-event-photo-backend.vercel.app';
-    const ADMIN_KEY = 'sfeventphoto2024';
-    const TRANSLOADIT_AUTH_KEY = 'bb7b82a0be8ae334a2c344bc03829cf7';
-    const TRANSLOADIT_TEMPLATE_ID = '0faae0d0433c4aa8bf399140ef3baa73';
-    const R2_PUBLIC_BASE_URL = 'https://pub-a8d11693660e42a9a8a90b2498b8f122.r2.dev';
-    const MAX_FILE_SIZE = 50 * 1024 * 1024;
-    const UPLOAD_CONCURRENCY = 1;
-
-    function getContextProject(context) {
-        if (context === 'main') {
-            const sel = document.getElementById('uploadProjectSelect');
-            const projectId = sel?.value;
-            const selected = sel?.selectedOptions?.[0];
-            const projectSlug = selected?.dataset?.slug;
-            if (!projectId || !projectSlug) throw new Error('Select a collection first');
-            return { projectId, projectSlug, setName: null };
-        }
-        const proj = (typeof currentProject !== 'undefined' && currentProject) ? currentProject : window.currentProject;
-        if (!proj?.id || !proj?.slug) throw new Error('Open a collection first');
-        const activeSetFilter = (typeof currentSetFilter !== 'undefined') ? currentSetFilter : window.currentSetFilter;
-        const setName = (activeSetFilter && activeSetFilter !== '__favorites__') ? activeSetFilter : null;
-        return { projectId: proj.id, projectSlug: proj.slug, setName };
-    }
-
-    async function reservePhotoRecord(projectSlug, contentType) {
-        const r = await fetch(`${BACKEND_API_URL}/api/admin/upload/presign-with-id`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
-            body: JSON.stringify({ contentType: contentType || 'image/jpeg', projectSlug })
-        });
-        if (!r.ok) throw new Error(`presign failed: HTTP ${r.status}`);
-        const data = await r.json();
-        if (data.error) throw new Error(data.error);
-        return data;
-    }
-
-    async function completeUploadInBackend({ projectId, setName, originalFilename, publicUrl, photoId, filename }) {
-        const body = {
-            projectId,
-            publicUrl,
-            photoId,
-            filename,
-            originalFilename,
-            sortOrder: 0
-        };
-        if (setName) body.set_name = setName;
-        const r = await fetch(`${BACKEND_API_URL}/api/admin/upload/complete-with-id`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'x-admin-key': ADMIN_KEY },
-            body: JSON.stringify(body)
-        });
-        if (!r.ok) throw new Error(`complete failed: HTTP ${r.status}`);
-    }
-
-    function buildResultUrl(result, fallbackFilename) {
-        if (result.ssl_url) return result.ssl_url;
-        if (result.url) return result.url;
-        if (result.key && R2_PUBLIC_BASE_URL) return `${R2_PUBLIC_BASE_URL}/${result.key}`;
-        if (result.name && R2_PUBLIC_BASE_URL) return `${R2_PUBLIC_BASE_URL}/${result.name}`;
-        if (fallbackFilename && R2_PUBLIC_BASE_URL) return `${R2_PUBLIC_BASE_URL}/uploads/${fallbackFilename}`;
-        return null;
-    }
-
-    function mountUploader(context) {
-        const target = context === 'main' ? document.getElementById('uppyDashboardMain') : document.getElementById('uppyDashboardSet');
-        if (!target) return null;
-        if (target.dataset.mounted === '1') return target.uppyInstance || null;
-
-        const uppy = new Uppy({
-            restrictions: {
-                allowedFileTypes: ['image/*'],
-                maxFileSize: MAX_FILE_SIZE
-            },
-            autoProceed: false,
-            // Safari can exhaust request streams on retry/replay; disable retry replay.
-            retryDelays: []
-        });
-
-        uppy.use(Dashboard, {
-            inline: true,
-            target,
-            height: context === 'main' ? 420 : 260,
-            width: '100%',
-            showProgressDetails: true,
-            proudlyDisplayPoweredByUppy: false,
-            disableThumbnailGenerator: true,
-            note: context === 'main'
-                ? 'Resumable managed upload. Originals are preserved.'
-                : 'Add media to this collection with managed resumable upload.'
-        });
-
-        uppy.use(Transloadit, {
-            limit: UPLOAD_CONCURRENCY,
-            waitForEncoding: true,
-            assemblyOptions: {
-                params: {
-                    auth: { key: TRANSLOADIT_AUTH_KEY },
-                    template_id: TRANSLOADIT_TEMPLATE_ID
-                }
-            }
-        });
-
-        uppy.on('file-added', (file) => {
-            try {
-                const targetContext = getContextProject(context);
-                uppy.setFileMeta(file.id, {
-                    target_project_id: targetContext.projectId,
-                    target_project_slug: targetContext.projectSlug,
-                    target_set_name: targetContext.setName || ''
-                });
-            } catch (err) {
-                uppy.removeFile(file.id);
-                window.showToast?.(err?.message || 'Select a collection first', 'error');
-            }
-        });
-
-        uppy.on('upload', () => {
-            try {
-                getContextProject(context);
-            } catch (err) {
-                uppy.cancelAll();
-                window.showToast?.(err?.message || 'Select a collection first', 'error');
-            }
-        });
-
-        uppy.on('transloadit:complete', async (assembly) => {
-            const storedResults = assembly?.results?.stored || [];
-            const resultByOriginalId = new Map();
-            storedResults.forEach((r) => {
-                if (r?.original_id) resultByOriginalId.set(r.original_id, r);
-            });
-
-            const successfulFiles = uppy.getFiles().filter((file) => !file.error && !file.isPaused);
-            let successCount = 0;
-            let failCount = 0;
-
-            for (const file of successfulFiles) {
-                try {
-                    const meta = file.meta || {};
-                    const projectId = meta.target_project_id;
-                    const projectSlug = meta.target_project_slug;
-                    const setName = meta.target_set_name || null;
-                    if (!projectId || !projectSlug) throw new Error('missing project context');
-
-                    const stored = resultByOriginalId.get(file.id) || storedResults.find((r) => r.name === file.name) || null;
-                    const reserved = await reservePhotoRecord(projectSlug, file.type);
-                    const publicUrl = buildResultUrl(stored || {}, reserved.filename);
-                    if (!publicUrl) throw new Error('missing result URL');
-
-                    await completeUploadInBackend({
-                        projectId,
-                        setName,
-                        originalFilename: file.name,
-                        publicUrl,
-                        photoId: reserved.photoId,
-                        filename: reserved.filename
-                    });
-                    successCount += 1;
-                } catch (err) {
-                    console.error('[Transloadit finalize error]', file?.name, err);
-                    failCount += 1;
-                }
-            }
-
-            if (successCount > 0) window.showToast?.(`${successCount} photo(s) uploaded`, 'success');
-            if (failCount > 0) window.showToast?.(`${failCount} upload(s) failed`, 'error');
-            if (successCount > 0) {
-                window.loadProjects?.();
-                const activeProject = (typeof currentProject !== 'undefined' && currentProject) ? currentProject : window.currentProject;
-                if (activeProject) window.reloadProjectPhotosKeepSet?.();
-            }
-            uppy.cancelAll();
-        });
-
-        uppy.on('upload-error', (file, err) => {
-            console.error('[Transloadit upload-error]', file?.name, err);
-        });
-        uppy.on('error', (err) => console.error('[Transloadit error]', err));
-
-        target.dataset.mounted = '1';
-        target.uppyInstance = uppy;
-        return uppy;
-    }
-
-    window.initMainUppy = function() {
-        mountUploader('main');
-    };
-
-    window.initSetUppy = function() {
-        mountUploader('set');
-    };
-
-    window.triggerSetUpload = function() {
-        const zone = document.getElementById('setUploadZone');
-        if (zone) zone.style.display = 'block';
-        const uppy = mountUploader('set');
-        const fileInput = document.querySelector('#uppyDashboardSet .uppy-Dashboard-input');
-        if (fileInput) fileInput.click();
-        if (!fileInput && uppy) window.showToast?.('Uploader is loading, try again.', 'error');
-    };
-
-    window.uppyReady = true;
-    if (document.getElementById('uppyDashboardMain')?.offsetParent !== null) window.initMainUppy();
-    if (document.getElementById('uppyDashboardSet')?.offsetParent !== null) window.initSetUppy();
     </script>
 </body>
 </html>
