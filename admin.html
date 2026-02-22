@@ -1226,6 +1226,7 @@
     
     <script>
     const API_URL='https://sf-event-photo-backend.vercel.app';
+    const UPLOAD_API_URL = 'https://sf-event-photo-uploader.fly.dev';
     const ADMIN_PASSWORD='sfeventphoto2024';
     let projects=[],currentProject=null,currentPhotos=[];
     let nextPhotoSeq = 142763; // Start at 142763 so first photo is 142764
@@ -2816,7 +2817,7 @@
                     form.append('sortOrder', String(idx));
                     if (setName) form.append('set_name', setName);
 
-                    const ur = await fetch(`${API_URL}/api/admin/upload/direct-with-id`, {
+                    const ur = await fetch(`${UPLOAD_API_URL}/api/admin/upload/direct-with-id`, {
                         method: 'POST',
                         headers: { 'x-admin-key': ADMIN_PASSWORD },
                         body: form
@@ -2935,7 +2936,7 @@
                     form.append('projectSlug', project.slug);
                     form.append('sortOrder', String(idx));
 
-                    const ur = await fetch(`${API_URL}/api/admin/upload/direct-with-id`, {
+                    const ur = await fetch(`${UPLOAD_API_URL}/api/admin/upload/direct-with-id`, {
                         method: 'POST',
                         headers: { 'x-admin-key': ADMIN_PASSWORD },
                         body: form
