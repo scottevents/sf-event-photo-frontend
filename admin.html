@@ -3541,6 +3541,7 @@
     const TRANSLOADIT_TEMPLATE_ID = '0faae0d0433c4aa8bf399140ef3baa73';
     const R2_PUBLIC_BASE_URL = 'https://pub-a8d11693660e42a9a8a90b2498b8f122.r2.dev';
     const MAX_FILE_SIZE = 50 * 1024 * 1024;
+    const UPLOAD_CONCURRENCY = 1;
 
     function getContextProject(context) {
         if (context === 'main') {
@@ -3607,7 +3608,9 @@
                 allowedFileTypes: ['image/*'],
                 maxFileSize: MAX_FILE_SIZE
             },
-            autoProceed: false
+            autoProceed: false,
+            // Safari can exhaust request streams on retry/replay; disable retry replay.
+            retryDelays: []
         });
 
         uppy.use(Dashboard, {
@@ -3624,6 +3627,7 @@
         });
 
         uppy.use(Transloadit, {
+            limit: UPLOAD_CONCURRENCY,
             waitForEncoding: true,
             assemblyOptions: {
                 params: {
