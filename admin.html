@@ -2787,7 +2787,8 @@
         list.innerHTML = '';
         
         let completed = 0, failed = 0;
-        const BATCH = 5;
+        const seenUploadUrls = new Set();
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
         
         async function uploadOne(file, idx) {
             const sizeKB = (file.size/1024).toFixed(0);
@@ -2807,16 +2808,42 @@
             list.appendChild(row);
             
             try {
-                const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:currentProject.slug})});
-                const pd = await pr.json();
-                if (pd.error) throw new Error(pd.error);
-                
-                const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
-                if (!ur.ok) throw new Error('Upload failed');
-                
-                await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
+                let pd = null;
+                for (let presignTry = 1; presignTry <= 4; presignTry++) {
+                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {
+                        method: 'POST',
+                        headers: {'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},
+                        body: JSON.stringify({contentType:file.type || 'image/jpeg', projectSlug:currentProject.slug})
+                    });
+                    if (!pr.ok) throw new Error(`Presign failed (${pr.status})`);
+                    const nextPd = await pr.json();
+                    if (nextPd.error) throw new Error(nextPd.error);
+                    if (!seenUploadUrls.has(nextPd.uploadUrl)) {
+                        pd = nextPd;
+                        seenUploadUrls.add(nextPd.uploadUrl);
+                        break;
+                    }
+                    await sleep(250 * presignTry);
+                }
+                if (!pd) throw new Error('Duplicate presign URL');
+
+                let uploaded = false;
+                for (let putTry = 1; putTry <= 5; putTry++) {
+                    const body = file.slice(0, file.size, file.type || 'application/octet-stream');
+                    const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type || 'application/octet-stream'}, body});
+                    if (ur.ok) { uploaded = true; break; }
+                    if (ur.status === 429 || ur.status >= 500) {
+                        await sleep(500 * putTry);
+                        continue;
+                    }
+                    throw new Error(`Upload failed (${ur.status})`);
+                }
+                if (!uploaded) throw new Error('Upload failed after retries');
+
+                const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({
                     projectId: currentProject.id, publicUrl: pd.publicUrl, photoId: pd.photoId, filename: pd.filename, originalFilename: file.name, sortOrder: idx, set_name: setName
                 })});
+                if (!cr.ok) throw new Error(`Complete failed (${cr.status})`);
                 
                 row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
                 document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
@@ -2831,11 +2858,11 @@
             count.textContent = `${completed} of ${total} items`;
         }
         
-        // Process in batches of BATCH concurrent uploads
+        // Strictly one-at-a-time to avoid duplicate filenames + R2 throttling
         const fileArr = [...files];
-        for (let i = 0; i < fileArr.length; i += BATCH) {
-            const batch = fileArr.slice(i, i + BATCH);
-            await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
+        for (let i = 0; i < fileArr.length; i++) {
+            await uploadOne(fileArr[i], i);
+            await sleep(120);
         }
         
         popup.classList.add('completed');
@@ -2892,7 +2919,8 @@
         list.innerHTML = '';
         
         let completed = 0, failed = 0;
-        const BATCH = 5;
+        const seenUploadUrls = new Set();
+        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
         
         async function uploadOne(file, idx) {
             const sizeKB = (file.size/1024).toFixed(0);
@@ -2911,14 +2939,40 @@
             list.appendChild(row);
             
             try {
-                const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({contentType:file.type, projectSlug:project.slug})});
-                const pd = await pr.json();
-                if (pd.error) throw new Error(pd.error);
-                
-                const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type}, body:file});
-                if (!ur.ok) throw new Error('Upload failed');
-                
-                await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:idx})});
+                let pd = null;
+                for (let presignTry = 1; presignTry <= 4; presignTry++) {
+                    const pr = await fetch(`${API_URL}/api/admin/upload/presign-with-id`, {
+                        method:'POST',
+                        headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD},
+                        body:JSON.stringify({contentType:file.type || 'image/jpeg', projectSlug:project.slug})
+                    });
+                    if (!pr.ok) throw new Error(`Presign failed (${pr.status})`);
+                    const nextPd = await pr.json();
+                    if (nextPd.error) throw new Error(nextPd.error);
+                    if (!seenUploadUrls.has(nextPd.uploadUrl)) {
+                        pd = nextPd;
+                        seenUploadUrls.add(nextPd.uploadUrl);
+                        break;
+                    }
+                    await sleep(250 * presignTry);
+                }
+                if (!pd) throw new Error('Duplicate presign URL');
+
+                let uploaded = false;
+                for (let putTry = 1; putTry <= 5; putTry++) {
+                    const body = file.slice(0, file.size, file.type || 'application/octet-stream');
+                    const ur = await fetch(pd.uploadUrl, {method:'PUT', headers:{'Content-Type':file.type || 'application/octet-stream'}, body});
+                    if (ur.ok) { uploaded = true; break; }
+                    if (ur.status === 429 || ur.status >= 500) {
+                        await sleep(500 * putTry);
+                        continue;
+                    }
+                    throw new Error(`Upload failed (${ur.status})`);
+                }
+                if (!uploaded) throw new Error('Upload failed after retries');
+
+                const cr = await fetch(`${API_URL}/api/admin/upload/complete-with-id`, {method:'POST', headers:{'Content-Type':'application/json','x-admin-key':ADMIN_PASSWORD}, body:JSON.stringify({projectId, publicUrl:pd.publicUrl, photoId: pd.photoId, filename:pd.filename, originalFilename: file.name, sortOrder:idx})});
+                if (!cr.ok) throw new Error(`Complete failed (${cr.status})`);
                 
                 row.querySelector('.upload-popup-item-meta').textContent = `${pd.filename} • ${sizeKB} KB`;
                 document.getElementById(`stat-${itemId}`).className = 'upload-popup-item-status done';
@@ -2933,11 +2987,11 @@
             count.textContent = `${completed} of ${total} items`;
         }
         
-        // Process in batches of BATCH concurrent uploads
+        // Strictly one-at-a-time to avoid duplicate filenames + R2 throttling
         const fileArr = [...files];
-        for (let i = 0; i < fileArr.length; i += BATCH) {
-            const batch = fileArr.slice(i, i + BATCH);
-            await Promise.all(batch.map((f, j) => uploadOne(f, i + j)));
+        for (let i = 0; i < fileArr.length; i++) {
+            await uploadOne(fileArr[i], i);
+            await sleep(120);
         }
         
         popup.classList.add('completed');
